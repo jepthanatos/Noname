@@ -43,11 +43,11 @@ namespace noname
     void ProgramManager::startUp()
     {
         Manager::setType("ProgramManager");
-        LogManager::getInstance().startUp();
-        LogManager::getInstance().writeLog(Level::Debug, "Starting services...");
-        FileManager::getInstance().startUp();
-        started = LogManager::getInstance().isStarted() and
-                  FileManager::getInstance().isStarted();
+        LM.startUp();
+        LM.writeLog(Level::Debug, "Starting services...");
+        FM.startUp();
+        started = LM.isStarted() and
+                  FM.isStarted();
     }
 
     /**
@@ -55,9 +55,9 @@ namespace noname
      */
     void ProgramManager::shutDown()
     {
-        FileManager::getInstance().shutDown();
-        LogManager::getInstance().writeLog(Level::Debug, "Closing services...");
-        LogManager::getInstance().shutDown();
+        FM.shutDown();
+        LM.writeLog(Level::Debug, "Closing services...");
+        LM.shutDown();
     }
 
     /**
@@ -65,8 +65,7 @@ namespace noname
      */
     void ProgramManager::run()
     {
-        LogManager::getInstance().writeLog(Level::Debug, "Starting program...");
-
-        LogManager::getInstance().writeLog(Level::Debug, "Ending program...");
+        LM.writeLog(Level::Debug, "Starting program...");
+        LM.writeLog(Level::Debug, "Ending program...");
     }
 }

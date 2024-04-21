@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "LogManagerTests.cpp"
+#include "TestLogManager.cpp"
+#include "TestPlayer.cpp"
+#include "TestRankManager.cpp"
+#include "TestSkill.cpp"
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

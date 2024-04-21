@@ -21,7 +21,10 @@
 /* FileManager */
 //==============================================================================
 
-/**----
+// Two-letter acronym for easier access to manager.
+#define FM noname::FileManager::getInstance()
+
+/**
  * Manager of the input and output files.
  */
 namespace noname

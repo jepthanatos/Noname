@@ -20,7 +20,10 @@
 /* LogManager */
 //==============================================================================
 
-/**----
+// Two-letter acronym for easier access to manager.
+#define LM noname::LogManager::getInstance()
+
+/**
  * Manager of the logfile.
  */
 namespace noname

@@ -15,7 +15,7 @@
 /* Manager */
 //==============================================================================
 
-/**----
+/**
  * Base class for managers.
  */
 namespace noname
@@ -41,10 +41,16 @@ namespace noname
         std::string getType() const;
 
         // Startup Manager.
-        virtual void startUp() = 0;
+        virtual void startUp()
+        {
+            started = true;
+        }
 
         // Shutdown Manager.
-        virtual void shutDown() = 0;
+        virtual void shutDown()
+        {
+            started = false;
+        }
 
         // Return true when startUp() was executed ok, else false.
         bool isStarted() const;

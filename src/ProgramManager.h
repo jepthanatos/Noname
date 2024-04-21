@@ -19,7 +19,10 @@
 /* ProgramManager */
 //==============================================================================
 
-/**----
+// Two-letter acronym for easier access to manager.
+#define PM noname::ProgramManager::getInstance()
+
+/**
  * Manager of the program.
  */
 namespace noname

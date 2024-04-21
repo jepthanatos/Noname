@@ -12,7 +12,7 @@
 /* Noname */
 //==============================================================================
 
-/**----
+/**
  * Main program
  */
 using namespace noname;
@@ -20,20 +20,20 @@ using namespace noname;
 int main(int argc, char *argv[])
 {
     // First check the arguments, if they are wrong exit the program.
-    if (ProgramManager::getInstance().initialization(argc, argv) == EXIT_FAILURE)
+    if (PM.initialization(argc, argv) == EXIT_FAILURE)
         return EXIT_FAILURE;
 
     // Run the services of the program.
-    ProgramManager::getInstance().startUp();
+    PM.startUp();
 
     // Check if the program has started.
-    if (ProgramManager::getInstance().isStarted())
+    if (PM.isStarted())
     {
-        ProgramManager::getInstance().run();
+        PM.run();
     }
 
     // Shut down the services of the program.
-    ProgramManager::getInstance().shutDown();
+    PM.shutDown();
 
     return EXIT_SUCCESS;
 }

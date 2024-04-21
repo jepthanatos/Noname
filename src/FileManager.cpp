@@ -53,8 +53,8 @@ namespace noname
         }
         catch (std::ofstream::failure e)
         {
-            LogManager::getInstance().writeLog(Level::Debug, "Error opening the input file");
-            LogManager::getInstance().writeLog(Level::Debug, e.what());
+            LM.writeLog(Level::Debug, "Error opening the input file");
+            LM.writeLog(Level::Debug, e.what());
             std::cerr << e.what() << std::endl;
         }
 
@@ -67,8 +67,8 @@ namespace noname
             }
             catch (std::ofstream::failure e)
             {
-                LogManager::getInstance().writeLog(Level::Debug, "Error opening the output file");
-                LogManager::getInstance().writeLog(Level::Debug, e.what());
+                LM.writeLog(Level::Debug, "Error opening the output file");
+                LM.writeLog(Level::Debug, e.what());
                 std::cerr << e.what() << std::endl;
             }
         }

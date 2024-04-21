@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/LogManager.h"
+#include "LogManager.h"
 
 using namespace noname;
 using namespace testing;

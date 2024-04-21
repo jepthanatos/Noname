@@ -12,7 +12,7 @@
 /* Singleton */
 //==============================================================================
 
-/**----
+/**
  * Template class to implement Singleton using CRTP
  */
 template <class T>
