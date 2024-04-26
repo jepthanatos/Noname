@@ -33,6 +33,4 @@
 
 # VSCode
 build
-*.txt
-*.log
 .vscode
