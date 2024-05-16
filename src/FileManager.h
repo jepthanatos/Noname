@@ -1,32 +1,18 @@
-//==============================================================================
-// Name        : FileManager.h
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Manager of the input and output files.
-//==============================================================================
-
 #ifndef __FILE_MANAGER_H__
 #define __FILE_MANAGER_H__
 
-// System includes.
+// System includes
 #include <fstream>
 #include <iostream>
 #include <string>
 
-// Local includes.
+// Local includes
 #include "Singleton.h"
 #include "Manager.h"
-
-//==============================================================================
-/* FileManager */
-//==============================================================================
 
 // Two-letter acronym for easier access to manager.
 #define FM noname::FileManager::getInstance()
 
-/**
- * Manager of the input and output files.
- */
 namespace noname
 {
     class FileManager : public Manager, public Singleton<FileManager>
@@ -39,7 +25,6 @@ namespace noname
         // IO Files.
         std::ifstream inputFile;
         std::ofstream outputFile;
-
 
     public:
         // If files are open, close them.
@@ -58,5 +43,4 @@ namespace noname
         void shutDown();
     };
 }
-//------------------------------------------------------------------------------
 #endif // __FILE_MANAGER_H__

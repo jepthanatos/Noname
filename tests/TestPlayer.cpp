@@ -9,9 +9,9 @@
 using namespace noname;
 using namespace testing;
 
-struct TestPlayer: Test
+struct TestPlayer : Test
 {
-  Player player{};
+    Player player{};
 };
 
 TEST_F(TestPlayer, getLevel)
@@ -32,23 +32,13 @@ TEST_F(TestPlayer, updateTriesTest)
     short swordLevel{player.getSkill(SkillType::SWORD)};
     EXPECT_EQ(swordLevel, 1);
 
-    for (int i = 0; i <= MELEE_SKILLS + 10; ++i)
+    for (int i = 0; i <= MELEE_TRIES + 10; ++i)
     {
         player.updateTries(SkillType::SWORD);
     }
 
     swordLevel = player.getSkill(SkillType::SWORD);
     EXPECT_EQ(swordLevel, 2);
-}
-
-TEST_F(TestPlayer, getMaxDamageAtLevel1)
-{
-    // Skill = 1, WeaponDamage = 10, AttackFactor = 1
-    player.setLevel(1);
-    const short damage{player.getMaxDamage(1, 10, 1)};
-    EXPECT_EQ(damage, 6);
-    EXPECT_EQ(player.getLevel(), 1);
-    EXPECT_EQ(player.getSkill(SkillType::SWORD), 1);
 }
 
 TEST_F(TestPlayer, setSkillAndGetDamageAtLevel1)
@@ -135,7 +125,7 @@ TEST_F(TestPlayer, takeDamageAndDie)
     EXPECT_EQ(damage, 21);
 
     short health{player.getHealth()};
-    while(health > 0)
+    while (health > 0)
     {
         player.takeDamage(damage);
         health = player.getHealth();
@@ -171,7 +161,8 @@ TEST_F(TestPlayer, playerHealthAtEachLevelFrom1To1000)
 
 TEST_F(TestPlayer, playerExperienceAtEachLevelFrom1To1000)
 {
-    auto getExp = [](int level) {
+    auto getExp = [](int level)
+    {
         return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
     };
 

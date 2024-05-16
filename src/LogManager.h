@@ -1,31 +1,17 @@
-//==============================================================================
-// Name        : LogManager.h
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Manager of the logfile.
-//==============================================================================
-
 #ifndef __LOG_MANAGER_H__
 #define __LOG_MANAGER_H__
 
-// System includes.
+// System includes
 #include <string>
 #include <fstream>
 
-// Engine includes.
+// Engine includes
 #include "Singleton.h"
 #include "Manager.h"
 
-//==============================================================================
-/* LogManager */
-//==============================================================================
-
-// Two-letter acronym for easier access to manager.
+// Two-letter acronym for easier access to manager
 #define LM noname::LogManager::getInstance()
 
-/**
- * Manager of the logfile.
- */
 namespace noname
 {
     const std::string LOGFILE_NAME = "noname.log";
@@ -64,5 +50,4 @@ namespace noname
         void setLevel(Level value);
     };
 }
-//------------------------------------------------------------------------------
 #endif // __LOG_MANAGER_H__

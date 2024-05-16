@@ -1,20 +1,6 @@
-//==============================================================================
-// Name        : Noname.cpp
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Main program of a running journal.
-//==============================================================================
-
-// Local includes.
+// Local includes
 #include "ProgramManager.h"
 
-//==============================================================================
-/* Noname */
-//==============================================================================
-
-/**
- * Main program
- */
 using namespace noname;
 
 int main(int argc, char *argv[])
@@ -37,5 +23,3 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
-
-//==============================================================================

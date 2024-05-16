@@ -1,131 +1,117 @@
-//==============================================================================
-// Name        : Player.cpp
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Player class
-//==============================================================================
-
+// Local includes
 #include "Player.h"
 
 // System includes
 #include <cmath>
 #include <math.h>
-
-//==============================================================================
-/* Player */
-//==============================================================================
+#include <random>
 
 namespace noname
 {
-    Player::Player()
+    Player::Player() : _weapon(SkillType::SWORD, 6)
     {
         static int cont{0};
-        m_id = cont;
+        _id = cont;
         ++cont;
         for (int i = 0; i < static_cast<int>(SkillType::LAST_SKILL); ++i)
         {
-            skills.emplace(static_cast<SkillType>(i), 1);
-            skillTries.emplace(static_cast<SkillType>(i), 0);
-            weaponAttack.emplace(static_cast<SkillType>(i), 10);
+            _skills.emplace(static_cast<SkillType>(i), 1);
+            _skillTries.emplace(static_cast<SkillType>(i), 0);
         }
         setLevel(1);
     }
 
     short Player::getLevel() const
     {
-        return level;
+        return _level;
     }
 
     void Player::setLevel(short value)
     {
-        level = value;
+        _level = value;
         setHealth();
-        experience = getExpForLevel(level);
+        _currentLevelExp = getExpForLevel(_level);
+        _nextLevelExp = getExpForLevel(_level + 1);
     }
 
     void Player::setHealth()
     {
-        // Depends on vocation
-        // Paladin
-        health = 5 * ((2 * level) + 21);
-        // Knight
-        // health = 5 * ((3 * level) + 13);
-        // Sorcerer and Druid
-        // health = 5 * (level + 29);
+        _health = 10 * _level;
     }
 
     short Player::getSkill(SkillType skill) const
     {
-        return skills.find(skill)->second;
+        return _skills.find(skill)->second;
     }
-    
+
     void Player::setSkill(SkillType skill, short value)
     {
-        skills.find(skill)->second = value;
+        _skills.find(skill)->second = value;
     }
 
     void Player::updateTries(SkillType skill)
     {
-        skillTries.find(skill)->second++;
-        if (skillTries.find(skill)->second == MELEE_SKILLS)
+        _skillTries.find(skill)->second++;
+        if ((skill == SkillType::DISTANCE and _skillTries.find(skill)->second >= DISTANCE_TRIES) or (_skillTries.find(skill)->second >= MELEE_TRIES))
         {
-            skillTries.find(skill)->second = 0;
-            skills.find(skill)->second++;
+            _skillTries.find(skill)->second = 0;
+            _skills.find(skill)->second++;
         }
-    }
-
-    short Player::getMaxDamage(int attackSkill, int weaponDamage, int attackFactor) const
-    {
-        return ceil(2 * (weaponDamage * ((attackSkill + 5.8) / 25) + (level / 10) - 0.1) / attackFactor);
     }
 
     short Player::getDamage(SkillType skill) const
     {
-        short maxDamage{getMaxDamage(skills.find(skill)->second, weaponAttack.find(skill)->second, 1)};
-
-        return maxDamage;
+        auto rollDice = [](int min, int max)
+        {
+            std::random_device dev;
+            std::mt19937 rng(dev());
+            std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
+            return dist6(rng);
+        };
+        short doubleDamage{1};
+        auto d20{rollDice(1, 20)};
+        if (d20 > 1)
+        {
+            if (d20 == 20)
+            {
+                doubleDamage = 2;
+            }
+            return (rollDice(1, _weapon.getDice()) * doubleDamage) + _skills.find(skill)->second;
+        }
+        return 0;
     }
 
     short Player::getHealth() const
     {
-        return health;
+        return _health;
     }
 
     void Player::takeDamage(short damage)
     {
-        health -= damage;
-        if (health <= 0)
+        _health -= damage;
+        if (_health <= 0)
         {
-            experience -= ceil((experience * 25) / 100);
-            if (experience < getExpForLevel(level))
-                level--;
+            _currentLevelExp -= ceil((_currentLevelExp * 25) / 100);
+            if (_currentLevelExp < getExpForLevel(_level))
+                _level--;
         }
     }
 
     void Player::addExperience(long exp)
     {
-        experience += exp;
-        short prevLevel = getLevel();
-        short newLevel = getLevel();
+        _currentLevelExp += exp;
 
-        long currLevelExp = Player::getExpForLevel(newLevel);
-        long nextLevelExp = Player::getExpForLevel(newLevel + 1);
-        while (experience >= nextLevelExp)
+        while (_currentLevelExp >= _nextLevelExp)
         {
+            short newLevel = getLevel();
             ++newLevel;
-            setHealth();
-            //healthMax += vocation->getHPGain();
-            //health += vocation->getHPGain();
-            //manaMax += vocation->getManaGain();
-            //mana += vocation->getManaGain();
-            //capacity += vocation->getCapGain();
-            nextLevelExp = Player::getExpForLevel(newLevel + 1);
+            setLevel(newLevel);
         }
     }
 
     unsigned long long Player::getExperience() const
     {
-        return experience;
+        return _currentLevelExp;
     }
 
     unsigned long long Player::getExpForLevel(short level) const

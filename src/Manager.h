@@ -1,23 +1,9 @@
-//==============================================================================
-// Name        : Manager.h
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Base class for managers.
-//==============================================================================
-
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
 
-// System includes.
+// System includes
 #include <string>
 
-//==============================================================================
-/* Manager */
-//==============================================================================
-
-/**
- * Base class for managers.
- */
 namespace noname
 {
     class Manager
@@ -56,5 +42,4 @@ namespace noname
         bool isStarted() const;
     };
 }
-//------------------------------------------------------------------------------
 #endif /* __MANAGER_H__ */

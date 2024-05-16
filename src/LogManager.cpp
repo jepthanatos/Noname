@@ -1,10 +1,3 @@
-//==============================================================================
-// Name        : LogManager.cpp
-// Author      : Jorge
-// Copyright   : https://creativecommons.org/licenses/by/4.0/
-// Description : Manager of the logfile.
-//==============================================================================
-
 #include "LogManager.h"
 
 // Sytem includes
@@ -13,24 +6,14 @@
 #include <sstream>
 #include <iostream>
 
-//==============================================================================
-/* Manager */
-//==============================================================================
-
 namespace noname
 {
-    /**
-     * Destructor.
-     */
     LogManager::~LogManager()
     {
         if (logFile.is_open())
             logFile.close();
     }
 
-    /**
-     * Startup the LogManager (open logfile).
-     */
     void LogManager::startUp()
     {
         try
@@ -46,20 +29,14 @@ namespace noname
         }
     }
 
-    /**
-     * Shut down the LogManager (close logfile).
-     */
     void LogManager::shutDown()
     {
         logFile.close();
     }
 
-    /**
-     * Write to logfile.
-     */
     void LogManager::writeLog(Level level, const std::string &message)
     {
-        // Lambda to generate pretty time for logs.
+        // Lambda to generate pretty time for logs
         auto prettyTime = []()
         {
             auto now = std::chrono::system_clock::now();
@@ -69,23 +46,18 @@ namespace noname
             return stream.str();
         };
 
-        if (level >= logLevel) {
+        if (level >= logLevel)
+        {
             logFile << prettyTime() << " : " << message << std::endl;
             logFile.flush();
         }
     }
 
-    /**
-     * Get the log level.
-     */
     Level LogManager::getLevel() const
     {
         return logLevel;
     }
 
-    /**
-     * Set the log level.
-     */
     void LogManager::setLevel(Level value)
     {
         logLevel = value;

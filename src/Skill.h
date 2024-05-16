@@ -1,7 +1,7 @@
 #ifndef __SKILL_H__
 #define __SKILL_H__
 
-// System includes.
+// System includes
 #include <string>
 
 namespace noname
@@ -18,8 +18,8 @@ namespace noname
     };
 
     static const short MAGIC_LEVEL = 1600;
-    static const short MELEE_SKILLS = 50;
-    static const short DISTANCE_SKILLS = 25;
+    static const short MELEE_TRIES = 50;
+    static const short DISTANCE_TRIES = 25;
     static const short SHIELDING = 100;
     static const short FISHING = 20;
 
@@ -49,13 +49,13 @@ namespace noname
     {
 
     private:
-        // SKILL m_id;     // Unique game engine defined identifier.
-        int m_min_value;    // Minimum value the skill can have.
-        int m_max_value;    // Maximum value the skill can have.
-        int m_tries_needed; // Number of tries needed before next level.
+        // SKILL _id;     // Unique game engine defined identifier.
+        int _min_value;    // Minimum value the skill can have.
+        int _max_value;    // Maximum value the skill can have.
+        int _tries_needed; // Number of tries needed before next level.
 
     public:
-        Skill(int min_value, int max_value, int tries) : m_min_value{min_value}, m_max_value{max_value}, m_tries_needed{tries}
+        Skill(int min_value, int max_value, int tries) : _min_value{min_value}, _max_value{max_value}, _tries_needed{tries}
         {
         }
 
@@ -65,5 +65,4 @@ namespace noname
     };
 
 }
-//------------------------------------------------------------------------------
 #endif // __SKILL_H__

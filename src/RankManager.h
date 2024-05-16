@@ -22,7 +22,7 @@ namespace noname
     {
 
     private:
-        std::vector<Player> m_players_list;
+        std::vector<Player> _players_list;
 
     public:
         void startUp()
@@ -35,7 +35,7 @@ namespace noname
 
         void shutDown()
         {
-            m_players_list.clear();
+            _players_list.clear();
             Manager::shutDown();
             // LM.getLogger()->debug("RankManager::shutDown");
             LM.writeLog(Level::Debug, "RankManager::shutDown");
@@ -43,27 +43,27 @@ namespace noname
 
         void updateRanking()
         {
-            std::sort(m_players_list.begin(), m_players_list.end(), [](Player a, Player b)
+            std::sort(_players_list.begin(), _players_list.end(), [](Player a, Player b)
                       { return a.getSkill(_skill) > b.getSkill(_skill); });
         }
 
         void addPlayer(const Player &player)
         {
-            //LM.writeLog(Level::Debug, "RankManager::addPlayer: " + std::to_string(player.getId()));
-            m_players_list.emplace_back(player);
+            // LM.writeLog(Level::Debug, "RankManager::addPlayer: " + std::to_string(player.getId()));
+            _players_list.emplace_back(player);
             updateRanking();
         }
 
         std::vector<Player> getRanking() const
         {
-            return m_players_list;
+            return _players_list;
         }
 
         short getPlayerRanking(int playerId)
         {
-            for (int i = 0; i < m_players_list.size(); i++)
+            for (int i = 0; i < _players_list.size(); i++)
             {
-                if (m_players_list[i].getId() == playerId)
+                if (_players_list[i].getId() == playerId)
                 {
                     return i;
                 }
@@ -75,17 +75,16 @@ namespace noname
         {
             auto title{"Ranking of:" + SkillToString(_skill)};
             std::string text = title + "\n";
-            for (auto player : m_players_list)
+            for (auto player : _players_list)
             {
-                text +="Player ID: " + std::to_string(player.getId()) + " | Skill: " + std::to_string(player.getSkill(_skill)) + "\n";
-                
+                text += "Player ID: " + std::to_string(player.getId()) + " | Skill: " + std::to_string(player.getSkill(_skill)) + "\n";
             }
             LM.writeLog(Level::Debug, text);
             // auto ranking_logger = spdlog::basic_logger_mt("ranking_logger", "log/ranking.txt", true);
             // ranking_logger->set_level(spdlog::level::debug);
             // ranking_logger->set_pattern("[%H:%M:%S %z] [%^%L%$] [thread %t] %v");
             // ranking_logger->debug("Ranking of: {}", SkillToString(_skill));
-            // for (auto player : m_players_list)
+            // for (auto player : _players_list)
             // {
             //     ranking_logger->debug("{} {}", player.getName(), player.getSkill(_skill));
             // }
