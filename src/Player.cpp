@@ -1,5 +1,6 @@
 // Local includes
 #include "Player.h"
+#include "WeaponsManager.h"
 
 // System includes
 #include <cmath>
@@ -8,7 +9,7 @@
 
 namespace noname
 {
-    Player::Player() : _weapon("Short Sword", SkillType::SWORD, 6)
+    Player::Player()
     {
         static int cont{0};
         _id = cont;
@@ -59,7 +60,7 @@ namespace noname
         }
     }
 
-    short Player::getDamage(SkillType skill) const
+    short Player::getDamage() const
     {
         auto rollDice = [](int min, int max)
         {
@@ -76,7 +77,7 @@ namespace noname
             {
                 doubleDamage = 2;
             }
-            return (rollDice(1, _weapon.getDice()) * doubleDamage) + _skills.find(skill)->second;
+            return (rollDice(1, _weapon.getDice()) * doubleDamage) + _skills.find(_weapon.getType())->second;
         }
         return 0;
     }
@@ -117,5 +118,10 @@ namespace noname
     unsigned long long Player::getExpForLevel(short level) const
     {
         return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
+    }
+
+    void Player::setWeapon(const std::string &weapon)
+    {
+        _weapon = WM.getWeapon(weapon);
     }
 }

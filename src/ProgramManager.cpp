@@ -43,7 +43,7 @@ namespace noname
     void ProgramManager::run()
     {
         LM.writeLog(Level::Debug, "Starting program...");
-        WM.initWeapons();
+        WM.initializeWeapons();
         LM.writeLog(Level::Debug, "Ending program...");
     }
 

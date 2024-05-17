@@ -36,12 +36,14 @@ namespace noname
         short getSkill(SkillType skill) const;
         void setSkill(SkillType skill, short value);
         void updateTries(SkillType skill);
-        short getDamage(SkillType skill) const;
+        short getDamage() const;
         short getHealth() const;
         void takeDamage(short damage);
         void addExperience(long exp);
         unsigned long long getExperience() const;
         unsigned long long getExpForLevel(short level) const;
+        void setWeapon(const std::string &weapon);
+        Weapon getWeapon() const { return _weapon; }
         bool operator==(const Player &p) const
         {
             return _id == p._id;

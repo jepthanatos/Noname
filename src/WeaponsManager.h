@@ -9,6 +9,7 @@
 
 // System includes
 #include <vector>
+#include <unordered_map>
 
 // Two-letter acronym for easier access to manager
 #define WM noname::WeaponsManager::getInstance()
@@ -19,7 +20,7 @@ namespace noname
     {
 
     private:
-        std::vector<Weapon> _weapons_list;
+        std::unordered_map<std::string, Weapon> _weapons_list;
 
     public:
         void startUp()
@@ -36,21 +37,23 @@ namespace noname
             LM.writeLog(Level::Debug, "WeaponsManager::shutDown");
         }
 
-        void initWeapons()
+        void initializeWeapons()
         {
-            _weapons_list.push_back({"Club", SkillType::CLUB, 4});
-            _weapons_list.push_back({"Dagger", SkillType::SWORD, 4});
-            _weapons_list.push_back({"Greatclub", SkillType::CLUB, 8});
-            _weapons_list.push_back({"Handaxe", SkillType::AXE, 6});
-            _weapons_list.push_back({"Javelin", SkillType::DISTANCE, 6});
-            _weapons_list.push_back({"Light hammer", SkillType::CLUB, 4});
-            _weapons_list.push_back({"Mace", SkillType::CLUB, 6});
-            _weapons_list.push_back({"Quaterstaff", SkillType::CLUB, 6});
-            _weapons_list.push_back({"Sickle", SkillType::SWORD, 4});
-            _weapons_list.push_back({"Spear", SkillType::DISTANCE, 6});
+            _weapons_list.insert({"Club", {"Club", SkillType::CLUB, 4}});
+            _weapons_list.insert({"Dagger", {"Dagger", SkillType::SWORD, 4}});
+            _weapons_list.insert({"Greatclub", {"Greatclub", SkillType::CLUB, 8}});
+            _weapons_list.insert({"Handaxe", {"Handaxe", SkillType::AXE, 6}});
+            _weapons_list.insert({"Javelin", {"Javelin", SkillType::DISTANCE, 6}});
+            _weapons_list.insert({"Light hammer", {"Light hammer", SkillType::CLUB, 4}});
+            _weapons_list.insert({"Mace", {"Mace", SkillType::CLUB, 6}});
+            _weapons_list.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, 6}});
+            _weapons_list.insert({"Sickle", {"Sickle", SkillType::SWORD, 4}});
+            _weapons_list.insert({"Spear", {"Spear", SkillType::DISTANCE, 6}});
         }
 
-        std::vector<Weapon> getWeaponsList() const { return _weapons_list; }
+        std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons_list; }
+
+        Weapon getWeapon(const std::string &weapon) { return _weapons_list.find(weapon)->second; }
     };
 
 }

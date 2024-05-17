@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "Player.h"
+#include "WeaponsManager.h"
 
 // System includes
 #include <cmath>
@@ -43,8 +44,10 @@ TEST_F(TestPlayer, updateTriesTest)
 
 TEST_F(TestPlayer, takeDamage)
 {
-    player.setSkill(SkillType::SWORD, 20);
-    short damage{player.getDamage(SkillType::SWORD)};
+    WM.initializeWeapons();
+    player.setWeapon("Club");
+    player.setSkill(SkillType::CLUB, 20);
+    short damage{player.getDamage()};
 
     short initialHealth{player.getHealth()};
     player.takeDamage(damage);
@@ -57,8 +60,10 @@ TEST_F(TestPlayer, takeDamageAndDie)
     player.setLevel(2);
     short level{player.getLevel()};
 
-    player.setSkill(SkillType::SWORD, 20);
-    short damage{player.getDamage(SkillType::SWORD)};
+    WM.initializeWeapons();
+    player.setWeapon("Club");
+    player.setSkill(SkillType::CLUB, 20);
+    short damage{player.getDamage()};
 
     short health{player.getHealth()};
     while (health > 0)
@@ -100,4 +105,19 @@ TEST_F(TestPlayer, playerExperienceAtEachLevelFrom1To1000)
 
         ASSERT_EQ(player.getExpForLevel(i), getExp(i));
     }
+}
+
+TEST_F(TestPlayer, playerSetWeapon)
+{
+    Weapon club{"Club", SkillType::CLUB, 4};
+    WM.initializeWeapons();
+
+    player.setWeapon("Club");
+    EXPECT_EQ(club, player.getWeapon());
+}
+
+TEST_F(TestPlayer, playerAddExperience)
+{
+    player.addExperience(1000);
+    EXPECT_EQ(player.getExperience(), 1000);
 }

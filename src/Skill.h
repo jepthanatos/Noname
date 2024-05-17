@@ -17,11 +17,11 @@ namespace noname
         LAST_SKILL
     };
 
-    static const short MAGIC_LEVEL = 1600;
+    // static const short MAGIC_LEVEL = 1600;
     static const short MELEE_TRIES = 50;
     static const short DISTANCE_TRIES = 25;
     static const short SHIELDING = 100;
-    static const short FISHING = 20;
+    // static const short FISHING = 20;
 
     static std::string SkillToString(SkillType s)
     {
@@ -49,7 +49,7 @@ namespace noname
     {
 
     private:
-        // SKILL _id;     // Unique game engine defined identifier.
+        // short _id;
         short _min_value;    // Minimum value the skill can have.
         short _max_value;    // Maximum value the skill can have.
         short _tries_needed; // Number of tries needed before next level.
