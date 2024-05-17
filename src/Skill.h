@@ -50,18 +50,24 @@ namespace noname
 
     private:
         // SKILL _id;     // Unique game engine defined identifier.
-        int _min_value;    // Minimum value the skill can have.
-        int _max_value;    // Maximum value the skill can have.
-        int _tries_needed; // Number of tries needed before next level.
+        short _min_value;    // Minimum value the skill can have.
+        short _max_value;    // Maximum value the skill can have.
+        short _tries_needed; // Number of tries needed before next level.
 
     public:
-        Skill(int min_value, int max_value, int tries) : _min_value{min_value}, _max_value{max_value}, _tries_needed{tries}
+        Skill(const short min_value, const short max_value, const short tries) : _min_value{min_value}, _max_value{max_value}, _tries_needed{tries}
         {
         }
 
         virtual ~Skill(){};
 
-        SkillType getType() { return _skill; }
+        SkillType getType() const { return _skill; }
+
+        short getMinValue() const { return _min_value; }
+
+        short getMaxValue() const { return _max_value; }
+
+        short getTriesNeeded() const { return _tries_needed; }
     };
 
 }

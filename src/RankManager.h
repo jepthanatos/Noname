@@ -1,5 +1,5 @@
-#ifndef __SKILL_MANAGER_H__
-#define __SKILL_MANAGER_H__
+#ifndef __RANK_MANAGER_H__
+#define __RANK_MANAGER_H__
 
 #include "Singleton.h"
 #include "Manager.h"
@@ -10,7 +10,6 @@
 // System includes.
 #include <vector>
 #include <algorithm>
-// #include "spdlog/sinks/basic_file_sink.h"
 
 // Two-letter acronym for easier access to manager.
 #define RM_SWORD noname::RankManager<SkillType::SWORD>::getInstance()
@@ -28,7 +27,6 @@ namespace noname
         void startUp()
         {
             Manager::setType("RankManager-" + SkillToString(_skill));
-            // LM.getLogger()->debug("{} RankManager::startUp", SkillToString(_skill));
             LM.writeLog(Level::Debug, SkillToString(_skill) + " RankManager::startUp");
             Manager::startUp();
         }
@@ -37,7 +35,6 @@ namespace noname
         {
             _players_list.clear();
             Manager::shutDown();
-            // LM.getLogger()->debug("RankManager::shutDown");
             LM.writeLog(Level::Debug, "RankManager::shutDown");
         }
 
@@ -49,7 +46,6 @@ namespace noname
 
         void addPlayer(const Player &player)
         {
-            // LM.writeLog(Level::Debug, "RankManager::addPlayer: " + std::to_string(player.getId()));
             _players_list.emplace_back(player);
             updateRanking();
         }
@@ -80,17 +76,8 @@ namespace noname
                 text += "Player ID: " + std::to_string(player.getId()) + " | Skill: " + std::to_string(player.getSkill(_skill)) + "\n";
             }
             LM.writeLog(Level::Debug, text);
-            // auto ranking_logger = spdlog::basic_logger_mt("ranking_logger", "log/ranking.txt", true);
-            // ranking_logger->set_level(spdlog::level::debug);
-            // ranking_logger->set_pattern("[%H:%M:%S %z] [%^%L%$] [thread %t] %v");
-            // ranking_logger->debug("Ranking of: {}", SkillToString(_skill));
-            // for (auto player : _players_list)
-            // {
-            //     ranking_logger->debug("{} {}", player.getName(), player.getSkill(_skill));
-            // }
         }
     };
 
 }
-//------------------------------------------------------------------------------
-#endif // __SKILL_MANAGER_H__
+#endif // __RANK_MANAGER_H__

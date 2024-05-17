@@ -8,7 +8,7 @@
 
 namespace noname
 {
-    Player::Player() : _weapon(SkillType::SWORD, 6)
+    Player::Player() : _weapon("Short Sword", SkillType::SWORD, 6)
     {
         static int cont{0};
         _id = cont;

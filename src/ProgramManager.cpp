@@ -7,6 +7,7 @@
 #include "ProgramManager.h"
 #include "LogManager.h"
 #include "FileManager.h"
+#include "WeaponsManager.h"
 
 namespace noname
 {
@@ -42,6 +43,8 @@ namespace noname
     void ProgramManager::run()
     {
         LM.writeLog(Level::Debug, "Starting program...");
+        WM.initWeapons();
         LM.writeLog(Level::Debug, "Ending program...");
     }
+
 }

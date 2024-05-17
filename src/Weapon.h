@@ -13,16 +13,19 @@ namespace noname
     {
 
     private:
-        short _id; // Unique game engine defined identifier
+        short _id;
+        std::string _name;
         SkillType _type;
         short _dice;
 
     public:
-        Weapon(SkillType type, short dice) : _type{type}, _dice{dice}
+        Weapon(const std::string name, const SkillType type, const short dice) : _name{name}, _type{type}, _dice{dice}
         {
         }
 
         virtual ~Weapon(){};
+
+        std::string getName() const { return _name; }
 
         SkillType getType() const { return _type; }
 

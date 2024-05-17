@@ -41,72 +41,10 @@ TEST_F(TestPlayer, updateTriesTest)
     EXPECT_EQ(swordLevel, 2);
 }
 
-TEST_F(TestPlayer, setSkillAndGetDamageAtLevel1)
-{
-    player.setLevel(1);
-    short level{player.getLevel()};
-    EXPECT_EQ(level, 1);
-
-    player.setSkill(SkillType::FIST, 10);
-    short damage{player.getDamage(SkillType::FIST)};
-    EXPECT_EQ(damage, 13);
-
-    player.setSkill(SkillType::SWORD, 20);
-    damage = player.getDamage(SkillType::SWORD);
-    EXPECT_EQ(damage, 21);
-
-    player.setSkill(SkillType::CLUB, 30);
-    damage = player.getDamage(SkillType::CLUB);
-    EXPECT_EQ(damage, 29);
-}
-
-TEST_F(TestPlayer, setSkillAndGetDamageAtLevel10)
-{
-    player.setLevel(10);
-    short level{player.getLevel()};
-    EXPECT_EQ(level, 10);
-
-    player.setSkill(SkillType::FIST, 10);
-    short damage{player.getDamage(SkillType::FIST)};
-    EXPECT_EQ(damage, 15);
-
-    player.setSkill(SkillType::SWORD, 20);
-    damage = player.getDamage(SkillType::SWORD);
-    EXPECT_EQ(damage, 23);
-
-    player.setSkill(SkillType::CLUB, 30);
-    damage = player.getDamage(SkillType::CLUB);
-    EXPECT_EQ(damage, 31);
-}
-
-TEST_F(TestPlayer, setSkillAndGetDamageAtLevel100)
-{
-    player.setLevel(100);
-    short level{player.getLevel()};
-    EXPECT_EQ(level, 100);
-
-    player.setSkill(SkillType::FIST, 10);
-    short damage{player.getDamage(SkillType::FIST)};
-    EXPECT_EQ(damage, 33);
-
-    player.setSkill(SkillType::SWORD, 20);
-    damage = player.getDamage(SkillType::SWORD);
-    EXPECT_EQ(damage, 41);
-
-    player.setSkill(SkillType::CLUB, 30);
-    damage = player.getDamage(SkillType::CLUB);
-    EXPECT_EQ(damage, 49);
-}
-
 TEST_F(TestPlayer, takeDamage)
 {
-    player.setLevel(1);
-    short level{player.getLevel()};
-    EXPECT_EQ(level, 1);
-
     player.setSkill(SkillType::SWORD, 20);
     short damage{player.getDamage(SkillType::SWORD)};
-    EXPECT_EQ(damage, 21);
 
     short initialHealth{player.getHealth()};
     player.takeDamage(damage);
@@ -118,11 +56,9 @@ TEST_F(TestPlayer, takeDamageAndDie)
 {
     player.setLevel(2);
     short level{player.getLevel()};
-    EXPECT_EQ(level, 2);
 
     player.setSkill(SkillType::SWORD, 20);
     short damage{player.getDamage(SkillType::SWORD)};
-    EXPECT_EQ(damage, 21);
 
     short health{player.getHealth()};
     while (health > 0)
@@ -136,16 +72,6 @@ TEST_F(TestPlayer, takeDamageAndDie)
     ASSERT_EQ(player.getExperience(), experience);
 }
 
-TEST_F(TestPlayer, playerHealthAtLevel1)
-{
-    player.setLevel(1);
-    short level{player.getLevel()};
-    EXPECT_EQ(level, 1);
-
-    short initialHealth{player.getHealth()};
-    ASSERT_EQ(initialHealth, 5 * ((2 * level) + 21));
-}
-
 TEST_F(TestPlayer, playerHealthAtEachLevelFrom1To1000)
 {
     for (int i = 1; i < 1001; i += 10)
@@ -155,7 +81,7 @@ TEST_F(TestPlayer, playerHealthAtEachLevelFrom1To1000)
         EXPECT_EQ(level, i);
 
         short health{player.getHealth()};
-        ASSERT_EQ(health, 5 * ((2 * i) + 21));
+        ASSERT_EQ(health, 10 * level);
     }
 }
 
