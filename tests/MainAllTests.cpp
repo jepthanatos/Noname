@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "TestLogManager.cpp"
-#include "TestPlayer.cpp"
+#include "TestCharacter.cpp"
 #include "TestRankManager.cpp"
 #include "TestSkill.cpp"
 #include "TestWeapon.cpp"

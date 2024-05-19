@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
 #include "RankManager.h"
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <stdlib.h> /* srand, rand */
+#include <time.h>   /* time */
 
 using namespace noname;
 
@@ -27,7 +27,6 @@ TEST_F(TestRankManager, addPlayer)
 {
     RM_SWORD.startUp();
     Player player{};
-    player.setSkill(SkillType::SWORD, 20);
     RM_SWORD.addPlayer(player);
     std::vector<Player> ranking{RM_SWORD.getRanking()};
     std::vector<Player> myRanking{std::move(player)};
@@ -43,7 +42,6 @@ TEST_F(TestRankManager, add100Players)
     for (int i = 0; i < 100; ++i)
     {
         Player player{};
-        player.setSkill(SkillType::SWORD, rand() % 100);
         RM_SWORD.addPlayer(player);
     }
     RM_SWORD.printRanking();

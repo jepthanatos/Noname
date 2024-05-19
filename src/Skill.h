@@ -17,7 +17,7 @@ namespace noname
         LAST_SKILL
     };
 
-    // static const short MAGIC_LEVEL = 1600;
+    static const short MANA_POINTS = 1600;
     static const short MELEE_TRIES = 50;
     static const short DISTANCE_TRIES = 25;
     static const short SHIELDING = 100;
