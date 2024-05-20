@@ -18,9 +18,11 @@ namespace noname
     {
         try
         {
-            logFile.open(LOGFILE_NAME, std::ofstream::out);
+            Manager::setType("LogManager");
+            logFile.open(LOGFILE_NAME, std::ofstream::out | std::ofstream::app);
             logLevel = Level::Debug;
             started = true;
+            writeLog(Level::Debug, "LogManager::startUp");
         }
         catch (std::ofstream::failure e)
         {
@@ -31,6 +33,7 @@ namespace noname
 
     void LogManager::shutDown()
     {
+        writeLog(Level::Debug, "LogManager::shutDown");
         logFile.close();
     }
 

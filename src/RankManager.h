@@ -13,6 +13,7 @@
 
 // Two-letter acronym for easier access to manager.
 #define RM_SWORD noname::RankManager<SkillType::SWORD>::getInstance()
+#define RM_CLUB noname::RankManager<SkillType::CLUB>::getInstance()
 
 namespace noname
 {
@@ -27,7 +28,7 @@ namespace noname
         void startUp()
         {
             Manager::setType("RankManager-" + SkillToString(_skill));
-            LM.writeLog(Level::Debug, SkillToString(_skill) + " RankManager::startUp");
+            LM.writeLog(Level::Debug, Manager::getType() + "::startUp");
             Manager::startUp();
         }
 
@@ -35,7 +36,7 @@ namespace noname
         {
             _players_list.clear();
             Manager::shutDown();
-            LM.writeLog(Level::Debug, "RankManager::shutDown");
+            LM.writeLog(Level::Debug, Manager::getType() + "::shutDown");
         }
 
         void updateRanking()
@@ -69,11 +70,11 @@ namespace noname
 
         void printRanking()
         {
-            auto title{"Ranking of:" + SkillToString(_skill)};
+            auto title{"Ranking of: " + SkillToString(_skill)};
             std::string text = title + "\n";
             for (auto player : _players_list)
             {
-                text += "Player ID: " + std::to_string(player.getId()) + " | Skill: " + std::to_string(player.getSkill(_skill)) + "\n";
+                text += player.getInfoForRanking(_skill);
             }
             LM.writeLog(Level::Debug, text);
         }

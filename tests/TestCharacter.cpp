@@ -2,6 +2,7 @@
 
 #include "Character.h"
 #include "WeaponsManager.h"
+#include "LogManager.h"
 
 // System includes
 #include <cmath>
@@ -16,8 +17,13 @@ struct TestCharacter : Test
 
     void SetUp() override
     {
+        LM.startUp();
         WM.initializeWeapons();
-        character.setWeapon("Club");
+        character.equipWeapon("Club");
+    }
+    void TearDown() override
+    {
+        LM.shutDown();
     }
 };
 
@@ -46,14 +52,19 @@ TEST_F(TestCharacter, CharacterExperienceAtEachLevelFrom1To1000)
 
 TEST_F(TestCharacter, CharacterAddExperience)
 {
-    Character player;
-    player.addExperience(1000);
-    EXPECT_EQ(player.getExperience(), 1000);
+    character.addExperience(1000);
+    EXPECT_EQ(character.getExperience(), 1000);
 }
 
 TEST_F(TestCharacter, getLevel)
 {
     EXPECT_EQ(character.getLevel(), 1);
+}
+
+TEST_F(TestCharacter, CharacterAddExperienceAndLevelUp)
+{
+    character.addExperience(character.getExpForLevel(100) - character.getExperience());
+    EXPECT_EQ(character.getLevel(), 100);
 }
 
 TEST_F(TestCharacter, getSkill)
@@ -104,4 +115,13 @@ TEST_F(TestCharacter, CharacterSetWeaponAndGetWeapon)
 {
     Weapon club{"Club", SkillType::CLUB, 4};
     EXPECT_EQ(club, character.getWeapon());
+}
+
+TEST_F(TestCharacter, CharacterAttack)
+{
+    for (int i = 0; i < 1000; ++i)
+    {
+        character.attack();
+    }
+    ASSERT_TRUE(character.getSkill(SkillType::CLUB) > 1);
 }

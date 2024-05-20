@@ -1,14 +1,12 @@
 // Local includes
 #include "Character.h"
+#include "Utils.h"
 
 // System includes
-#include <cmath>
-#include <math.h>
-#include <random>
 
 namespace noname
 {
-    Character::Character() : _name{}, _currentExp{0}, _nextLevelExp{0}, _currentManaWasted{0}, _nextLevelManaWasted{0}, _level{0}, _magicLevel{0}, _currentHealth{0}, _maxHealth{0}, _currentMana{0}, _maxMana{0}, _currentCapacity{0}, _maxCapacity{0}
+    Character::Character() : _currentExp{0}, _nextLevelExp{0}, _currentManaWasted{0}, _nextLevelManaWasted{0}, _level{0}, _magicLevel{0}, _currentHealth{0}, _maxHealth{0}, _currentMana{0}, _maxMana{0}, _currentCapacity{0}, _maxCapacity{0}
     {
         static int cont{0};
         _id = cont;
@@ -67,15 +65,16 @@ namespace noname
         {
             _skillTries.find(skill)->second = 0;
             _skills.find(skill)->second++;
+            LM.writeLog(Level::Debug, "New value of " + SkillToString(skill) + " = " + std::to_string(_skills.find(skill)->second));
         }
     }
 
-    unsigned long long Character::getExpForLevel(short level) const
+    unsigned long long Character::getExpForLevel(short level)
     {
         return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
     }
 
-    void Character::addExperience(long exp)
+    void Character::addExperience(unsigned long long exp)
     {
         _currentExp += exp;
 
@@ -88,22 +87,15 @@ namespace noname
 
     short Character::getAttackDamage() const
     {
-        auto rollDice = [](int min, int max)
-        {
-            std::random_device dev;
-            std::mt19937 rng(dev());
-            std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
-            return dist6(rng);
-        };
         short doubleDamage{1};
-        auto d20{rollDice(1, 20)};
+        auto d20{Utils::rollDice(1, 20)};
         if (d20 > 1)
         {
             if (d20 == 20) // The character did a critical hit
             {
                 doubleDamage = 2;
             }
-            return (rollDice(1, _currentWeapon.getDice()) * doubleDamage) + _skills.find(_currentWeapon.getType())->second;
+            return (Utils::rollDice(1, _currentWeapon.getDice()) * doubleDamage) + _skills.find(_currentWeapon.getType())->second;
         }
         // The character missed the attack
         return 0;
@@ -118,5 +110,13 @@ namespace noname
             if (_currentExp < getExpForLevel(_level))
                 _level--;
         }
+    }
+
+    void Character::attack()
+    {
+        auto damage{getAttackDamage()};
+        // LM.writeLog(Level::Debug, "Character has attacked with damage equal to " + std::to_string(damage));
+        if (damage > 0)
+            updateTries(_currentWeapon.getType());
     }
 }
