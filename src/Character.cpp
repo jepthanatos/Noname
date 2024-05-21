@@ -101,7 +101,7 @@ namespace noname
         return 0;
     }
 
-    void Character::takeDamage(short damage)
+    void Character::takeDamage(int damage)
     {
         _currentHealth -= damage;
         if (_currentHealth <= 0)

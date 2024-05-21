@@ -54,7 +54,7 @@ namespace noname
         short getSkill(SkillType skill) const { return _skills.find(skill)->second; }
         short getCurrentHealth() const { return _currentHealth; }
         short getAttackDamage() const;
-        void takeDamage(short damage);
+        void takeDamage(int damage);
         Weapon getWeapon() const { return _currentWeapon; }
         void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
 

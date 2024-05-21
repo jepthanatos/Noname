@@ -1,13 +1,14 @@
 #include <gtest/gtest.h>
 
-#include "Relationship.h"
+#include "Relationships.h"
 
 using namespace noname;
 using namespace testing;
 
-struct TestRelationship : Test
+struct TestRelationships : Test
 {
-    Character parent{"Parent"};
+    Character parent1{"Husband"};
+    Character parent2{"Wife"};
     Character child1{"Child1"};
     Character child2{"Child2"};
     Relationships relationships;
@@ -15,8 +16,11 @@ struct TestRelationship : Test
     void SetUp() override
     {
         LM.startUp();
-        relationships.add_parent_and_child(parent, child1);
-        relationships.add_parent_and_child(parent, child2);
+        relationships.add_parent_and_child(parent1, child1);
+        relationships.add_parent_and_child(parent1, child2);
+        relationships.add_parent_and_child(parent2, child1);
+        relationships.add_parent_and_child(parent2, child2);
+        relationships.add_husband_and_wife(parent1, parent2);
     }
     void TearDown() override
     {
@@ -24,14 +28,30 @@ struct TestRelationship : Test
     }
 };
 
-TEST_F(TestRelationship, findAllChildrenOfParent)
+TEST_F(TestRelationships, findAllChildrenOfParents)
 {
-    auto children = relationships.find_all_children_of("Parent");
-    EXPECT_TRUE(children.size() > 0);
+    EXPECT_TRUE(relationships.find_all_children_of("Husband").size() > 0);
+
+    EXPECT_TRUE(relationships.find_all_children_of("Wife").size() > 0);
 }
 
-TEST_F(TestRelationship, findAllChildrenOfChildren)
+TEST_F(TestRelationships, findAllChildrenOfChildrenShouldNotReturnAnything)
 {
-    auto children = relationships.find_all_children_of("Children1");
-    EXPECT_FALSE(children.size() > 0);
+    auto children = relationships.find_all_children_of("Child1");
+    EXPECT_TRUE(children.size() == 0);
+}
+
+TEST_F(TestRelationships, findParentsOfChild)
+{
+    EXPECT_TRUE(relationships.find_parents_of("Child1").size() == 2);
+}
+
+TEST_F(TestRelationships, findHusbandOf)
+{
+    EXPECT_TRUE(relationships.find_husband_of("Wife").size() == 1);
+}
+
+TEST_F(TestRelationships, findWifeOf)
+{
+    EXPECT_TRUE(relationships.find_wife_of("Husband").size() == 1);
 }
