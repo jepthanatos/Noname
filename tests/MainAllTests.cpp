@@ -2,7 +2,7 @@
 
 #include "TestLogManager.cpp"
 #include "TestCharacter.cpp"
-#include "TestRankManager.cpp"
+#include "TestRanking.cpp"
 #include "TestSkill.cpp"
 #include "TestWeapon.cpp"
 #include "TestRelationship.cpp"

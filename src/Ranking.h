@@ -1,40 +1,58 @@
-#ifndef __RANK_MANAGER_H__
-#define __RANK_MANAGER_H__
+#ifndef __RANKING_H__
+#define __RANKING_H__
 
+// Local includes
 #include "Singleton.h"
 #include "Manager.h"
 #include "Skill.h"
 #include "Player.h"
 #include "LogManager.h"
 
-// System includes.
+// System includes
 #include <vector>
 #include <algorithm>
 
-// Two-letter acronym for easier access to manager.
-#define RM_SWORD noname::RankManager<SkillType::SWORD>::getInstance()
-#define RM_CLUB noname::RankManager<SkillType::CLUB>::getInstance()
+// Acronyms for easier access to managers
+#define RANKING_FIST noname::Ranking<SkillType::FIST>::getInstance()
+#define RANKING_SWORD noname::Ranking<SkillType::SWORD>::getInstance()
+#define RANKING_AXE noname::Ranking<SkillType::AXE>::getInstance()
+#define RANKING_CLUB noname::Ranking<SkillType::CLUB>::getInstance()
+#define RANKING_DISTANCE noname::Ranking<SkillType::DISTANCE>::getInstance()
+#define RANKING_MAGIC noname::Ranking<SkillType::MAGIC>::getInstance()
 
 namespace noname
 {
     template <SkillType _skill>
-    class RankManager : public Manager, public Singleton<RankManager<_skill>>
+    class Ranking : public Manager, public Singleton<Ranking<_skill>>
     {
 
     private:
         std::vector<Player> _players_list;
+        std::ofstream file;
+        std::string rankingFile;
 
     public:
         void startUp()
         {
-            Manager::setType("RankManager-" + SkillToString(_skill));
+            Manager::setType("Ranking-" + SkillToString(_skill));
             LM.writeLog(Level::Debug, Manager::getType() + "::startUp");
             Manager::startUp();
+            try
+            {
+                rankingFile = "Ranking-" + SkillToString(_skill) + ".txt";
+                file.open(rankingFile, std::ofstream::out);
+            }
+            catch (std::ofstream::failure e)
+            {
+                std::cerr << "Ranking-" << SkillToString(_skill) << "file creation failed." << std::endl;
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void shutDown()
         {
             _players_list.clear();
+            file.close();
             Manager::shutDown();
             LM.writeLog(Level::Debug, Manager::getType() + "::shutDown");
         }
@@ -76,9 +94,9 @@ namespace noname
             {
                 text += player.getInfoForRanking(_skill);
             }
-            LM.writeLog(Level::Debug, text);
+            file << text << std::endl;
+            file.flush();
         }
     };
-
 }
-#endif // __RANK_MANAGER_H__
+#endif // __RANKING_H__
