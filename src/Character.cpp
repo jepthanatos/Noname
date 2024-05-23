@@ -6,7 +6,49 @@
 
 namespace noname
 {
-    Character::Character() : _currentExp{0}, _nextLevelExp{0}, _currentManaWasted{0}, _nextLevelManaWasted{0}, _level{0}, _magicLevel{0}, _currentHealth{0}, _maxHealth{0}, _currentMana{0}, _maxMana{0}, _currentCapacity{0}, _maxCapacity{0}
+    Character::Character() : _id{0},
+                             _name{"Noname"},
+                             _level{0},
+                             _magicLevel{0},
+                             _currentHealth{0},
+                             _maxHealth{0},
+                             _currentMana{0},
+                             _maxMana{0},
+                             _currentCapacity{0},
+                             _maxCapacity{0},
+                             _currentExperience{0},
+                             _nextLevelExperience{0},
+                             _currentManaWasted{0},
+                             _nextLevelManaWasted{0}
+    {
+        static int cont{0};
+        _id = cont;
+        ++cont;
+
+        setLevel(1);
+        setMagicLevel(1);
+
+        for (int i = 0; i < static_cast<int>(SkillType::LAST_SKILL); ++i)
+        {
+            _skills.emplace(static_cast<SkillType>(i), 1);
+            _skillTries.emplace(static_cast<SkillType>(i), 0);
+        }
+    }
+
+    Character::Character(const std::string &name) : _id{0},
+                                                    _name{name},
+                                                    _level{0},
+                                                    _magicLevel{0},
+                                                    _currentHealth{0},
+                                                    _maxHealth{0},
+                                                    _currentMana{0},
+                                                    _maxMana{0},
+                                                    _currentCapacity{0},
+                                                    _maxCapacity{0},
+                                                    _currentExperience{0},
+                                                    _nextLevelExperience{0},
+                                                    _currentManaWasted{0},
+                                                    _nextLevelManaWasted{0}
     {
         static int cont{0};
         _id = cont;
@@ -25,7 +67,7 @@ namespace noname
     void Character::setLevel(short value)
     {
         _level = value;
-        _nextLevelExp = getExpForLevel(_level + 1);
+        _nextLevelExperience = getExpForLevel(_level + 1);
         setHealth();
         setMana();
     }
@@ -60,11 +102,11 @@ namespace noname
 
     void Character::updateTries(SkillType skill)
     {
-        _skillTries.find(skill)->second++;
+        ++_skillTries.find(skill)->second;
         if ((skill == SkillType::DISTANCE and _skillTries.find(skill)->second >= DISTANCE_TRIES) or (_skillTries.find(skill)->second >= MELEE_TRIES))
         {
             _skillTries.find(skill)->second = 0;
-            _skills.find(skill)->second++;
+            ++_skills.find(skill)->second;
             LM.writeLog(Level::Debug, "New value of " + SkillToString(skill) + " = " + std::to_string(_skills.find(skill)->second));
         }
     }
@@ -76,12 +118,11 @@ namespace noname
 
     void Character::addExperience(unsigned long long exp)
     {
-        _currentExp += exp;
+        _currentExperience += exp;
 
-        while (_currentExp >= _nextLevelExp)
+        while (_currentExperience >= _nextLevelExperience)
         {
-            _level++;
-            setLevel(_level);
+            setLevel(_level + 1);
         }
     }
 
@@ -101,14 +142,20 @@ namespace noname
         return 0;
     }
 
+    void Character::respawn()
+    {
+        setLevel(_level);
+        _isDead = false;
+    }
+
     void Character::takeDamage(int damage)
     {
         _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
-            _currentExp -= ceil((_currentExp * 25) / 100);
-            if (_currentExp < getExpForLevel(_level))
-                _level--;
+            --_level;
+            _currentExperience = _currentExperience - ceil((_currentExperience * 25) / 100);
+            _isDead = true;
         }
     }
 

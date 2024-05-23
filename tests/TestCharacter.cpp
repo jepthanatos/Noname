@@ -13,7 +13,7 @@ using namespace testing;
 
 struct TestCharacter : Test
 {
-    Character character{};
+    Character character{"Noname"};
 
     void SetUp() override
     {
@@ -29,7 +29,7 @@ struct TestCharacter : Test
 
 TEST_F(TestCharacter, getName)
 {
-    EXPECT_EQ(character.getName(), "");
+    EXPECT_EQ(character.getName(), "Noname");
 }
 
 TEST_F(TestCharacter, getExperience)
@@ -69,7 +69,7 @@ TEST_F(TestCharacter, CharacterAddExperienceAndLevelUp)
 
 TEST_F(TestCharacter, getSkill)
 {
-    EXPECT_EQ(character.getSkill(SkillType::CLUB), 1);
+    EXPECT_EQ(character.getSkill(SkillType::CLUB), short(1));
 }
 
 TEST_F(TestCharacter, CharacterHealthAtEachLevelFrom1To1000)
@@ -91,7 +91,7 @@ TEST_F(TestCharacter, getAttackDamage)
 TEST_F(TestCharacter, takeDamage)
 {
     short damage{character.getAttackDamage()};
-    short initialHealth{character.getCurrentHealth()};
+    int initialHealth{character.getCurrentHealth()};
     character.takeDamage(damage);
     ASSERT_EQ(character.getCurrentHealth(), initialHealth - damage);
 }
@@ -100,14 +100,17 @@ TEST_F(TestCharacter, takeDamageAndDie)
 {
     character.addExperience(character.getExpForLevel(2));
     ASSERT_EQ(character.getLevel(), 2);
+    ASSERT_EQ(character.getExperience(), character.getExpForLevel(2));
 
-    while (character.getCurrentHealth() > 0)
+    while (!character.isDead())
     {
         character.takeDamage(character.getAttackDamage());
     }
     ASSERT_TRUE(character.getCurrentHealth() <= 0);
+
+    character.respawn();
     ASSERT_EQ(character.getLevel(), 1);
-    unsigned long long experience = character.getExpForLevel(2) - ceil((character.getExpForLevel(2) * 25) / 100);
+    auto experience = character.getExpForLevel(2) - ceil((character.getExpForLevel(2) * 25) / 100);
     ASSERT_EQ(character.getExperience(), experience);
 }
 
@@ -123,5 +126,6 @@ TEST_F(TestCharacter, CharacterAttack)
     {
         character.attack();
     }
-    ASSERT_TRUE(character.getSkill(SkillType::CLUB) > 1);
+    Property<short int> expectedSkill{1};
+    ASSERT_TRUE(character.getSkill(SkillType::CLUB) > expectedSkill);
 }

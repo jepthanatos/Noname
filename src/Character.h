@@ -4,8 +4,10 @@
 // System includes
 #include <unordered_map>
 #include <string>
+#include <memory>
 
 // Local includes
+#include "Property.h"
 #include "Skill.h"
 #include "Weapon.h"
 #include "WeaponsManager.h"
@@ -14,24 +16,25 @@ namespace noname
 {
     class Character
     {
-    private:
-        int _id;
-        std::string _name;
-        unsigned long long _currentExp;
-        unsigned long long _nextLevelExp;
-        unsigned long long _currentManaWasted;
-        unsigned long long _nextLevelManaWasted;
-        short _level;
-        short _magicLevel;
-        int _currentHealth;
-        int _maxHealth;
-        int _currentMana;
-        int _maxMana;
-        std::unordered_map<SkillType, short> _skills;
-        std::unordered_map<SkillType, short> _skillTries;
-        int _currentCapacity;
-        int _maxCapacity;
+    protected:
+        Property<int> _id;
+        Property<std::string> _name;
+        Property<short> _level;
+        Property<short> _magicLevel;
+        Property<int> _currentHealth;
+        Property<int> _maxHealth;
+        Property<int> _currentMana;
+        Property<int> _maxMana;
+        Property<int> _currentCapacity;
+        Property<int> _maxCapacity;
+        Property<unsigned long long> _currentExperience;
+        Property<unsigned long long> _nextLevelExperience;
+        Property<unsigned long long> _currentManaWasted;
+        Property<unsigned long long> _nextLevelManaWasted;
+        std::unordered_map<SkillType, Property<short>> _skills;
+        std::unordered_map<SkillType, Property<short>> _skillTries;
         Weapon _currentWeapon;
+        bool _isDead;
 
         void setLevel(short value);
         void setMagicLevel(short value);
@@ -43,16 +46,18 @@ namespace noname
 
     public:
         Character();
-        Character(const std::string &name) : _name{name} { Character(); }
+        Character(const std::string &name);
         bool operator==(const Character &p) const { return _id == p._id; }
         int getId() const { return _id; }
         std::string getName() const { return _name; }
-        unsigned long long getExperience() const { return _currentExp; }
+        unsigned long long getExperience() { return _currentExperience; }
         static unsigned long long getExpForLevel(short level);
         void addExperience(unsigned long long exp);
         short getLevel() const { return _level; }
         short getSkill(SkillType skill) const { return _skills.find(skill)->second; }
-        short getCurrentHealth() const { return _currentHealth; }
+        int getCurrentHealth() { return _currentHealth; }
+        bool isDead() { return _isDead; }
+        void respawn();
         short getAttackDamage() const;
         void takeDamage(int damage);
         Weapon getWeapon() const { return _currentWeapon; }
