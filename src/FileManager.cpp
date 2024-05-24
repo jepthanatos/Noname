@@ -23,16 +23,19 @@ namespace noname
     void FileManager::startUp()
     {
         // Open the input file.
-        try
+        if (inputFileName != "")
         {
-            inputFile.open(inputFileName);
-            started = true;
-        }
-        catch (std::ofstream::failure e)
-        {
-            LM.writeLog(Level::Debug, "Error opening the input file");
-            LM.writeLog(Level::Debug, e.what());
-            std::cerr << e.what() << std::endl;
+            try
+            {
+                inputFile.open(inputFileName, std::ofstream::in);
+                started = true;
+            }
+            catch (std::ofstream::failure e)
+            {
+                LM.writeLog(Level::Debug, "Error opening the input file: " + inputFileName);
+                LM.writeLog(Level::Debug, e.what());
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         // Open the output file.
@@ -40,11 +43,11 @@ namespace noname
         {
             try
             {
-                outputFile.open(outputFileName);
+                outputFile.open(outputFileName, std::ofstream::out);
             }
             catch (std::ofstream::failure e)
             {
-                LM.writeLog(Level::Debug, "Error opening the output file");
+                LM.writeLog(Level::Debug, "Error opening the output file: " + outputFileName);
                 LM.writeLog(Level::Debug, e.what());
                 std::cerr << e.what() << std::endl;
             }
@@ -57,5 +60,11 @@ namespace noname
             inputFile.close();
         if (outputFile.is_open())
             outputFile.close();
+    }
+
+    void FileManager::write(const std::string &text)
+    {
+        outputFile << text << std::endl;
+        outputFile.flush();
     }
 }

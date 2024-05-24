@@ -1,22 +1,19 @@
-#ifndef __PROGRAM_MANAGER_H__
-#define __PROGRAM_MANAGER_H__
-
-// System includes
-#include <string>
+#ifndef __GAME_MANAGER_H__
+#define __GAME_MANAGER_H__
 
 // Local includes
 #include "Singleton.h"
 #include "Manager.h"
 
-// Two-letter acronym for easier access to manager.
-#define PM noname::ProgramManager::getInstance()
+// Two-letter acronym for easier access to manager
+#define GM noname::GameManager::getInstance()
 
 namespace noname
 {
-    class ProgramManager : public Manager, public Singleton<ProgramManager>
+    class GameManager : public Manager, public Singleton<GameManager>
     {
     public:
-        ~ProgramManager(){};
+        ~GameManager(){};
 
         // Initialize the program by parsing the program arguments.
         int initialization(int argc, char *argv[]);
@@ -31,4 +28,4 @@ namespace noname
         void run();
     };
 }
-#endif // __PROGRAM_MANAGER_H__
+#endif // __GAME_MANAGER_H__

@@ -7,6 +7,7 @@
 #include "Skill.h"
 #include "Player.h"
 #include "LogManager.h"
+#include "FileManager.h"
 
 // System includes
 #include <vector>
@@ -28,8 +29,7 @@ namespace noname
 
     private:
         std::vector<Player> _players_list;
-        std::ofstream file;
-        std::string rankingFile;
+        FileManager rankingFile;
 
     public:
         void startUp()
@@ -37,22 +37,14 @@ namespace noname
             Manager::setType("Ranking-" + SkillToString(_skill));
             LM.writeLog(Level::Debug, Manager::getType() + "::startUp");
             Manager::startUp();
-            try
-            {
-                rankingFile = "Ranking-" + SkillToString(_skill) + ".txt";
-                file.open(rankingFile, std::ofstream::out);
-            }
-            catch (std::ofstream::failure e)
-            {
-                std::cerr << "Ranking-" << SkillToString(_skill) << "file creation failed." << std::endl;
-                std::cerr << e.what() << std::endl;
-            }
+            rankingFile.initOutputFile("Ranking-" + SkillToString(_skill) + ".txt");
+            rankingFile.startUp();
         }
 
         void shutDown()
         {
             _players_list.clear();
-            file.close();
+            rankingFile.shutDown();
             Manager::shutDown();
             LM.writeLog(Level::Debug, Manager::getType() + "::shutDown");
         }
@@ -89,13 +81,13 @@ namespace noname
         void printRanking()
         {
             auto title{"Ranking of: " + SkillToString(_skill)};
+            LM.writeLog(Level::Debug, title);
             std::string text = title + "\n";
             for (auto player : _players_list)
             {
                 text += player.getInfoForRanking(_skill);
             }
-            file << text << std::endl;
-            file.flush();
+            rankingFile.write(text);
         }
     };
 }

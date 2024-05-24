@@ -4,13 +4,17 @@
 // Local includes
 #include "Ranking.h"
 
+// Two-letter acronym for easier access to manager
+#define RM noname::RankingManager::getInstance()
+
 namespace noname
 {
-    class RankingManager : public Singleton<RankingManager>
+    class RankingManager : public Manager, public Singleton<RankingManager>
     {
     public:
         void startUp()
         {
+            Manager::setType("RankingManager");
             LM.writeLog(Level::Debug, "RankingManager::startUp");
             RANKING_FIST.startUp();
             RANKING_SWORD.startUp();
@@ -18,6 +22,7 @@ namespace noname
             RANKING_CLUB.startUp();
             RANKING_DISTANCE.startUp();
             RANKING_MAGIC.startUp();
+            Manager::startUp();
         }
 
         void shutDown()
@@ -29,6 +34,7 @@ namespace noname
             RANKING_DISTANCE.shutDown();
             RANKING_MAGIC.shutDown();
             LM.writeLog(Level::Debug, "RankingManager::shutDown");
+            Manager::shutDown();
         }
 
         void updateAllRankings()
@@ -39,6 +45,16 @@ namespace noname
             RANKING_CLUB.updateRanking();
             RANKING_DISTANCE.updateRanking();
             RANKING_MAGIC.updateRanking();
+        }
+
+        void addPlayer(const Player &player)
+        {
+            RANKING_FIST.addPlayer(std::move(player));
+            RANKING_SWORD.addPlayer(std::move(player));
+            RANKING_AXE.addPlayer(std::move(player));
+            RANKING_CLUB.addPlayer(std::move(player));
+            RANKING_DISTANCE.addPlayer(std::move(player));
+            RANKING_MAGIC.addPlayer(std::move(player));
         }
 
         short getPlayerRanking(int playerId, SkillType skill)
@@ -71,13 +87,14 @@ namespace noname
 
         void printAllRankings()
         {
-            auto title{"RankingManager of: " + SkillToString(_skill)};
-            std::string text = title + "\n";
-            for (auto player : _players_list)
-            {
-                text += player.getInfoForRanking(_skill);
-            }
-            LM.writeLog(Level::Debug, text);
+            LM.writeLog(Level::Debug, "RankingManager::printAllRankings");
+            updateAllRankings();
+            RANKING_FIST.printRanking();
+            RANKING_SWORD.printRanking();
+            RANKING_AXE.printRanking();
+            RANKING_CLUB.printRanking();
+            RANKING_DISTANCE.printRanking();
+            RANKING_MAGIC.printRanking();
         }
     };
 }

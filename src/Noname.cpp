@@ -1,25 +1,25 @@
 // Local includes
-#include "ProgramManager.h"
+#include "GameManager.h"
 
 using namespace noname;
 
 int main(int argc, char *argv[])
 {
     // First check the arguments, if they are wrong exit the program.
-    if (PM.initialization(argc, argv) == EXIT_FAILURE)
+    if (GM.initialization(argc, argv) == EXIT_FAILURE)
         return EXIT_FAILURE;
 
     // Run the services of the program.
-    PM.startUp();
+    GM.startUp();
 
     // Check if the program has started.
-    if (PM.isStarted())
+    if (GM.isStarted())
     {
-        PM.run();
+        GM.run();
     }
 
     // Shut down the services of the program.
-    PM.shutDown();
+    GM.shutDown();
 
     return EXIT_SUCCESS;
 }

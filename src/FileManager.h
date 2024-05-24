@@ -10,12 +10,9 @@
 #include "Singleton.h"
 #include "Manager.h"
 
-// Two-letter acronym for easier access to manager.
-#define FM noname::FileManager::getInstance()
-
 namespace noname
 {
-    class FileManager : public Manager, public Singleton<FileManager>
+    class FileManager : public Manager
     {
     private:
         // Name of the IO files.
@@ -41,6 +38,9 @@ namespace noname
 
         // Shut down the FileManager (close files).
         void shutDown();
+
+        // Write to the file.
+        void write(const std::string &text);
     };
 }
 #endif // __FILE_MANAGER_H__
