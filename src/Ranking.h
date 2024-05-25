@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "LogManager.h"
 #include "FileManager.h"
+#include "HtmlBuilder.h"
 
 // System includes
 #include <vector>
@@ -37,7 +38,7 @@ namespace noname
             Manager::setType("Ranking-" + SkillToString(_skill));
             LM.writeLog(Level::Debug, Manager::getType() + "::startUp");
             Manager::startUp();
-            rankingFile.initOutputFile("Ranking-" + SkillToString(_skill) + ".txt");
+            rankingFile.initOutputFile("Ranking-" + SkillToString(_skill) + ".html");
             rankingFile.startUp();
         }
 
@@ -82,12 +83,18 @@ namespace noname
         {
             auto title{"Ranking of: " + SkillToString(_skill)};
             LM.writeLog(Level::Debug, title);
-            std::string text = title + "\n";
+
+            HtmlBuilder rankingTable{"table"};
+            rankingTable.add_child("caption", title);
+
+            rankingTable.add_child("tr", HtmlBuilder{"th", "Player ID"}.str() +
+                                             HtmlBuilder{"th", "Level"}.str() +
+                                             HtmlBuilder{"th", "Skill"}.str());
             for (auto player : _players_list)
             {
-                text += player.getInfoForRanking(_skill);
+                player.getInfoForRanking(rankingTable, _skill);
             }
-            rankingFile.write(text);
+            rankingFile.write(rankingTable.str());
         }
     };
 }
