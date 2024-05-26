@@ -1,16 +1,13 @@
 #ifndef __HTML_BUILDER_H__
 #define __HTML_BUILDER_H__
 
-#include <iostream>
+// System includes
 #include <string>
 #include <vector>
 #include <sstream>
-#include <memory>
 
 namespace noname
 {
-    class HtmlBuilder;
-
     struct HtmlElement
     {
         std::string _name;
@@ -39,11 +36,6 @@ namespace noname
             oss << i << "</" << _name << ">" << std::endl;
             return oss.str();
         }
-
-        static std::unique_ptr<HtmlBuilder> build(std::string root_name)
-        {
-            return std::make_unique<HtmlBuilder>(root_name);
-        }
     };
 
     class HtmlBuilder
@@ -60,7 +52,6 @@ namespace noname
             root._text = text;
         }
 
-        // void to start with
         HtmlBuilder &add_child(std::string child_name, std::string child_text)
         {
             HtmlElement e{child_name, child_text};
@@ -68,12 +59,10 @@ namespace noname
             return *this;
         }
 
-        // pointer based
-        HtmlBuilder *add_child_2(std::string child_name, std::string child_text)
+        HtmlBuilder &add_child(HtmlBuilder child)
         {
-            HtmlElement e{child_name, child_text};
-            root._elements.emplace_back(e);
-            return this;
+            root._elements.emplace_back(child);
+            return *this;
         }
 
         std::string str() { return root.str(); }
@@ -83,21 +72,5 @@ namespace noname
     private:
         HtmlElement root;
     };
-
-    // int demo()
-    // {
-    //     // easier
-    //     HtmlBuilder builder{"ul"};
-    //     builder.add_child("li", "hello").add_child("li", "world");
-    //     std::cout << builder.str() << std::endl;
-
-    //     auto builder2 = HtmlElement::build("ul")
-    //                         ->add_child_2("li", "hello")
-    //                         ->add_child_2("li", "world");
-    //     std::cout << builder2 << std::endl;
-
-    //     getchar();
-    //     return 0;
-    // }
 }
 #endif // __HTML_BUILDER_H__

@@ -16,9 +16,7 @@ namespace noname
         Player();
         void getInfoForRanking(HtmlBuilder &builder, const SkillType &skill)
         {
-            builder.add_child("tr", HtmlBuilder{"td", _id.toString()}.str() +
-                                        HtmlBuilder{"td", _level.toString()}.str() +
-                                        HtmlBuilder{"td", _skills.find(skill)->second.toString()}.str());
+            builder.add_child(HtmlBuilder{"tr"}.add_child("td", _id.toString()).add_child("td", _level.toString()).add_child("td", _skills.find(skill)->second.toString()));
         }
     };
 }
