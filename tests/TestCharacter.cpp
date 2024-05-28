@@ -61,6 +61,11 @@ TEST_F(TestCharacter, getLevel)
     EXPECT_EQ(character.getLevel(), 1);
 }
 
+TEST_F(TestCharacter, getMagicLevel)
+{
+    EXPECT_EQ(character.getMagicLevel(), 1);
+}
+
 TEST_F(TestCharacter, CharacterAddExperienceAndLevelUp)
 {
     character.addExperience(character.getExpForLevel(100) - character.getExperience());

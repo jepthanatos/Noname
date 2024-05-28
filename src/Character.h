@@ -54,6 +54,7 @@ namespace noname
         static unsigned long long getExpForLevel(short level);
         void addExperience(unsigned long long exp);
         short getLevel() const { return _level; }
+        short getMagicLevel() const { return _magicLevel; }
         short getSkill(SkillType skill) const { return _skills.find(skill)->second; }
         int getCurrentHealth() { return _currentHealth; }
         bool isDead() { return _isDead; }

@@ -1,11 +1,18 @@
 #include "gtest/gtest.h"
 
-#include "TestLogManager.cpp"
 #include "TestCharacter.cpp"
+#include "TestContainer.cpp"
+#include "TestFileManager.cpp"
+#include "TestGameManager.cpp"
+#include "TestItem.cpp"
+#include "TestLogManager.cpp"
+#include "TestPlayer.cpp"
+#include "TestProperty.cpp"
 #include "TestRanking.cpp"
+#include "TestRelationships.cpp"
 #include "TestSkill.cpp"
+#include "TestUtils.cpp"
 #include "TestWeapon.cpp"
-#include "TestRelationship.cpp"
 
 int main(int argc, char **argv)
 {

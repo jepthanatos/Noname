@@ -6,35 +6,25 @@
 
 // Local includes
 #include "Skill.h"
+#include "Item.h"
+#include "Property.h"
 
 namespace noname
 {
-    class Weapon
+    class Weapon : public Item
     {
 
     private:
-        // short _id;
-        std::string _name;
         SkillType _type;
-        short _dice;
+        Property<short> _dice;
 
     public:
-        Weapon(){};
-        Weapon(const std::string name, const SkillType type, const short dice) : _name{name}, _type{type}, _dice{dice}
-        {
-        }
-
-        std::string getName() const { return _name; }
+        Weapon() : _type{SkillType::FIST}, _dice{2}, Item("Fists", ItemType::WEAPON) {}
+        Weapon(const std::string &name, const SkillType type, const short dice) : _type{type}, _dice{dice}, Item(name, ItemType::WEAPON) {}
 
         SkillType getType() const { return _type; }
 
         short getDice() const { return _dice; }
-
-        bool operator==(const Weapon &w) const
-        {
-            return w._name == _name;
-        }
     };
-
 }
 #endif // __WEAPON_H__

@@ -39,6 +39,7 @@ namespace noname
 
         void initializeWeapons()
         {
+            _weapons_list.insert({"Fists", {"Fists", SkillType::FIST, 2}});
             _weapons_list.insert({"Club", {"Club", SkillType::CLUB, 4}});
             _weapons_list.insert({"Dagger", {"Dagger", SkillType::SWORD, 4}});
             _weapons_list.insert({"Greatclub", {"Greatclub", SkillType::CLUB, 8}});

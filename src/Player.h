@@ -14,6 +14,7 @@ namespace noname
     {
     public:
         Player();
+        Player(const std::string &name) : Character(name){};
         void getInfoForRanking(HtmlBuilder &builder, const SkillType &skill)
         {
             builder.add_child(HtmlBuilder{"tr"}.add_child("td", _id.toString()).add_child("td", _level.toString()).add_child("td", _skills.find(skill)->second.toString()));

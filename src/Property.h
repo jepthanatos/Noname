@@ -4,14 +4,15 @@
 // System includes
 #include <string>
 
-// Local includes
 namespace noname
 {
     template <typename T>
-    struct Property
+    class Property
     {
+    private:
         T value;
-        // Property() {}
+
+    public:
         Property(const T initialValue)
         {
             *this = initialValue;
