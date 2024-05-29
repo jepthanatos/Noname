@@ -23,7 +23,6 @@ namespace noname
         Weapon(const std::string &name, const SkillType type, const short dice) : _type{type}, _dice{dice}, Item(name, ItemType::WEAPON) {}
 
         SkillType getType() const { return _type; }
-
         short getDice() const { return _dice; }
     };
 }

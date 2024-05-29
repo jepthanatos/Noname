@@ -20,7 +20,7 @@ namespace noname
     {
 
     private:
-        std::unordered_map<std::string, Weapon> _weapons_list;
+        std::unordered_map<std::string, Weapon> _weapons;
 
     public:
         void startUp()
@@ -32,29 +32,29 @@ namespace noname
 
         void shutDown()
         {
-            _weapons_list.clear();
+            _weapons.clear();
             Manager::shutDown();
             LM.writeLog(Level::Debug, "WeaponsManager::shutDown");
         }
 
         void initializeWeapons()
         {
-            _weapons_list.insert({"Fists", {"Fists", SkillType::FIST, 2}});
-            _weapons_list.insert({"Club", {"Club", SkillType::CLUB, 4}});
-            _weapons_list.insert({"Dagger", {"Dagger", SkillType::SWORD, 4}});
-            _weapons_list.insert({"Greatclub", {"Greatclub", SkillType::CLUB, 8}});
-            _weapons_list.insert({"Handaxe", {"Handaxe", SkillType::AXE, 6}});
-            _weapons_list.insert({"Javelin", {"Javelin", SkillType::DISTANCE, 6}});
-            _weapons_list.insert({"Light hammer", {"Light hammer", SkillType::CLUB, 4}});
-            _weapons_list.insert({"Mace", {"Mace", SkillType::CLUB, 6}});
-            _weapons_list.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, 6}});
-            _weapons_list.insert({"Sickle", {"Sickle", SkillType::SWORD, 4}});
-            _weapons_list.insert({"Spear", {"Spear", SkillType::DISTANCE, 6}});
+            _weapons.insert({"Fists", {"Fists", SkillType::FIST, 2}});
+            _weapons.insert({"Club", {"Club", SkillType::CLUB, 4}});
+            _weapons.insert({"Dagger", {"Dagger", SkillType::SWORD, 4}});
+            _weapons.insert({"Greatclub", {"Greatclub", SkillType::CLUB, 8}});
+            _weapons.insert({"Handaxe", {"Handaxe", SkillType::AXE, 6}});
+            _weapons.insert({"Javelin", {"Javelin", SkillType::DISTANCE, 6}});
+            _weapons.insert({"Light hammer", {"Light hammer", SkillType::CLUB, 4}});
+            _weapons.insert({"Mace", {"Mace", SkillType::CLUB, 6}});
+            _weapons.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, 6}});
+            _weapons.insert({"Sickle", {"Sickle", SkillType::SWORD, 4}});
+            _weapons.insert({"Spear", {"Spear", SkillType::DISTANCE, 6}});
         }
 
-        std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons_list; }
+        std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons; }
 
-        Weapon getWeapon(const std::string &weapon) { return _weapons_list.find(weapon)->second; }
+        Weapon getWeapon(const std::string &weapon) { return _weapons.find(weapon)->second; }
     };
 
 }

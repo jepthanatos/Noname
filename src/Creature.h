@@ -1,7 +1,8 @@
-#ifndef __PLAYER_H__
-#define __PLAYER_H__
+#ifndef __CREATURE_H__
+#define __CREATURE_H__
 
 // System includes
+#include <string>
 
 // Local includes
 #include "Character.h"
@@ -10,15 +11,24 @@
 
 namespace noname
 {
-    class Player : public Character
+    enum class CreatureType
     {
+        BEAST,
+        LAST_CREATURE_TYPE
+    };
+
+    class Creature : public Character
+    {
+    private:
+        CreatureType _type;
+
     public:
-        Player() : Character(){};
-        Player(const std::string &name) : Character(name){};
+        Creature() : Character(){};
+        Creature(const std::string &name, const CreatureType &type) : Character(name), _type{type};
         void getInfoForRanking(HtmlBuilder &builder, const SkillType &skill)
         {
             builder.add_child(HtmlBuilder{"tr"}.add_child("td", _id.toString()).add_child("td", _level.toString()).add_child("td", _skills.find(skill)->second.toString()));
         }
     };
 }
-#endif // __PLAYER_H__
+#endif // __CREATURE_H__

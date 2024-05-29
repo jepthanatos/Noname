@@ -119,7 +119,7 @@ TEST_F(TestCharacter, takeDamageAndDie)
     ASSERT_EQ(character.getExperience(), experience);
 }
 
-TEST_F(TestCharacter, CharacterSetWeaponAndGetWeapon)
+TEST_F(TestCharacter, CharacterGetWeapon)
 {
     Weapon club{"Club", SkillType::CLUB, 4};
     EXPECT_EQ(club, character.getWeapon());
