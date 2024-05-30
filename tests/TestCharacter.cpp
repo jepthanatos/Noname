@@ -18,7 +18,7 @@ struct TestCharacter : Test
     void SetUp() override
     {
         LM.startUp();
-        WM.initializeWeapons();
+        WM.startUp();
         character.equipWeapon("Club");
     }
     void TearDown() override

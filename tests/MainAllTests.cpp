@@ -2,6 +2,7 @@
 
 #include "TestCharacter.cpp"
 #include "TestContainer.cpp"
+#include "TestCreatures.cpp"
 #include "TestFileManager.cpp"
 #include "TestGameManager.cpp"
 #include "TestItem.cpp"

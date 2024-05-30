@@ -44,7 +44,6 @@ namespace noname
     void GameManager::run()
     {
         LM.writeLog(Level::Debug, "Starting program...");
-        WM.initializeWeapons();
         for (int i = 0; i < 100; ++i)
         {
             Player player{};

@@ -28,6 +28,7 @@ namespace noname
             Manager::setType("ItemsManager");
             LM.writeLog(Level::Debug, "ItemsManager::startUp");
             Manager::startUp();
+            initializeItems();
         }
 
         void shutDown()

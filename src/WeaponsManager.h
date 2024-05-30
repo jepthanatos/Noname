@@ -28,6 +28,7 @@ namespace noname
             Manager::setType("WeaponsManager");
             LM.writeLog(Level::Debug, "WeaponsManager::startUp");
             Manager::startUp();
+            initializeWeapons();
         }
 
         void shutDown()

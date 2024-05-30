@@ -13,7 +13,7 @@
 #include <unordered_map>
 
 // Two-letter acronym for easier access to manager
-#define MM noname::CreaturesManager::getInstance()
+#define CM noname::CreaturesManager::getInstance()
 
 namespace noname
 {
@@ -22,7 +22,7 @@ namespace noname
 
     private:
         std::unordered_map<std::string, Creature> _creatures;
-        Relationships _relationships;
+        Relationships<Creature> _relationships;
 
     public:
         void startUp()
@@ -30,6 +30,7 @@ namespace noname
             Manager::setType("CreaturesManager");
             LM.writeLog(Level::Debug, "CreaturesManager::startUp");
             Manager::startUp();
+            initializeCreatures();
         }
 
         void shutDown()
@@ -49,6 +50,9 @@ namespace noname
         std::unordered_map<std::string, Creature> getCreaturesList() const { return _creatures; }
 
         Creature getCreature(const std::string &name) { return _creatures.find(name)->second; }
+
+        std::vector<Creature> findPreyOf(const std::string &name) { return _relationships.find_prey_of(name); }
+        std::vector<Creature> findPredatorOf(const std::string &name) { return _relationships.find_predator_of(name); }
     };
 
 }

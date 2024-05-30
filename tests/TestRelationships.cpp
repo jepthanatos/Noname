@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "Character.h"
 #include "Relationships.h"
 
 using namespace noname;
@@ -11,7 +12,7 @@ struct TestRelationships : Test
     Character parent2{"Wife"};
     Character child1{"Child1"};
     Character child2{"Child2"};
-    Relationships relationships;
+    Relationships<Character> relationships;
 
     void SetUp() override
     {
