@@ -17,10 +17,8 @@ struct TestRelationships : Test
     void SetUp() override
     {
         LM.startUp();
-        relationships.add_parent_and_child(parent1, child1);
-        relationships.add_parent_and_child(parent1, child2);
-        relationships.add_parent_and_child(parent2, child1);
-        relationships.add_parent_and_child(parent2, child2);
+        relationships.add_parents_and_child(parent1, parent2, child1);
+        relationships.add_parents_and_child(parent1, parent2, child2);
         relationships.add_husband_and_wife(parent1, parent2);
     }
     void TearDown() override
@@ -32,7 +30,6 @@ struct TestRelationships : Test
 TEST_F(TestRelationships, findAllChildrenOfParents)
 {
     EXPECT_TRUE(relationships.find_all_children_of("Husband").size() > 0);
-
     EXPECT_TRUE(relationships.find_all_children_of("Wife").size() > 0);
 }
 

@@ -1,8 +1,13 @@
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
 
+// Local includes
+#include "HtmlBuilder.h"
+
 // System includes
 #include <string>
+#include <string_view>
+#include <type_traits>
 
 namespace noname
 {
@@ -47,7 +52,19 @@ namespace noname
         }
         std::string toString() const
         {
-            return std::to_string(value);
+            if constexpr (std::is_convertible_v<T, std::string> or
+                          std::is_convertible_v<T, std::string_view>)
+                return value;
+            else
+                return std::to_string(value);
+        }
+        HtmlBuilder toHtmlBuilder(const std::string &title)
+        {
+            if constexpr (std::is_convertible_v<T, std::string> or
+                          std::is_convertible_v<T, std::string_view>)
+                return HtmlBuilder{"tr"}.add_child("td", title).add_child("td", value);
+            else
+                return HtmlBuilder{"tr"}.add_child("td", title).add_child("td", std::to_string(value));
         }
     };
 }

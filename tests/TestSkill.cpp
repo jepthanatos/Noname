@@ -7,13 +7,8 @@ using namespace testing;
 
 struct TestSkill : Test
 {
-    Skill<SkillType::SWORD> skill{1, 100, 50};
+    Skill skill{1, 100, 50};
 };
-
-TEST_F(TestSkill, getType)
-{
-    EXPECT_EQ(skill.getType(), SkillType::SWORD);
-}
 
 TEST_F(TestSkill, getMinimum)
 {

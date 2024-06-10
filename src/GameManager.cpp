@@ -8,6 +8,8 @@
 #include "LogManager.h"
 #include "WeaponsManager.h"
 #include "RankingManager.h"
+#include "CreaturesManager.h"
+#include "SkillsManager.h"
 #include "Utils.h"
 
 namespace noname
@@ -29,15 +31,19 @@ namespace noname
         LM.startUp();
         LM.writeLog(Level::Debug, "Starting services...");
         WM.startUp();
+        CM.startUp();
         RM.startUp();
-        started = LM.isStarted() and WM.isStarted() and RM.isStarted();
+        SM.startUp();
+        started = LM.isStarted() and CM.isStarted() and WM.isStarted() and RM.isStarted() and SM.isStarted();
     }
 
     void GameManager::shutDown()
     {
         LM.writeLog(Level::Debug, "Closing services...");
         WM.shutDown();
+        CM.shutDown();
         RM.shutDown();
+        SM.shutDown();
         LM.shutDown();
     }
 
@@ -52,6 +58,7 @@ namespace noname
             for (int j = 1; j < Utils::rollDice(1, 10000); ++j)
                 player.attack();
             RM.addPlayer(std::move(player));
+            player.writeCharacterInfo();
         }
         RM.printAllRankings();
         LM.writeLog(Level::Debug, "Ending program...");

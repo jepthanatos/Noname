@@ -14,14 +14,9 @@ namespace noname
         CLUB,
         DISTANCE,
         MAGIC,
+        SHIELDING,
         LAST_SKILL
     };
-
-    static const short MANA_POINTS = 1600;
-    static const short MELEE_TRIES = 50;
-    static const short DISTANCE_TRIES = 25;
-    static const short SHIELDING_TRIES = 100;
-    // static const short FISHING = 20;
 
     static std::string SkillToString(SkillType s)
     {
@@ -39,12 +34,13 @@ namespace noname
             return "DISTANCE";
         case SkillType::MAGIC:
             return "MAGIC";
+        case SkillType::SHIELDING:
+            return "SHIELDING";
         default:
             return "";
         }
     };
 
-    template <SkillType _skill>
     class Skill
     {
 
@@ -54,14 +50,16 @@ namespace noname
         short _tries_needed; // Number of tries needed before next level.
 
     public:
-        Skill(const short min_value, const short max_value, const short tries) : _min_value{min_value}, _max_value{max_value}, _tries_needed{tries}
-        {
-        }
+        Skill(const short min_value, const short max_value, const short tries) : _min_value{min_value}, _max_value{max_value}, _tries_needed{tries} {}
 
-        SkillType getType() const { return _skill; }
         short getMinValue() const { return _min_value; }
         short getMaxValue() const { return _max_value; }
         short getTriesNeeded() const { return _tries_needed; }
+
+        bool operator==(const Skill &skill)
+        {
+            return _min_value == skill._min_value && _max_value == skill._max_value && _tries_needed == skill._tries_needed;
+        }
     };
 
 }

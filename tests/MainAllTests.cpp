@@ -12,6 +12,7 @@
 #include "TestRanking.cpp"
 #include "TestRelationships.cpp"
 #include "TestSkill.cpp"
+#include "TestSkillsManager.cpp"
 #include "TestUtils.cpp"
 #include "TestWeapon.cpp"
 

@@ -23,6 +23,7 @@ struct TestCharacter : Test
     }
     void TearDown() override
     {
+        WM.shutDown();
         LM.shutDown();
     }
 };
@@ -131,6 +132,6 @@ TEST_F(TestCharacter, CharacterAttack)
     {
         character.attack();
     }
-    Property<short int> expectedSkill{1};
-    ASSERT_TRUE(character.getSkill(SkillType::CLUB) > expectedSkill);
+    Property<short> expectedSkill{1};
+    ASSERT_TRUE(character.getSkill(character.getWeapon().getType()) > expectedSkill);
 }

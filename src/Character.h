@@ -4,7 +4,6 @@
 // System includes
 #include <unordered_map>
 #include <string>
-#include <memory>
 
 // Local includes
 #include "Property.h"
@@ -35,6 +34,10 @@ namespace noname
         std::unordered_map<SkillType, Property<short>> _skillTries;
         Weapon _currentWeapon;
         bool _isDead;
+        // Other attributes
+        Property<short> _strength;
+        Property<short> _dextery;
+        Property<short> _intelligence;
 
         void setLevel(short value);
         void setMagicLevel(short value);
@@ -63,6 +66,7 @@ namespace noname
         void takeDamage(int damage);
         Weapon getWeapon() const { return _currentWeapon; }
         void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
+        void writeCharacterInfo();
 
         // Actions
         virtual void move() {}
@@ -73,6 +77,9 @@ namespace noname
         virtual void pick() {}
         virtual void drop() {}
         virtual void use() {}
+
+        // Others
+        void determineAttributes(const Character &father, const Character &mother);
     };
 }
 #endif // __CHARACTER_H__
