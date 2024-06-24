@@ -25,7 +25,7 @@ TEST_F(TestWeapon, getType)
     EXPECT_EQ(Weapon.getType(), SkillType::AXE);
 }
 
-TEST_F(TestWeapon, getDice)
+TEST_F(TestWeapon, getDie)
 {
-    EXPECT_EQ(Weapon.getDice(), 20);
+    EXPECT_EQ(Weapon.getDie(), 20);
 }

@@ -2,7 +2,7 @@
 #define __CHARACTER_H__
 
 // System includes
-#include <unordered_map>
+#include <vector>
 #include <string>
 
 // Local includes
@@ -10,6 +10,7 @@
 #include "Skill.h"
 #include "Weapon.h"
 #include "WeaponsManager.h"
+#include "Heritables.h"
 
 namespace noname
 {
@@ -30,14 +31,11 @@ namespace noname
         Property<unsigned long long> _nextLevelExperience;
         Property<unsigned long long> _currentManaWasted;
         Property<unsigned long long> _nextLevelManaWasted;
-        std::unordered_map<SkillType, Property<short>> _skills;
-        std::unordered_map<SkillType, Property<short>> _skillTries;
+        std::vector<Property<short>> _skills;
+        std::vector<Property<short>> _skillTries;
         Weapon _currentWeapon;
         bool _isDead;
-        // Other attributes
-        Property<short> _strength;
-        Property<short> _dextery;
-        Property<short> _intelligence;
+        Heritables _heritables;
 
         void setLevel(short value);
         void setMagicLevel(short value);
@@ -49,7 +47,7 @@ namespace noname
 
     public:
         Character();
-        Character(const std::string &name);
+        Character(const std::string &name) : Character() { _name = name; };
         bool operator==(const Character &p) const { return _id == p._id; }
         int getId() const { return _id; }
         std::string getName() const { return _name; }
@@ -58,8 +56,10 @@ namespace noname
         void addExperience(unsigned long long exp);
         short getLevel() const { return _level; }
         short getMagicLevel() const { return _magicLevel; }
-        short getSkill(SkillType skill) const { return _skills.find(skill)->second; }
-        int getCurrentHealth() { return _currentHealth; }
+        short getSkill(SkillType skill) const { return _skills.at(static_cast<int>(skill)); }
+        int getCurrentHealth() const { return _currentHealth; }
+        int getMaxHealth() const { return _maxHealth; }
+        short getHeritable(HeritableType value) { return _heritables.at(value); }
         bool isDead() { return _isDead; }
         void respawn();
         short getAttackDamage() const;
@@ -79,7 +79,7 @@ namespace noname
         virtual void use() {}
 
         // Others
-        void determineAttributes(const Character &father, const Character &mother);
+        void determineHeritables(const Character &father, const Character &mother);
     };
 }
 #endif // __CHARACTER_H__

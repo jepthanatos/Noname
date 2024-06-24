@@ -54,8 +54,8 @@ namespace noname
         {
             Player player{};
             player.equipWeapon("Club");
-            player.addExperience(Character::getExpForLevel(Utils::rollDice(1, 100)));
-            for (int j = 1; j < Utils::rollDice(1, 10000); ++j)
+            player.addExperience(Character::getExpForLevel(Utils::rollDie(1, 100)));
+            for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
                 player.attack();
             RM.addPlayer(std::move(player));
             player.writeCharacterInfo();

@@ -19,6 +19,7 @@ struct TestPlayer : Test
     {
         LM.startUp();
         WM.startUp();
+        playerOne.respawn();
         playerOne.equipWeapon("Club");
     }
     void TearDown() override
@@ -84,7 +85,7 @@ TEST_F(TestPlayer, PlayerHealthAtEachLevelFrom1To1000)
         playerOne.addExperience(playerOne.getExpForLevel(i) - playerOne.getExpForLevel(i - 1));
         EXPECT_EQ(playerOne.getLevel(), i);
 
-        ASSERT_EQ(playerOne.getCurrentHealth(), 10 * playerOne.getLevel());
+        ASSERT_TRUE(playerOne.getMaxHealth() > playerOne.getHeritable(HeritableType::CONSTITUTION) * playerOne.getLevel());
     }
 }
 

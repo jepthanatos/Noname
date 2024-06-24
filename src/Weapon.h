@@ -16,14 +16,14 @@ namespace noname
 
     private:
         SkillType _type;
-        Property<short> _dice;
+        Property<short> _die;
 
     public:
-        Weapon() : _type{SkillType::FIST}, _dice{2}, Item("Fists", ItemType::WEAPON) {}
-        Weapon(const std::string &name, const SkillType type, const short dice) : _type{type}, _dice{dice}, Item(name, ItemType::WEAPON) {}
+        Weapon() : _type{SkillType::FIST}, _die{2}, Item("Fists", ItemType::WEAPON) {}
+        Weapon(const std::string &name, const SkillType type, const short dice) : _type{type}, _die{dice}, Item(name, ItemType::WEAPON) {}
 
         SkillType getType() const { return _type; }
-        short getDice() const { return _dice; }
+        short getDie() const { return _die; }
     };
 }
 #endif // __WEAPON_H__

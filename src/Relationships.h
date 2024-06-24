@@ -47,7 +47,7 @@ namespace noname
         _familyRelations.push_back({child, Relationship::CHILD, father});
         _familyRelations.push_back({mother, Relationship::PARENT, child});
         _familyRelations.push_back({child, Relationship::CHILD, mother});
-        child.determineAttributes(father, mother);
+        child.determineHeritables(father, mother);
     }
 
     template <class T>

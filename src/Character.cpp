@@ -7,7 +7,6 @@
 
 // System includes
 #include <memory>
-#include <random>
 
 namespace noname
 {
@@ -24,10 +23,7 @@ namespace noname
                              _currentExperience{0},
                              _nextLevelExperience{0},
                              _currentManaWasted{0},
-                             _nextLevelManaWasted{0},
-                             _strength{0},
-                             _dextery{0},
-                             _intelligence{0}
+                             _nextLevelManaWasted{0}
     {
         static int cont{0};
         _id = cont;
@@ -36,59 +32,11 @@ namespace noname
         setLevel(1);
         setMagicLevel(1);
 
-        for (int i = 0; i < static_cast<int>(SkillType::LAST_SKILL); ++i)
+        for (int i = 0; i < Utils::toInt(SkillType::LAST_SKILL); ++i)
         {
-            _skills.emplace(static_cast<SkillType>(i), 1);
-            _skillTries.emplace(static_cast<SkillType>(i), 0);
+            _skills.push_back(1);
+            _skillTries.push_back(0);
         }
-
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> attributesDist(0, 100);
-        _strength = attributesDist(gen);
-        _dextery = attributesDist(gen);
-        _intelligence = attributesDist(gen);
-
-        writeCharacterInfo();
-    }
-
-    Character::Character(const std::string &name) : _id{0},
-                                                    _name{name},
-                                                    _level{0},
-                                                    _magicLevel{0},
-                                                    _currentHealth{0},
-                                                    _maxHealth{0},
-                                                    _currentMana{0},
-                                                    _maxMana{0},
-                                                    _currentCapacity{0},
-                                                    _maxCapacity{0},
-                                                    _currentExperience{0},
-                                                    _nextLevelExperience{0},
-                                                    _currentManaWasted{0},
-                                                    _nextLevelManaWasted{0},
-                                                    _strength{0},
-                                                    _dextery{0},
-                                                    _intelligence{0}
-    {
-        static int cont{0};
-        _id = cont;
-        ++cont;
-
-        setLevel(1);
-        setMagicLevel(1);
-
-        for (int i = 0; i < static_cast<int>(SkillType::LAST_SKILL); ++i)
-        {
-            _skills.emplace(static_cast<SkillType>(i), 1);
-            _skillTries.emplace(static_cast<SkillType>(i), 0);
-        }
-
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> attributesDist(0, 100);
-        _strength = attributesDist(gen);
-        _dextery = attributesDist(gen);
-        _intelligence = attributesDist(gen);
 
         writeCharacterInfo();
     }
@@ -114,29 +62,27 @@ namespace noname
 
     void Character::setHealth()
     {
-        _currentHealth = 10 * _level;
-        _maxHealth = _currentHealth;
+        _maxHealth = _maxHealth + _heritables.at(HeritableType::CONSTITUTION) + Utils::rollDie(1, _level);
     }
 
     void Character::setMana()
     {
-        _currentMana = 10 * _level;
-        _maxMana = _currentMana;
+        _maxMana = _maxMana + _heritables.at(HeritableType::INTELLIGENCE) + Utils::rollDie(1, _level);
     }
 
     void Character::setSkill(SkillType skill, short value)
     {
-        _skillTries.find(skill)->second = value;
+        _skillTries.at(Utils::toInt(skill)) = value;
     }
 
     void Character::updateTries(SkillType skill)
     {
-        ++_skillTries.find(skill)->second;
-        if (_skillTries.find(skill)->second >= SM.getSkill(skill).getTriesNeeded())
+        ++_skillTries.at(Utils::toInt(skill));
+        if (_skillTries.at(Utils::toInt(skill)) >= SM.getSkill(skill).getTriesNeeded())
         {
-            _skillTries.find(skill)->second = 0;
-            ++_skills.find(skill)->second;
-            LM.writeLog(Level::Debug, "New value of " + SkillToString(skill) + " = " + std::to_string(_skills.find(skill)->second));
+            _skillTries.at(Utils::toInt(skill)) = 0;
+            ++_skills.at(Utils::toInt(skill));
+            LM.writeLog(Level::Debug, "New value of " + SkillToString(skill) + " = " + std::to_string(_skills.at(Utils::toInt(skill))));
         }
     }
 
@@ -158,14 +104,14 @@ namespace noname
     short Character::getAttackDamage() const
     {
         short doubleDamage{1};
-        auto d20{Utils::rollDice(1, 20)};
+        auto d20{Utils::rollDie(1, 20)};
         if (d20 > 1)
         {
             if (d20 == 20) // The character did a critical hit
             {
                 doubleDamage = 2;
             }
-            return (Utils::rollDice(1, _currentWeapon.getDice()) * doubleDamage) + _skills.find(_currentWeapon.getType())->second;
+            return (Utils::rollDie(1, _currentWeapon.getDie()) * doubleDamage) + _skills.at(Utils::toInt(_currentWeapon.getType()));
         }
         // The character missed the attack
         return 0;
@@ -174,6 +120,10 @@ namespace noname
     void Character::respawn()
     {
         setLevel(_level);
+        setHealth();
+        setMana();
+        _currentHealth = _maxHealth;
+        _currentMana = _maxMana;
         _isDead = false;
     }
 
@@ -212,9 +162,7 @@ namespace noname
         infoTable.add_child(_nextLevelExperience.toHtmlBuilder("Next Level Experience"));
         infoTable.add_child(_currentManaWasted.toHtmlBuilder("Current Mana Wasted"));
         infoTable.add_child(_nextLevelManaWasted.toHtmlBuilder("Next Level Mana Wasted"));
-        infoTable.add_child(_strength.toHtmlBuilder("Strength"));
-        infoTable.add_child(_dextery.toHtmlBuilder("Dextery"));
-        infoTable.add_child(_intelligence.toHtmlBuilder("Intelligence"));
+        // Add Heritables here
         characterFile.write(infoTable.str());
     }
 
@@ -226,73 +174,8 @@ namespace noname
             updateTries(_currentWeapon.getType());
     }
 
-    void Character::determineAttributes(const Character &father, const Character &mother)
+    void Character::determineHeritables(const Character &father, const Character &mother)
     {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dist(1, 2);
-        std::uniform_real_distribution<> mutationChance(0.0, 1.0);
-        double mutationRate = 0.1; // 10% chance of mutation
-
-        // Function to apply complex mutation
-        auto applyComplexMutation = [&](int attribute)
-        {
-            std::uniform_int_distribution<> mutationTypeDist(1, 3);
-            int mutationType = mutationTypeDist(gen);
-
-            LM.writeLog(Level::Debug, "Character " + std::string{_name} + " has complex mutation of type " + std::to_string(mutationType));
-
-            switch (mutationType)
-            {
-            case 1:
-            { // Random increase/decrease within a range
-                std::uniform_int_distribution<> changeDist(-3, 3);
-                attribute += changeDist(gen);
-                break;
-            }
-            case 2:
-            {                                                            // Percentage change
-                std::uniform_real_distribution<> percentDist(-0.1, 0.1); // -10% to +10%
-                attribute = static_cast<int>(attribute * (1.0 + percentDist(gen)));
-                break;
-            }
-            case 3:
-            { // Random set within a new range
-                std::uniform_int_distribution<> newValueDist(1, 20);
-                attribute = newValueDist(gen);
-                break;
-            }
-            }
-
-            // Ensure attribute stays within reasonable bounds
-            attribute = std::max(1, attribute);
-            attribute = std::min(20, attribute);
-            return attribute;
-        };
-        // Strength
-        short geneStrength = (dist(gen) == 1) ? father._strength : mother._strength;
-        if (mutationChance(gen) < mutationRate)
-        {
-            geneStrength = applyComplexMutation(geneStrength);
-        }
-        _strength = geneStrength;
-
-        // Dexterity
-        short geneDexterity = (dist(gen) == 1) ? father._dextery : mother._dextery;
-        if (mutationChance(gen) < mutationRate)
-        {
-            geneDexterity = applyComplexMutation(geneDexterity);
-        }
-        _dextery = geneDexterity;
-
-        // Intelligence
-        short geneIntelligence = (dist(gen) == 1) ? father._intelligence : mother._intelligence;
-        if (mutationChance(gen) < mutationRate)
-        {
-            geneIntelligence = applyComplexMutation(geneIntelligence);
-        }
-        _intelligence = geneIntelligence;
-
         writeCharacterInfo();
     }
 }

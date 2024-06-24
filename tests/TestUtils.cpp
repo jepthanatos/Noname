@@ -5,9 +5,9 @@
 using namespace noname;
 using namespace testing;
 
-TEST(TestUtils, rollDice)
+TEST(TestUtils, rollDie)
 {
-    auto result{Utils::rollDice(2, 4)};
+    auto result{Utils::rollDie(2, 4)};
     EXPECT_TRUE(result >= 2);
     EXPECT_TRUE(result <= 4);
 }
