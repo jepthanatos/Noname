@@ -2,15 +2,24 @@
 #include "Character.h"
 #include "Utils.h"
 #include "HtmlBuilder.h"
+#include "GameManager.h"
 #include "FileManager.h"
 #include "SkillsManager.h"
 
 // System includes
 #include <memory>
+#include <cmath>     // std::ceil
+#include <algorithm> // std::min std::max
 
 namespace noname
 {
-    Character::Character() : _id{0},
+    int Character::generateId()
+    {
+        static int cont{0};
+        return cont++;
+    }
+
+    Character::Character() : _id{generateId()},
                              _name{"Noname"},
                              _level{0},
                              _magicLevel{0},
@@ -23,49 +32,35 @@ namespace noname
                              _currentExperience{0},
                              _nextLevelExperience{0},
                              _currentManaWasted{0},
-                             _nextLevelManaWasted{0}
+                             _nextLevelManaWasted{0},
+                             _skills(Utils::toInt(SkillType::LAST_SKILL), 1),
+                             _skillTries(Utils::toInt(SkillType::LAST_SKILL), 0)
     {
-        static int cont{0};
-        _id = cont;
-        ++cont;
-
         setLevel(1);
         setMagicLevel(1);
-
-        for (int i = 0; i < Utils::toInt(SkillType::LAST_SKILL); ++i)
-        {
-            _skills.push_back(1);
-            _skillTries.push_back(0);
-        }
-
         writeCharacterInfo();
     }
 
     void Character::setLevel(short value)
     {
         _level = value;
-        _nextLevelExperience = getExpForLevel(_level + 1);
-        setHealth();
-        setMana();
+        _nextLevelExperience = GM.getExpForLevel(_level + 1);
+        setMaxHealth();
+        setMaxMana();
     }
 
     void Character::setMagicLevel(short value)
     {
         _magicLevel = value;
-        _nextLevelManaWasted = getManaForLevel(_level + 1);
+        _nextLevelManaWasted = GM.getManaForLevel(_level + 1);
     }
 
-    unsigned long long Character::getManaForLevel(short level) const
-    {
-        return 1600 * level;
-    }
-
-    void Character::setHealth()
+    void Character::setMaxHealth()
     {
         _maxHealth = _maxHealth + _heritables.at(HeritableType::CONSTITUTION) + Utils::rollDie(1, _level);
     }
 
-    void Character::setMana()
+    void Character::setMaxMana()
     {
         _maxMana = _maxMana + _heritables.at(HeritableType::INTELLIGENCE) + Utils::rollDie(1, _level);
     }
@@ -86,18 +81,21 @@ namespace noname
         }
     }
 
-    unsigned long long Character::getExpForLevel(short level)
+    void Character::gainExperience(unsigned long long value)
     {
-        return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
-    }
-
-    void Character::addExperience(unsigned long long exp)
-    {
-        _currentExperience += exp;
+        _currentExperience += value;
 
         while (_currentExperience >= _nextLevelExperience)
         {
             setLevel(_level + 1);
+        }
+    }
+
+    void Character::gainHealth(int value)
+    {
+        if (value > 0)
+        {
+            _currentHealth = std::min(static_cast<short>(_currentHealth + value), static_cast<short>(_maxHealth));
         }
     }
 
@@ -120,21 +118,40 @@ namespace noname
     void Character::respawn()
     {
         setLevel(_level);
-        setHealth();
-        setMana();
+        setMaxHealth();
+        setMaxMana();
         _currentHealth = _maxHealth;
         _currentMana = _maxMana;
         _isDead = false;
     }
 
-    void Character::takeDamage(int damage)
+    void Character::takeDamage(int value)
     {
-        _currentHealth -= damage;
-        if (_currentHealth <= 0)
+        if (value > 0)
         {
-            --_level;
-            _currentExperience = _currentExperience - ceil((_currentExperience * 25) / 100);
-            _isDead = true;
+            _currentHealth = std::max(static_cast<int>(0), static_cast<int>(_currentHealth - value));
+            if (_currentHealth == 0 && !_isDead)
+            {
+                --_level;
+                _currentExperience -= static_cast<unsigned long long>(std::ceil((_currentExperience * 25) / 100.0));
+                _currentExperience = std::max(static_cast<unsigned long long>(0), static_cast<unsigned long long>(_currentExperience));
+                _level = std::max(static_cast<short>(1), static_cast<short>(_level));
+                _isDead = true;
+            }
+        }
+    }
+
+    void Character::useMana(int value)
+    {
+        if (value > 0)
+        {
+            _currentMana -= value;
+            _currentManaWasted += value;
+            if (_currentManaWasted >= _nextLevelManaWasted)
+            {
+                ++_magicLevel;
+                _nextLevelManaWasted = GM.getManaForLevel(_magicLevel + 1);
+            }
         }
     }
 

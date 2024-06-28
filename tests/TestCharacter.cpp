@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
+// Local Includes
 #include "Character.h"
+#include "GameManager.h"
 #include "WeaponsManager.h"
 #include "LogManager.h"
 
@@ -48,13 +50,13 @@ TEST_F(TestCharacter, CharacterExperienceAtEachLevelFrom1To1000)
 
     for (int i = 1; i < 1001; i++)
     {
-        ASSERT_EQ(character.getExpForLevel(i), getExp(i));
+        ASSERT_EQ(GM.getExpForLevel(i), getExp(i));
     }
 }
 
 TEST_F(TestCharacter, CharacterAddExperience)
 {
-    character.addExperience(1000);
+    character.gainExperience(1000);
     EXPECT_EQ(character.getExperience(), 1000);
 }
 
@@ -68,12 +70,6 @@ TEST_F(TestCharacter, getMagicLevel)
     EXPECT_EQ(character.getMagicLevel(), 1);
 }
 
-TEST_F(TestCharacter, CharacterAddExperienceAndLevelUp)
-{
-    character.addExperience(character.getExpForLevel(100) - character.getExperience());
-    EXPECT_EQ(character.getLevel(), 100);
-}
-
 TEST_F(TestCharacter, getSkill)
 {
     EXPECT_EQ(character.getSkill(SkillType::CLUB), short(1));
@@ -83,7 +79,7 @@ TEST_F(TestCharacter, CharacterHealthAtEachLevelFrom1To1000)
 {
     for (int i = 1; i < 1001; i++)
     {
-        character.addExperience(character.getExpForLevel(i) - character.getExpForLevel(i - 1));
+        character.gainExperience(GM.getExpForLevel(i) - GM.getExpForLevel(i - 1));
         EXPECT_EQ(character.getLevel(), i);
 
         ASSERT_TRUE(character.getMaxHealth() > character.getHeritable(HeritableType::CONSTITUTION) * character.getLevel());
@@ -105,9 +101,9 @@ TEST_F(TestCharacter, takeDamage)
 
 TEST_F(TestCharacter, takeDamageAndDie)
 {
-    character.addExperience(character.getExpForLevel(2));
+    character.gainExperience(GM.getExpForLevel(2));
     ASSERT_EQ(character.getLevel(), 2);
-    ASSERT_EQ(character.getExperience(), character.getExpForLevel(2));
+    ASSERT_EQ(character.getExperience(), GM.getExpForLevel(2));
 
     while (!character.isDead())
     {
@@ -117,7 +113,7 @@ TEST_F(TestCharacter, takeDamageAndDie)
 
     character.respawn();
     ASSERT_EQ(character.getLevel(), 1);
-    auto experience = character.getExpForLevel(2) - ceil((character.getExpForLevel(2) * 25) / 100);
+    auto experience = GM.getExpForLevel(2) - ceil((GM.getExpForLevel(2) * 25) / 100);
     ASSERT_EQ(character.getExperience(), experience);
 }
 

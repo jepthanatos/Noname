@@ -37,11 +37,11 @@ namespace noname
         bool _isDead;
         Heritables _heritables;
 
+        static int generateId();
         void setLevel(short value);
         void setMagicLevel(short value);
-        unsigned long long getManaForLevel(short level) const;
-        void setHealth();
-        void setMana();
+        void setMaxHealth();
+        void setMaxMana();
         void setSkill(SkillType skill, short value);
         void updateTries(SkillType skill);
 
@@ -49,26 +49,31 @@ namespace noname
         Character();
         Character(const std::string &name) : Character() { _name = name; };
         bool operator==(const Character &p) const { return _id == p._id; }
+
+        // Getters for UI or info related
         int getId() const { return _id; }
         std::string getName() const { return _name; }
         unsigned long long getExperience() { return _currentExperience; }
-        static unsigned long long getExpForLevel(short level);
-        void addExperience(unsigned long long exp);
         short getLevel() const { return _level; }
         short getMagicLevel() const { return _magicLevel; }
         short getSkill(SkillType skill) const { return _skills.at(static_cast<int>(skill)); }
         int getCurrentHealth() const { return _currentHealth; }
         int getMaxHealth() const { return _maxHealth; }
-        short getHeritable(HeritableType value) { return _heritables.at(value); }
         bool isDead() { return _isDead; }
-        void respawn();
+        short getHeritable(HeritableType value) { return _heritables.at(value); }
         short getAttackDamage() const;
-        void takeDamage(int damage);
         Weapon getWeapon() const { return _currentWeapon; }
-        void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
         void writeCharacterInfo();
 
+        // Others
+        void gainExperience(unsigned long long value);
+        void gainHealth(int value);
+        void takeDamage(int value);
+        void useMana(int value);
+        void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
+
         // Actions
+        virtual void respawn();
         virtual void move() {}
         virtual void attack();
         virtual void defense() {}

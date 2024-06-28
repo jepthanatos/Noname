@@ -26,6 +26,9 @@ namespace noname
 
         // Run program loop.
         void run();
+
+        unsigned long long getExpForLevel(short level) const;
+        unsigned long long getManaForLevel(short level) const;
     };
 }
 #endif // __GAME_MANAGER_H__

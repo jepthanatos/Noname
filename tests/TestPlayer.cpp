@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+// Local includes
 #include "Player.h"
 #include "WeaponsManager.h"
 #include "LogManager.h"
@@ -47,13 +48,13 @@ TEST_F(TestPlayer, PlayerExperienceAtEachLevelFrom1To1000)
 
     for (int i = 1; i < 1001; i++)
     {
-        ASSERT_EQ(playerOne.getExpForLevel(i), getExp(i));
+        ASSERT_EQ(GM.getExpForLevel(i), getExp(i));
     }
 }
 
 TEST_F(TestPlayer, PlayerAddExperience)
 {
-    playerOne.addExperience(1000);
+    playerOne.gainExperience(1000);
     EXPECT_EQ(playerOne.getExperience(), 1000);
 }
 
@@ -69,7 +70,7 @@ TEST_F(TestPlayer, getMagicLevel)
 
 TEST_F(TestPlayer, PlayerAddExperienceAndLevelUp)
 {
-    playerOne.addExperience(playerOne.getExpForLevel(100) - playerOne.getExperience());
+    playerOne.gainExperience(GM.getExpForLevel(100) - playerOne.getExperience());
     EXPECT_EQ(playerOne.getLevel(), 100);
 }
 
@@ -82,7 +83,7 @@ TEST_F(TestPlayer, PlayerHealthAtEachLevelFrom1To1000)
 {
     for (int i = 1; i < 1001; i++)
     {
-        playerOne.addExperience(playerOne.getExpForLevel(i) - playerOne.getExpForLevel(i - 1));
+        playerOne.gainExperience(GM.getExpForLevel(i) - GM.getExpForLevel(i - 1));
         EXPECT_EQ(playerOne.getLevel(), i);
 
         ASSERT_TRUE(playerOne.getMaxHealth() > playerOne.getHeritable(HeritableType::CONSTITUTION) * playerOne.getLevel());
@@ -104,9 +105,9 @@ TEST_F(TestPlayer, takeDamage)
 
 TEST_F(TestPlayer, takeDamageAndDie)
 {
-    playerOne.addExperience(playerOne.getExpForLevel(2));
+    playerOne.gainExperience(GM.getExpForLevel(2));
     ASSERT_EQ(playerOne.getLevel(), 2);
-    ASSERT_EQ(playerOne.getExperience(), playerOne.getExpForLevel(2));
+    ASSERT_EQ(playerOne.getExperience(), GM.getExpForLevel(2));
 
     while (!playerOne.isDead())
     {
@@ -116,7 +117,7 @@ TEST_F(TestPlayer, takeDamageAndDie)
 
     playerOne.respawn();
     ASSERT_EQ(playerOne.getLevel(), 1);
-    auto experience = playerOne.getExpForLevel(2) - ceil((playerOne.getExpForLevel(2) * 25) / 100);
+    auto experience = GM.getExpForLevel(2) - ceil((GM.getExpForLevel(2) * 25) / 100);
     ASSERT_EQ(playerOne.getExperience(), experience);
 }
 

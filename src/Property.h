@@ -8,6 +8,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <algorithm> // Para std::min y std::max
 
 namespace noname
 {
@@ -19,53 +20,113 @@ namespace noname
 
     public:
         Property(const T initialValue)
+            : value(initialValue)
         {
-            *this = initialValue;
         }
+
         operator T() const
         {
             return value;
         }
-        T operator=(T newValue)
+
+        Property<T> &operator=(T newValue)
         {
-            return value = newValue;
+            value = newValue;
+            return *this;
         }
-        bool operator>(T rValue)
+
+        bool operator>(const T &rValue) const
         {
             return value > rValue;
         }
-        T operator++()
+
+        bool operator<(const T &rValue) const
         {
-            return value++;
+            return value < rValue;
         }
-        T operator--()
+
+        bool operator>=(const T &rValue) const
         {
-            return value--;
+            return value >= rValue;
         }
-        T operator+=(T &rightValue)
+
+        bool operator<=(const T &rValue) const
         {
-            return value += rightValue;
+            return value <= rValue;
         }
-        T operator-=(T &rightValue)
+
+        bool operator==(const T &rValue) const
         {
-            return value -= rightValue;
+            return value == rValue;
         }
+
+        bool operator!=(const T &rValue) const
+        {
+            return value != rValue;
+        }
+
+        Property<T> &operator++()
+        {
+            ++value;
+            return *this;
+        }
+
+        Property<T> operator++(int)
+        {
+            Property<T> temp = *this;
+            ++value;
+            return temp;
+        }
+
+        Property<T> &operator--()
+        {
+            --value;
+            return *this;
+        }
+
+        Property<T> operator--(int)
+        {
+            Property<T> temp = *this;
+            --value;
+            return temp;
+        }
+
+        Property<T> &operator+=(const T &rightValue)
+        {
+            value += rightValue;
+            return *this;
+        }
+
+        Property<T> &operator-=(const T &rightValue)
+        {
+            value -= rightValue;
+            return *this;
+        }
+
         std::string toString() const
         {
-            if constexpr (std::is_convertible_v<T, std::string> or
-                          std::is_convertible_v<T, std::string_view>)
+            if constexpr (std::is_convertible_v<T, std::string> || std::is_convertible_v<T, std::string_view>)
+            {
                 return value;
+            }
             else
+            {
                 return std::to_string(value);
+            }
         }
-        HtmlBuilder toHtmlBuilder(const std::string &title)
+
+        HtmlBuilder toHtmlBuilder(const std::string &title) const
         {
-            if constexpr (std::is_convertible_v<T, std::string> or
-                          std::is_convertible_v<T, std::string_view>)
+            if constexpr (std::is_convertible_v<T, std::string> || std::is_convertible_v<T, std::string_view>)
+            {
                 return HtmlBuilder{"tr"}.add_child("td", title).add_child("td", value);
+            }
             else
+            {
                 return HtmlBuilder{"tr"}.add_child("td", title).add_child("td", std::to_string(value));
+            }
         }
     };
 }
+
 #endif // __PROPERTY_H__

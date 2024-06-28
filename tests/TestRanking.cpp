@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 
+// Local includes
 #include "Ranking.h"
 #include "Utils.h"
+#include "GameManager.h"
 
 using namespace noname;
 using namespace testing;
@@ -41,7 +43,7 @@ TEST_F(TestRanking, add100Players)
     {
         Player player{};
         player.equipWeapon("Club");
-        player.addExperience(Character::getExpForLevel(Utils::rollDie(1, 100)));
+        player.gainExperience(GM.getExpForLevel(Utils::rollDie(1, 100)));
         for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
             player.attack();
         RANKING_CLUB.addPlayer(std::move(player));

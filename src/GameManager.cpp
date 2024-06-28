@@ -54,7 +54,7 @@ namespace noname
         {
             Player player{};
             player.equipWeapon("Club");
-            player.addExperience(Character::getExpForLevel(Utils::rollDie(1, 100)));
+            player.gainExperience(getExpForLevel(Utils::rollDie(1, 100)));
             for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
                 player.attack();
             RM.addPlayer(std::move(player));
@@ -64,4 +64,13 @@ namespace noname
         LM.writeLog(Level::Debug, "Ending program...");
     }
 
+    unsigned long long GameManager::getExpForLevel(short level) const
+    {
+        return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
+    }
+
+    unsigned long long GameManager::getManaForLevel(short level) const
+    {
+        return 1600 * level;
+    }
 }
