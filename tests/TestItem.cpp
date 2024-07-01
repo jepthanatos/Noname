@@ -7,32 +7,32 @@ using namespace testing;
 
 struct TestItem : Test
 {
-    Item Item{"Something", ItemType::ARMOR};
+    Item item{"Something", ItemType::ARMOR};
 };
 
 TEST_F(TestItem, getName)
 {
-    EXPECT_EQ(Item.getName(), "Something");
+    EXPECT_EQ(item.getName(), "Something");
 }
 
 TEST_F(TestItem, getItemType)
 {
-    EXPECT_EQ(Item.getItemType(), ItemType::ARMOR);
+    EXPECT_EQ(item.getItemType(), ItemType::ARMOR);
 }
 
 TEST_F(TestItem, getValue)
 {
-    EXPECT_EQ(Item.getValue(), NO_VALUE);
+    EXPECT_EQ(item.getValue(), NO_VALUE);
 }
 
 TEST_F(TestItem, getUses)
 {
-    EXPECT_EQ(Item.getUses(), NO_VALUE);
+    EXPECT_EQ(item.getUses(), NO_VALUE);
 }
 
 TEST_F(TestItem, getWeight)
 {
-    EXPECT_EQ(Item.getWeight(), NO_VALUE);
+    EXPECT_EQ(item.getWeight(), NO_VALUE);
 }
 
 struct TestOtherItem : Test

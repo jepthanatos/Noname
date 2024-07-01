@@ -7,25 +7,25 @@ using namespace testing;
 
 struct TestWeapon : Test
 {
-    Weapon Weapon{"Great Axe", SkillType::AXE, 20};
+    Weapon weapon{"Great Axe", SkillType::AXE, 20};
 };
 
 TEST_F(TestWeapon, getName)
 {
-    EXPECT_EQ(Weapon.getName(), "Great Axe");
+    EXPECT_EQ(weapon.getName(), "Great Axe");
 }
 
 TEST_F(TestWeapon, getItemType)
 {
-    EXPECT_EQ(Weapon.getItemType(), ItemType::WEAPON);
+    EXPECT_EQ(weapon.getItemType(), ItemType::WEAPON);
 }
 
 TEST_F(TestWeapon, getType)
 {
-    EXPECT_EQ(Weapon.getType(), SkillType::AXE);
+    EXPECT_EQ(weapon.getType(), SkillType::AXE);
 }
 
 TEST_F(TestWeapon, getDie)
 {
-    EXPECT_EQ(Weapon.getDie(), 20);
+    EXPECT_EQ(weapon.getDie(), 20);
 }

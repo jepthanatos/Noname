@@ -7,30 +7,30 @@ using namespace testing;
 
 struct TestContainer : Test
 {
-    Container Container{"Backpack", ContainerType::BACKPACK, 8, 100};
+    Container backack{"Backpack", ContainerType::BACKPACK, 8, 100};
 };
 
 TEST_F(TestContainer, getName)
 {
-    EXPECT_EQ(Container.getName(), "Backpack");
+    EXPECT_EQ(backack.getName(), "Backpack");
 }
 
 TEST_F(TestContainer, getItemType)
 {
-    EXPECT_EQ(Container.getItemType(), ItemType::CONTAINER);
+    EXPECT_EQ(backack.getItemType(), ItemType::CONTAINER);
 }
 
 TEST_F(TestContainer, getType)
 {
-    EXPECT_EQ(Container.getType(), ContainerType::BACKPACK);
+    EXPECT_EQ(backack.getType(), ContainerType::BACKPACK);
 }
 
 TEST_F(TestContainer, getSlots)
 {
-    EXPECT_EQ(Container.getSlots(), 8);
+    EXPECT_EQ(backack.getSlots(), 8);
 }
 
 TEST_F(TestContainer, getMaxCapacity)
 {
-    EXPECT_EQ(Container.getMaxCapacity(), 100);
+    EXPECT_EQ(backack.getMaxCapacity(), 100);
 }
