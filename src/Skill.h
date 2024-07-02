@@ -13,7 +13,6 @@ namespace noname
         AXE,
         CLUB,
         DISTANCE,
-        MAGIC,
         SHIELDING,
         LAST_SKILL
     };
@@ -32,8 +31,6 @@ namespace noname
             return "CLUB";
         case SkillType::DISTANCE:
             return "DISTANCE";
-        case SkillType::MAGIC:
-            return "MAGIC";
         case SkillType::SHIELDING:
             return "SHIELDING";
         default:

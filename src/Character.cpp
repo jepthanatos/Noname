@@ -155,6 +155,14 @@ namespace noname
         }
     }
 
+    void Character::gainMana(int value)
+    {
+        if (value > 0)
+        {
+            _currentMana = std::min(static_cast<short>(_currentMana + value), static_cast<short>(_maxMana));
+        }
+    }
+
     void Character::writeCharacterInfo()
     {
         FileManager characterFile;

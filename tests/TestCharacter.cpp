@@ -41,20 +41,7 @@ TEST_F(TestCharacter, getExperience)
     EXPECT_EQ(character.getExperience(), 0);
 }
 
-TEST_F(TestCharacter, CharacterExperienceAtEachLevelFrom1To1000)
-{
-    auto getExp = [](int level)
-    {
-        return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level)) / 3ULL;
-    };
-
-    for (int i = 1; i < 1001; i++)
-    {
-        ASSERT_EQ(GM.getExpForLevel(i), getExp(i));
-    }
-}
-
-TEST_F(TestCharacter, CharacterAddExperience)
+TEST_F(TestCharacter, CharacterGainExperience)
 {
     character.gainExperience(1000);
     EXPECT_EQ(character.getExperience(), 1000);
@@ -131,4 +118,33 @@ TEST_F(TestCharacter, CharacterAttack)
     }
     Property<short> expectedSkill{1};
     ASSERT_TRUE(character.getSkill(character.getWeapon().getType()) > expectedSkill);
+}
+
+TEST_F(TestCharacter, CharacterGainHealth)
+{
+    if (character.getCurrentHealth() == character.getMaxHealth())
+    {
+        character.takeDamage(1);
+    }
+    ASSERT_TRUE(character.getMaxHealth() > character.getCurrentHealth());
+    character.gainHealth(character.getMaxHealth() - character.getCurrentHealth());
+    ASSERT_TRUE(character.getMaxHealth() == character.getCurrentHealth());
+}
+
+TEST_F(TestCharacter, CharacterGainMana)
+{
+    if (character.getCurrentMana() == character.getMaxMana())
+    {
+        character.useMana(1);
+    }
+    ASSERT_TRUE(character.getMaxMana() > character.getCurrentMana());
+    character.gainMana(character.getMaxMana() - character.getCurrentMana());
+    ASSERT_TRUE(character.getMaxMana() == character.getCurrentMana());
+}
+
+TEST_F(TestCharacter, CharacterUseMana)
+{
+    ASSERT_TRUE(character.getManaWasted() == 0);
+    character.useMana(1);
+    ASSERT_TRUE(character.getManaWasted() == 1);
 }

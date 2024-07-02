@@ -71,6 +71,6 @@ namespace noname
 
     unsigned long long GameManager::getManaForLevel(short level) const
     {
-        return 1600 * level;
+        return 800ULL * level * level + 800ULL * level + 0ULL;
     }
 }

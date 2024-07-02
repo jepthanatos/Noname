@@ -21,7 +21,7 @@ namespace noname
             RANKING_AXE.startUp();
             RANKING_CLUB.startUp();
             RANKING_DISTANCE.startUp();
-            RANKING_MAGIC.startUp();
+            RANKING_SHIELDING.startUp();
             Manager::startUp();
         }
 
@@ -32,7 +32,7 @@ namespace noname
             RANKING_AXE.shutDown();
             RANKING_CLUB.shutDown();
             RANKING_DISTANCE.shutDown();
-            RANKING_MAGIC.shutDown();
+            RANKING_SHIELDING.shutDown();
             LM.writeLog(Level::Debug, "RankingManager::shutDown");
             Manager::shutDown();
         }
@@ -44,7 +44,7 @@ namespace noname
             RANKING_AXE.updateRanking();
             RANKING_CLUB.updateRanking();
             RANKING_DISTANCE.updateRanking();
-            RANKING_MAGIC.updateRanking();
+            RANKING_SHIELDING.updateRanking();
         }
 
         void addPlayer(const Player &player)
@@ -54,7 +54,7 @@ namespace noname
             RANKING_AXE.addPlayer(std::move(player));
             RANKING_CLUB.addPlayer(std::move(player));
             RANKING_DISTANCE.addPlayer(std::move(player));
-            RANKING_MAGIC.addPlayer(std::move(player));
+            RANKING_SHIELDING.addPlayer(std::move(player));
         }
 
         short getPlayerRanking(int playerId, SkillType skill)
@@ -76,8 +76,8 @@ namespace noname
             case SkillType::DISTANCE:
                 return RANKING_DISTANCE.getPlayerRanking(playerId);
                 break;
-            case SkillType::MAGIC:
-                return RANKING_MAGIC.getPlayerRanking(playerId);
+            case SkillType::SHIELDING:
+                return RANKING_SHIELDING.getPlayerRanking(playerId);
                 break;
             default:
                 return -1;
@@ -94,7 +94,7 @@ namespace noname
             RANKING_AXE.printRanking();
             RANKING_CLUB.printRanking();
             RANKING_DISTANCE.printRanking();
-            RANKING_MAGIC.printRanking();
+            RANKING_SHIELDING.printRanking();
         }
     };
 }

@@ -20,7 +20,7 @@
 #define RANKING_AXE noname::Ranking<SkillType::AXE>::getInstance()
 #define RANKING_CLUB noname::Ranking<SkillType::CLUB>::getInstance()
 #define RANKING_DISTANCE noname::Ranking<SkillType::DISTANCE>::getInstance()
-#define RANKING_MAGIC noname::Ranking<SkillType::MAGIC>::getInstance()
+#define RANKING_SHIELDING noname::Ranking<SkillType::SHIELDING>::getInstance()
 
 namespace noname
 {

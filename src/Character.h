@@ -53,12 +53,16 @@ namespace noname
         // Getters for UI or info related
         int getId() const { return _id; }
         std::string getName() const { return _name; }
-        unsigned long long getExperience() { return _currentExperience; }
+        unsigned long long getExperience() const { return _currentExperience; }
+        unsigned long long getManaWasted() const { return _currentManaWasted; }
         short getLevel() const { return _level; }
         short getMagicLevel() const { return _magicLevel; }
         short getSkill(SkillType skill) const { return _skills.at(static_cast<int>(skill)); }
         int getCurrentHealth() const { return _currentHealth; }
         int getMaxHealth() const { return _maxHealth; }
+        int getCurrentMana() const {return _currentMana; }
+
+        int getMaxMana() const { return _maxMana; }
         bool isDead() { return _isDead; }
         short getHeritable(HeritableType value) { return _heritables.at(value); }
         short getAttackDamage() const;
@@ -70,6 +74,7 @@ namespace noname
         void gainHealth(int value);
         void takeDamage(int value);
         void useMana(int value);
+        void gainMana(int value);
         void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
 
         // Actions

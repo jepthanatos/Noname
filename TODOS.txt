@@ -8,10 +8,10 @@ TODOS:
     - Mana del personaje
         - Establecer el mana según el nivel y otros atributos - DONE
         - Usar mana - DONE
-        - Ganar mana
-    - Nivel mágico (va en habilidades pero debería de ir fuera)
-        - Saber el mana que hay que gastar para subir de nivel
-        - Apuntar el mana gastado
+        - Ganar mana - DONE
+    - Nivel mágico
+        - Saber el mana que hay que gastar para subir de nivel - DONE
+        - Apuntar el mana gastado - DONE
     - Experiencia
         - Aumentar la experiencia al matar un enemigo o hacer una quest
         - Reducir la experiencia al morir
