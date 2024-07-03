@@ -13,11 +13,13 @@ TODOS:
         - Saber el mana que hay que gastar para subir de nivel - DONE
         - Apuntar el mana gastado - DONE
     - Experiencia
-        - Aumentar la experiencia al matar un enemigo o hacer una quest
-        - Reducir la experiencia al morir
+        - Aumentar la experiencia al matar un enemigo o hacer una quest - DONE
+        - Reducir la experiencia al morir - DONE
+        - Bajar de nivel si la experiencia es menor a la del nivel que se encuentra - DONE
     - Habilidades con las armas
-        - Aumentar el número de intentos
-        - Aumentar una habilidad al haber cumplido el número de intentos y poner el número de intentos a 0
+        - Aumentar el número de intentos cuando el personaje ataca - DONE
+        - Aumentar una habilidad al haber cumplido el número de intentos y poner el número de intentos a 0 - DONE
+        - Caso especial sería el de shielding
     - Capacidad de carga
         - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución
     - Hereditables

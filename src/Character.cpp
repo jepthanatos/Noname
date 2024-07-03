@@ -81,14 +81,18 @@ namespace noname
         }
     }
 
-    void Character::gainExperience(unsigned long long value)
+    void Character::gainExperience(int value)
     {
-        _currentExperience += value;
-
-        while (_currentExperience >= _nextLevelExperience)
+        if (value > 0)
         {
-            setLevel(_level + 1);
+            _currentExperience += value;
+
+            while (_currentExperience >= _nextLevelExperience)
+            {
+                setLevel(_level + 1);
+            }
         }
+        // Error handling TBD
     }
 
     void Character::gainHealth(int value)
@@ -97,6 +101,7 @@ namespace noname
         {
             _currentHealth = std::min(static_cast<short>(_currentHealth + value), static_cast<short>(_maxHealth));
         }
+        // Error handling TBD
     }
 
     short Character::getAttackDamage() const
@@ -132,13 +137,17 @@ namespace noname
             _currentHealth = std::max(static_cast<int>(0), static_cast<int>(_currentHealth - value));
             if (_currentHealth == 0 && !_isDead)
             {
-                --_level;
+                _isDead = true;
                 _currentExperience -= static_cast<unsigned long long>(std::ceil((_currentExperience * 25) / 100.0));
                 _currentExperience = std::max(static_cast<unsigned long long>(0), static_cast<unsigned long long>(_currentExperience));
-                _level = std::max(static_cast<short>(1), static_cast<short>(_level));
-                _isDead = true;
+                while (_currentExperience < GM.getExpForLevel(_level - 1))
+                {
+                    _nextLevelExperience = GM.getExpForLevel(_level);
+                    --_level;
+                }
             }
         }
+        // Error handling TBD
     }
 
     void Character::useMana(int value)
@@ -153,6 +162,7 @@ namespace noname
                 _nextLevelManaWasted = GM.getManaForLevel(_magicLevel + 1);
             }
         }
+        // Error handling TBD
     }
 
     void Character::gainMana(int value)
@@ -161,6 +171,7 @@ namespace noname
         {
             _currentMana = std::min(static_cast<short>(_currentMana + value), static_cast<short>(_maxMana));
         }
+        // Error handling TBD
     }
 
     void Character::writeCharacterInfo()
@@ -201,6 +212,7 @@ namespace noname
 
     void Character::determineHeritables(const Character &father, const Character &mother)
     {
+        _heritables.determineHeritablesValues(father._heritables, mother._heritables);
         writeCharacterInfo();
     }
 }

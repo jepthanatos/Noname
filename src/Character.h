@@ -60,8 +60,7 @@ namespace noname
         short getSkill(SkillType skill) const { return _skills.at(static_cast<int>(skill)); }
         int getCurrentHealth() const { return _currentHealth; }
         int getMaxHealth() const { return _maxHealth; }
-        int getCurrentMana() const {return _currentMana; }
-
+        int getCurrentMana() const { return _currentMana; }
         int getMaxMana() const { return _maxMana; }
         bool isDead() { return _isDead; }
         short getHeritable(HeritableType value) { return _heritables.at(value); }
@@ -70,7 +69,7 @@ namespace noname
         void writeCharacterInfo();
 
         // Others
-        void gainExperience(unsigned long long value);
+        void gainExperience(int value);
         void gainHealth(int value);
         void takeDamage(int value);
         void useMana(int value);

@@ -99,9 +99,26 @@ TEST_F(TestCharacter, takeDamageAndDie)
     ASSERT_TRUE(character.getCurrentHealth() <= 0);
 
     character.respawn();
-    ASSERT_EQ(character.getLevel(), 1);
     auto experience = GM.getExpForLevel(2) - ceil((GM.getExpForLevel(2) * 25) / 100);
     ASSERT_EQ(character.getExperience(), experience);
+}
+
+TEST_F(TestCharacter, takeDamageDieAndLoseLevel)
+{
+    character.gainExperience(GM.getExpForLevel(100));
+    ASSERT_EQ(character.getLevel(), 100);
+    ASSERT_EQ(character.getExperience(), GM.getExpForLevel(100));
+
+    while (!character.isDead())
+    {
+        character.takeDamage(character.getAttackDamage());
+    }
+    ASSERT_TRUE(character.getCurrentHealth() <= 0);
+
+    character.respawn();
+    auto experience = GM.getExpForLevel(100) - ceil((GM.getExpForLevel(100) * 25) / 100);
+    ASSERT_EQ(character.getExperience(), experience);
+    ASSERT_EQ(character.getLevel(), 91);
 }
 
 TEST_F(TestCharacter, CharacterGetWeapon)

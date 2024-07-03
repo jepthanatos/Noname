@@ -55,7 +55,12 @@ namespace noname
 
         std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons; }
 
-        Weapon getWeapon(const std::string &weapon) { return _weapons.find(weapon)->second; }
+        Weapon getWeapon(const std::string &weapon)
+        {
+            if (!isStarted())
+                startUp();
+            return _weapons.find(weapon)->second;
+        }
     };
 
 }

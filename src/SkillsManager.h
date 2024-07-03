@@ -50,6 +50,8 @@ namespace noname
 
         Skill getSkill(const SkillType &skill) const
         {
+            if (!isStarted())
+                SM.startUp();
             if (_skillsList.size() > 0)
                 return _skillsList.find(skill)->second;
             return {0, 0, 0};

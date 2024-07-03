@@ -38,17 +38,20 @@ TEST_F(TestRanking, addPlayer)
 TEST_F(TestRanking, add100Players)
 {
     LM.startUp();
+    WM.startUp();
     RANKING_CLUB.startUp();
     for (int i = 0; i < 100; ++i)
     {
         Player player{};
         player.equipWeapon("Club");
         player.gainExperience(GM.getExpForLevel(Utils::rollDie(1, 100)));
-        for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
+        auto attackNumber{Utils::rollDie(1, 1000)};
+        for (int j = 1; j < attackNumber; ++j)
             player.attack();
         RANKING_CLUB.addPlayer(std::move(player));
     }
     RANKING_CLUB.printRanking();
     RANKING_CLUB.shutDown();
+    WM.shutDown();
     LM.shutDown();
 }

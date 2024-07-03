@@ -14,7 +14,7 @@
 #include <vector>
 #include <algorithm>
 
-// Acronyms for easier access to managers
+// Acronyms for easier access to rankings
 #define RANKING_FIST noname::Ranking<SkillType::FIST>::getInstance()
 #define RANKING_SWORD noname::Ranking<SkillType::SWORD>::getInstance()
 #define RANKING_AXE noname::Ranking<SkillType::AXE>::getInstance()
