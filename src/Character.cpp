@@ -47,6 +47,7 @@ namespace noname
         _nextLevelExperience = GM.getExpForLevel(_level + 1);
         setMaxHealth();
         setMaxMana();
+        setMaxCapacity();
     }
 
     void Character::setMagicLevel(short value)
@@ -63,6 +64,12 @@ namespace noname
     void Character::setMaxMana()
     {
         _maxMana = _maxMana + _heritables.at(HeritableType::INTELLIGENCE) + Utils::rollDie(1, _level);
+    }
+
+    void Character::setMaxCapacity()
+    {
+        _maxCapacity = _maxCapacity + _heritables.at(HeritableType::STRENGTH) + _heritables.at(HeritableType::CONSTITUTION) + Utils::rollDie(1, _level);
+        updateCurrentCapacity();
     }
 
     void Character::setSkill(SkillType skill, short value)
@@ -224,6 +231,24 @@ namespace noname
             LM.writeLog(Level::Debug, "Character " + _id.toString() + " has been damaged with " + std::to_string(damage - defense));
             takeDamage(damage - defense);
         }
+    }
+
+    void Character::pick(Item &item)
+    {
+        LM.writeLog(Level::Debug, "Character " + _id.toString() + " has picked item " + item.getName());
+        if (_currentCapacity >= item.getWeight())
+        {
+            // _inventory.addItemToContainer(item);
+            updateCurrentCapacity();
+        }
+    }
+
+    void Character::drop(int itemID)
+    {
+        // auto item{_inventory.searchItem(itemID)};
+        // LM.writeLog(Level::Debug, "Character " + _id.toString() + " has droped item " + item.getName());
+        // _inventory.dropItem(item);
+        updateCurrentCapacity();
     }
 
     void Character::determineHeritables(const Character &father, const Character &mother)

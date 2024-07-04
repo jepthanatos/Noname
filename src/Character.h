@@ -36,12 +36,19 @@ namespace noname
         Weapon _currentWeapon;
         bool _isDead;
         Heritables _heritables;
+        // Inventory _inventory;
 
         static int generateId();
         void setLevel(short value);
         void setMagicLevel(short value);
         void setMaxHealth();
         void setMaxMana();
+        void setMaxCapacity();
+        void updateCurrentCapacity()
+        {
+            _currentCapacity = _maxCapacity;
+            // - _inventory.getWeight();
+        }
         void setSkill(SkillType skill, short value);
         void updateTries(SkillType skill);
 
@@ -81,11 +88,9 @@ namespace noname
         virtual void move() {}
         virtual void attack(Character &character);
         virtual void defense(short damage);
-        virtual void eat() {}
-        virtual void sleep() {}
-        virtual void pick() {}
-        virtual void drop() {}
-        virtual void use() {}
+        virtual void pick(Item &item);
+        virtual void drop(int itemID);
+        virtual void use(int itemID) {}
 
         // Others
         void determineHeritables(const Character &father, const Character &mother);

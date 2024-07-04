@@ -21,7 +21,15 @@ TODOS:
         - Aumentar una habilidad al haber cumplido el número de intentos y poner el número de intentos a 0 - DONE
         - Caso especial sería el de shielding - DONE (en defensa)
     - Capacidad de carga
-        - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución
+        - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución - DONE
+        - Actualizar la capacidad de carga actual cuando: 
+            + el personaje coja objetos - MEDIO HECHO DE INVENTARIO
+            + deje objetos - MEDIO HECHO DEPENDE DE INVENTARIO
+            + suba de nivel - DONE
+    - Velocidad de movimiento
+        - Establecer la velocidad de movimiento dependiendo de la fuerza y la constitución
+        - Aumentar la velocidad de movimiento al subir de nivel
+        - Actualizar la velocidad de movimiento al coger o dejar objetos
     - Hereditables
         - Fuerza - Necesario para utilizar armas y para la capacidad de carga
         - Destreza - Necesario para utilizar armas
@@ -29,7 +37,6 @@ TODOS:
         - Inteligencia - Necesario para utilizar hechizos y objetos mágicos
         - Carisma - Necesario para saber cómo de fácil encontrará pareja
         - Atractivo - Necesario para saber cómo de fácil encontrará pareja
-        - Velocidad - Necesario para moverse por el mapa
 
 - Objetos (todos heredan de los objetos, incluidos las armas y los contenedores)
     + Categoría de los objetos
