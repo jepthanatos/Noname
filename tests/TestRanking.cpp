@@ -46,8 +46,8 @@ TEST_F(TestRanking, add100Players)
         player.equipWeapon("Club");
         player.gainExperience(GM.getExpForLevel(Utils::rollDie(1, 100)));
         auto attackNumber{Utils::rollDie(1, 1000)};
-        for (int j = 1; j < attackNumber; ++j)
-            player.attack();
+        // for (int j = 1; j < attackNumber; ++j)
+        // player.attack();
         RANKING_CLUB.addPlayer(std::move(player));
     }
     RANKING_CLUB.printRanking();

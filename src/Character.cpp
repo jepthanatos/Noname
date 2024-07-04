@@ -202,12 +202,28 @@ namespace noname
         characterFile.write(infoTable.str());
     }
 
-    void Character::attack()
+    void Character::attack(Character &character)
     {
         auto damage{getAttackDamage()};
-        // LM.writeLog(Level::Debug, "Character has attacked with damage equal to " + std::to_string(damage));
+        LM.writeLog(Level::Debug, "Character " + _id.toString() + " has attacked with damage equal to " + std::to_string(damage));
         if (damage > 0)
+        {
             updateTries(_currentWeapon.getType());
+            character.defense(damage);
+        }
+    }
+
+    void Character::defense(short damage)
+    {
+        auto shield{10};
+        auto defense{shield + ((_skills.at(Utils::toInt(SkillType::SHIELDING)) + 10) / 40)};
+        if (damage <= defense)
+            updateTries(SkillType::SHIELDING);
+        else
+        {
+            LM.writeLog(Level::Debug, "Character " + _id.toString() + " has been damaged with " + std::to_string(damage - defense));
+            takeDamage(damage - defense);
+        }
     }
 
     void Character::determineHeritables(const Character &father, const Character &mother)

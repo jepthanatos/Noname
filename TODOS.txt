@@ -19,7 +19,7 @@ TODOS:
     - Habilidades con las armas
         - Aumentar el número de intentos cuando el personaje ataca - DONE
         - Aumentar una habilidad al haber cumplido el número de intentos y poner el número de intentos a 0 - DONE
-        - Caso especial sería el de shielding
+        - Caso especial sería el de shielding - DONE (en defensa)
     - Capacidad de carga
         - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución
     - Hereditables

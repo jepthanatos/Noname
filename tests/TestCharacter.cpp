@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "WeaponsManager.h"
 #include "LogManager.h"
+#include "Creature.h"
 
 // System includes
 #include <cmath>
@@ -129,9 +130,11 @@ TEST_F(TestCharacter, CharacterGetWeapon)
 
 TEST_F(TestCharacter, CharacterAttack)
 {
+    std::unique_ptr<Character> beast = std::make_unique<Creature>();
+    beast->gainExperience(GM.getExpForLevel(1000));
     for (int i = 0; i < 1000; ++i)
     {
-        character.attack();
+        character.attack(*beast);
     }
     Property<short> expectedSkill{1};
     ASSERT_TRUE(character.getSkill(character.getWeapon().getType()) > expectedSkill);

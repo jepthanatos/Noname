@@ -79,8 +79,8 @@ namespace noname
         // Actions
         virtual void respawn();
         virtual void move() {}
-        virtual void attack();
-        virtual void defense() {}
+        virtual void attack(Character &character);
+        virtual void defense(short damage);
         virtual void eat() {}
         virtual void sleep() {}
         virtual void pick() {}

@@ -49,19 +49,19 @@ namespace noname
 
     void GameManager::run()
     {
-        LM.writeLog(Level::Debug, "Starting program...");
+        LM.writeLog(Level::Debug, "Starting game...");
         for (int i = 0; i < 100; ++i)
         {
             Player player{};
             player.equipWeapon("Club");
             player.gainExperience(getExpForLevel(Utils::rollDie(1, 100)));
-            for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
-                player.attack();
+            // for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
+            // player.attack();
             RM.addPlayer(std::move(player));
             player.writeCharacterInfo();
         }
         RM.printAllRankings();
-        LM.writeLog(Level::Debug, "Ending program...");
+        LM.writeLog(Level::Debug, "Ending game...");
     }
 
     unsigned long long GameManager::getExpForLevel(short level) const
