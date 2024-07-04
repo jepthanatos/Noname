@@ -27,9 +27,9 @@ TODOS:
             + deje objetos - MEDIO HECHO DEPENDE DE INVENTARIO
             + suba de nivel - DONE
     - Velocidad de movimiento
-        - Establecer la velocidad de movimiento dependiendo de la fuerza y la constitución
-        - Aumentar la velocidad de movimiento al subir de nivel
-        - Actualizar la velocidad de movimiento al coger o dejar objetos
+        - Establecer la velocidad de movimiento dependiendo de la fuerza y la constitución - DONE
+        - Aumentar la velocidad de movimiento al subir de nivel - DONE
+        - Actualizar la velocidad de movimiento al coger o dejar objetos - MEDIO HECHO DEPENDE DE INVENTARIO
     - Hereditables
         - Fuerza - Necesario para utilizar armas y para la capacidad de carga
         - Destreza - Necesario para utilizar armas
@@ -37,6 +37,7 @@ TODOS:
         - Inteligencia - Necesario para utilizar hechizos y objetos mágicos
         - Carisma - Necesario para saber cómo de fácil encontrará pareja
         - Atractivo - Necesario para saber cómo de fácil encontrará pareja
+    - Inventario
 
 - Objetos (todos heredan de los objetos, incluidos las armas y los contenedores)
     + Categoría de los objetos

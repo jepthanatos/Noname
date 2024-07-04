@@ -11,6 +11,7 @@
 #include "Weapon.h"
 #include "WeaponsManager.h"
 #include "Heritables.h"
+#include "Inventory.h"
 
 namespace noname
 {
@@ -27,6 +28,8 @@ namespace noname
         Property<int> _maxMana;
         Property<int> _currentCapacity;
         Property<int> _maxCapacity;
+        Property<int> _baseSpeed;
+        Property<int> _speed;
         Property<unsigned long long> _currentExperience;
         Property<unsigned long long> _nextLevelExperience;
         Property<unsigned long long> _currentManaWasted;
@@ -36,7 +39,7 @@ namespace noname
         Weapon _currentWeapon;
         bool _isDead;
         Heritables _heritables;
-        // Inventory _inventory;
+        Inventory _inventory;
 
         static int generateId();
         void setLevel(short value);
@@ -44,11 +47,9 @@ namespace noname
         void setMaxHealth();
         void setMaxMana();
         void setMaxCapacity();
-        void updateCurrentCapacity()
-        {
-            _currentCapacity = _maxCapacity;
-            // - _inventory.getWeight();
-        }
+        void updateCurrentCapacity();
+        void setSpeed();
+        void updateSpeed();
         void setSkill(SkillType skill, short value);
         void updateTries(SkillType skill);
 

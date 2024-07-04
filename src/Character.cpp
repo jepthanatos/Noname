@@ -29,6 +29,8 @@ namespace noname
                              _maxMana{0},
                              _currentCapacity{0},
                              _maxCapacity{0},
+                             _baseSpeed{0},
+                             _speed{0},
                              _currentExperience{0},
                              _nextLevelExperience{0},
                              _currentManaWasted{0},
@@ -48,6 +50,7 @@ namespace noname
         setMaxHealth();
         setMaxMana();
         setMaxCapacity();
+        updateSpeed();
     }
 
     void Character::setMagicLevel(short value)
@@ -70,6 +73,22 @@ namespace noname
     {
         _maxCapacity = _maxCapacity + _heritables.at(HeritableType::STRENGTH) + _heritables.at(HeritableType::CONSTITUTION) + Utils::rollDie(1, _level);
         updateCurrentCapacity();
+    }
+
+    void Character::updateCurrentCapacity()
+    {
+        _currentCapacity = _maxCapacity - _inventory.getWeight();
+    }
+
+    void Character::setSpeed()
+    {
+        _baseSpeed = _baseSpeed + _heritables.at(HeritableType::STRENGTH) - _heritables.at(HeritableType::CONSTITUTION) + Utils::rollDie(1, _level);
+        updateSpeed();
+    }
+
+    void Character::updateSpeed()
+    {
+        _speed = _baseSpeed - _inventory.getWeight();
     }
 
     void Character::setSkill(SkillType skill, short value)
