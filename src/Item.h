@@ -13,9 +13,15 @@ namespace noname
 {
     enum class ItemType
     {
+        AMULET,
+        HELMET,
+        CONTAINER,
         WEAPON,
         ARMOR,
-        CONTAINER,
+        SHIELD,
+        RING,
+        LEGS_ARMOR,
+        BOOTS,
         USABLE,
         LAST_ITEM_TYPE
     };

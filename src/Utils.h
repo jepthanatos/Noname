@@ -17,9 +17,10 @@ namespace noname
             return dist6(rng);
         };
 
-        static int toInt(SkillType skill)
+        template <class T>
+        static int toInt(T value)
         {
-            return static_cast<int>(skill);
+            return static_cast<int>(value);
         }
     };
 }

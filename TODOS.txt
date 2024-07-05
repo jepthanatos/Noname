@@ -23,13 +23,13 @@ TODOS:
     - Capacidad de carga
         - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución - DONE
         - Actualizar la capacidad de carga actual cuando: 
-            + el personaje coja objetos - MEDIO HECHO DE INVENTARIO
-            + deje objetos - MEDIO HECHO DEPENDE DE INVENTARIO
+            + el personaje coja objetos - DONE
+            + deje objetos - DONE
             + suba de nivel - DONE
     - Velocidad de movimiento
         - Establecer la velocidad de movimiento dependiendo de la fuerza y la constitución - DONE
         - Aumentar la velocidad de movimiento al subir de nivel - DONE
-        - Actualizar la velocidad de movimiento al coger o dejar objetos - MEDIO HECHO DEPENDE DE INVENTARIO
+        - Actualizar la velocidad de movimiento al coger o dejar objetos - DONE
     - Hereditables
         - Fuerza - Necesario para utilizar armas y para la capacidad de carga
         - Destreza - Necesario para utilizar armas
@@ -38,6 +38,10 @@ TODOS:
         - Carisma - Necesario para saber cómo de fácil encontrará pareja
         - Atractivo - Necesario para saber cómo de fácil encontrará pareja
     - Inventario
+        - Añadir objetos al inventario - DONE
+        - Quitar objetos del inventario - DONE
+        - Calcular el peso de todos los objetos del inventario - DONE (muy simple, necesita mejora)
+        - Usar un objeto del inventario 
 
 - Objetos (todos heredan de los objetos, incluidos las armas y los contenedores)
     + Categoría de los objetos
