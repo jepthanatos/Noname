@@ -21,15 +21,26 @@ namespace noname
 
     private:
         ContainerType _type;
-        Property<short> _slots;
+        Property<short> _slotsNumber;
         Property<short> _maxCapacity;
+        std::vector<std::optional<Item>> _slots;
 
     public:
-        Container(const std::string &name, const ContainerType type, short slots, short maxCapacity) : _type{type}, _slots{slots}, _maxCapacity{maxCapacity}, Item(name, ItemType::CONTAINER) {}
+        Container(const std::string &name, const ContainerType type, short slots, short maxCapacity) : _type{type}, _slotsNumber{slots}, _maxCapacity{maxCapacity}, Item(name, ItemType::CONTAINER) {}
 
         ContainerType getType() const { return _type; }
-        short getSlots() const { return _slots; }
+        short getSlotsNumber() const { return _slotsNumber; }
         short getMaxCapacity() const { return _maxCapacity; }
+        short getWeight() const override
+        {
+            short weight{0};
+            for (auto slot : _slots)
+            {
+                if (slot.has_value())
+                    weight += slot.value().getWeight();
+            }
+            return weight;
+        }
     };
 
 }

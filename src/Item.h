@@ -56,15 +56,20 @@ namespace noname
 
         std::string getName() const { return _name; }
         ItemType getItemType() const { return _type; }
-
         short getValue() const { return getValueFromOptional(_value); }
         short getUses() const { return getValueFromOptional(_uses); }
-        short getWeight() const { return getValueFromOptional(_weight); }
+        virtual short getWeight() const { return getValueFromOptional(_weight); }
 
         bool operator==(const Item &item) const
         {
             // return item._id == _id;
             return item._name == _name;
+        }
+
+        void useItem()
+        {
+            if (getUses() > 0)
+                _uses.value().operator--();
         }
     };
 

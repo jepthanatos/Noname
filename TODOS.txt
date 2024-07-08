@@ -22,7 +22,7 @@ TODOS:
         - Caso especial sería el de shielding - DONE (en defensa)
     - Capacidad de carga
         - Establecer la capacidad de carga del personaje dependiendo de la fuerza y la constitución - DONE
-        - Actualizar la capacidad de carga actual cuando: 
+        - Actualizar la capacidad de carga actual cuando:
             + el personaje coja objetos - DONE
             + deje objetos - DONE
             + suba de nivel - DONE
@@ -41,7 +41,7 @@ TODOS:
         - Añadir objetos al inventario - DONE
         - Quitar objetos del inventario - DONE
         - Calcular el peso de todos los objetos del inventario - DONE (muy simple, necesita mejora)
-        - Usar un objeto del inventario 
+        - Usar un objeto del inventario - DONE (hay que repasarlo)
 
 - Objetos (todos heredan de los objetos, incluidos las armas y los contenedores)
     + Categoría de los objetos

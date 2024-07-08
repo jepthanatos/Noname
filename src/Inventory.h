@@ -8,6 +8,7 @@
 #include "Utils.h"
 #include "Item.h"
 #include "Property.h"
+#include "Container.h"
 
 namespace noname
 {
@@ -43,9 +44,16 @@ namespace noname
             return value;
         }
 
-        int getWeight()
+        void useItem(SlotType slot)
         {
-            int weight{0};
+            if (_slots.at(Utils::toInt(slot)).has_value())
+                if (_slots.at(Utils::toInt(slot)).value().getUses() > 0)
+                    _slots.at(Utils::toInt(slot)).value().useItem();
+        }
+
+        short getWeight()
+        {
+            short weight{0};
             for (auto slot : _slots)
             {
                 if (slot.has_value())
@@ -68,63 +76,43 @@ namespace noname
             {
             case SlotType::AMULET:
                 if (item.getItemType() == ItemType::AMULET)
-                {
                     store(item);
-                }
                 break;
             case SlotType::HELMET:
                 if (item.getItemType() == ItemType::HELMET)
-                {
                     store(item);
-                }
                 break;
             case SlotType::CONTAINER:
                 if (item.getItemType() == ItemType::CONTAINER)
-                {
                     store(item);
-                }
                 break;
             case SlotType::WEAPON:
                 if (item.getItemType() == ItemType::WEAPON)
-                {
                     store(item);
-                }
                 break;
             case SlotType::RIGHT_RING:
                 if (item.getItemType() == ItemType::RING)
-                {
                     store(item);
-                }
                 break;
             case SlotType::ARMOR:
                 if (item.getItemType() == ItemType::ARMOR)
-                {
                     store(item);
-                }
                 break;
             case SlotType::SHIELD:
                 if (item.getItemType() == ItemType::SHIELD)
-                {
                     store(item);
-                }
                 break;
             case SlotType::LEFT_RING:
                 if (item.getItemType() == ItemType::RING)
-                {
                     store(item);
-                }
                 break;
             case SlotType::LEGS_ARMOR:
                 if (item.getItemType() == ItemType::LEGS_ARMOR)
-                {
                     store(item);
-                }
                 break;
             case SlotType::BOOTS:
                 if (item.getItemType() == ItemType::BOOTS)
-                {
                     store(item);
-                }
                 break;
             default:
                 // Error handling TBD

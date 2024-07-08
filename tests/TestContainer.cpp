@@ -25,9 +25,9 @@ TEST_F(TestContainer, getType)
     EXPECT_EQ(backack.getType(), ContainerType::BACKPACK);
 }
 
-TEST_F(TestContainer, getSlots)
+TEST_F(TestContainer, getSlotsNumber)
 {
-    EXPECT_EQ(backack.getSlots(), 8);
+    EXPECT_EQ(backack.getSlotsNumber(), 8);
 }
 
 TEST_F(TestContainer, getMaxCapacity)
