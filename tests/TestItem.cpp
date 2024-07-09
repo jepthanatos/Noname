@@ -37,7 +37,7 @@ TEST_F(TestItem, getWeight)
 
 struct TestOtherItem : Test
 {
-    Item OtherItem{"Rune", ItemType::USABLE, 20, 10, 5};
+    Item OtherItem{"Rune", ItemType::USABLE, ItemRank::NORMAL, 20, 10, 5};
 };
 
 TEST_F(TestOtherItem, getName)

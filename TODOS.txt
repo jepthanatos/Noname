@@ -44,7 +44,7 @@ TODOS:
         - Usar un objeto del inventario - DONE (hay que repasarlo)
 
 - Objetos (todos heredan de los objetos, incluidos las armas y los contenedores)
-    + Categoría de los objetos
+    + Categoría de los objetos - DONE
         Los objetos tendrían que tener una determinada categoría a elegir entre las siguientes:
             - Normales, sin propiedades mágicas - Color: blanco
             - Mágicos - Color: amarillo

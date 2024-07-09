@@ -124,7 +124,7 @@ TEST_F(TestCharacter, takeDamageDieAndLoseLevel)
 
 TEST_F(TestCharacter, CharacterGetWeapon)
 {
-    Weapon club{"Club", SkillType::CLUB, 4};
+    Weapon club{"Club", SkillType::CLUB, ItemRank::NORMAL, 4};
     EXPECT_EQ(club, character.getWeapon());
 }
 
@@ -137,7 +137,7 @@ TEST_F(TestCharacter, CharacterAttack)
         character.attack(*beast);
     }
     Property<short> expectedSkill{1};
-    ASSERT_TRUE(character.getSkill(character.getWeapon().getType()) > expectedSkill);
+    ASSERT_TRUE(character.getSkill(character.getWeapon().getSkillType()) > expectedSkill);
 }
 
 TEST_F(TestCharacter, CharacterGainHealth)

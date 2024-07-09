@@ -19,10 +19,9 @@ namespace noname
         Property<short> _die;
 
     public:
-        Weapon() : _type{SkillType::FIST}, _die{2}, Item("Fists", ItemType::WEAPON) {}
-        Weapon(const std::string &name, const SkillType type, const short dice) : _type{type}, _die{dice}, Item(name, ItemType::WEAPON) {}
+        Weapon(const std::string &name, const SkillType &type, const ItemRank &rank = ItemRank::NORMAL, const short &die = 0) : _type{type}, _die{die}, Item(name, ItemType::WEAPON, rank) {}
 
-        SkillType getType() const { return _type; }
+        SkillType getSkillType() const { return _type; }
         short getDie() const { return _die; }
     };
 }

@@ -7,7 +7,7 @@ using namespace testing;
 
 struct TestWeapon : Test
 {
-    Weapon weapon{"Great Axe", SkillType::AXE, 20};
+    Weapon weapon{"Great Axe", SkillType::AXE, ItemRank::NORMAL, 20};
 };
 
 TEST_F(TestWeapon, getName)
@@ -20,9 +20,9 @@ TEST_F(TestWeapon, getItemType)
     EXPECT_EQ(weapon.getItemType(), ItemType::WEAPON);
 }
 
-TEST_F(TestWeapon, getType)
+TEST_F(TestWeapon, getSkillType)
 {
-    EXPECT_EQ(weapon.getType(), SkillType::AXE);
+    EXPECT_EQ(weapon.getSkillType(), SkillType::AXE);
 }
 
 TEST_F(TestWeapon, getDie)

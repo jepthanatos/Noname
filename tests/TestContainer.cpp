@@ -7,7 +7,7 @@ using namespace testing;
 
 struct TestContainer : Test
 {
-    Container backack{"Backpack", ContainerType::BACKPACK, 8, 100};
+    Container backack{"Backpack", ContainerType::BACKPACK, ItemRank::NORMAL, 8, 100};
 };
 
 TEST_F(TestContainer, getName)

@@ -40,17 +40,17 @@ namespace noname
 
         void initializeWeapons()
         {
-            _weapons.insert({"Fists", {"Fists", SkillType::FIST, 2}});
-            _weapons.insert({"Club", {"Club", SkillType::CLUB, 4}});
-            _weapons.insert({"Dagger", {"Dagger", SkillType::SWORD, 4}});
-            _weapons.insert({"Greatclub", {"Greatclub", SkillType::CLUB, 8}});
-            _weapons.insert({"Handaxe", {"Handaxe", SkillType::AXE, 6}});
-            _weapons.insert({"Javelin", {"Javelin", SkillType::DISTANCE, 6}});
-            _weapons.insert({"Light hammer", {"Light hammer", SkillType::CLUB, 4}});
-            _weapons.insert({"Mace", {"Mace", SkillType::CLUB, 6}});
-            _weapons.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, 6}});
-            _weapons.insert({"Sickle", {"Sickle", SkillType::SWORD, 4}});
-            _weapons.insert({"Spear", {"Spear", SkillType::DISTANCE, 6}});
+            _weapons.insert({"Fists", {"Fists", SkillType::FIST, ItemRank::NORMAL, 2}});
+            _weapons.insert({"Club", {"Club", SkillType::CLUB, ItemRank::NORMAL, 4}});
+            _weapons.insert({"Dagger", {"Dagger", SkillType::SWORD, ItemRank::NORMAL, 4}});
+            _weapons.insert({"Greatclub", {"Greatclub", SkillType::CLUB, ItemRank::NORMAL, 8}});
+            _weapons.insert({"Handaxe", {"Handaxe", SkillType::AXE, ItemRank::NORMAL, 6}});
+            _weapons.insert({"Javelin", {"Javelin", SkillType::DISTANCE, ItemRank::NORMAL, 6}});
+            _weapons.insert({"Light hammer", {"Light hammer", SkillType::CLUB, ItemRank::NORMAL, 4}});
+            _weapons.insert({"Mace", {"Mace", SkillType::CLUB, ItemRank::NORMAL, 6}});
+            _weapons.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, ItemRank::NORMAL, 6}});
+            _weapons.insert({"Sickle", {"Sickle", SkillType::SWORD, ItemRank::NORMAL, 4}});
+            _weapons.insert({"Spear", {"Spear", SkillType::DISTANCE, ItemRank::NORMAL, 6}});
         }
 
         std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons; }

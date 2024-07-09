@@ -13,6 +13,7 @@ namespace noname
 {
     enum class ItemType
     {
+        NO_TYPE,
         AMULET,
         HELMET,
         CONTAINER,
@@ -26,6 +27,17 @@ namespace noname
         LAST_ITEM_TYPE
     };
 
+    enum class ItemRank
+    {
+        NO_RANK,
+        NORMAL,
+        MAGIC,
+        RARE,
+        EPIC,
+        LEGENDARY,
+        LAST_ITEM_RANK
+    };
+
     inline constexpr short NO_VALUE = -1;
 
     class Item
@@ -34,6 +46,7 @@ namespace noname
         int _id;
         std::string _name;
         ItemType _type;
+        ItemRank _rank;
         std::optional<Property<short>> _value;
         std::optional<Property<short>> _uses;
         std::optional<Property<short>> _weight;
@@ -47,11 +60,21 @@ namespace noname
         };
 
     public:
-        Item(const std::string &name, const ItemType type, const std::optional<short> value = std::nullopt, const std::optional<short> uses = std::nullopt, const std::optional<short> weight = std::nullopt) : _name{name}, _type{type}, _value{value}, _uses{uses}, _weight{weight}
+        Item(const std::string &name,
+             const ItemType &type,
+             const ItemRank &rank = ItemRank::NORMAL,
+             const std::optional<short> &value = std::nullopt,
+             const std::optional<short> &uses = std::nullopt,
+             const std::optional<short> &weight = std::nullopt) : _name{name},
+                                                                  _type{type},
+                                                                  _rank{rank},
+                                                                  _value{value},
+                                                                  _uses{uses},
+                                                                  _weight{weight}
         {
-            static int cont{0};
-            _id = cont;
-            ++cont;
+            static int itemId{0};
+            _id = itemId;
+            ++itemId;
         }
 
         std::string getName() const { return _name; }

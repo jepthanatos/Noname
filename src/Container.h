@@ -26,7 +26,7 @@ namespace noname
         std::vector<std::optional<Item>> _slots;
 
     public:
-        Container(const std::string &name, const ContainerType type, short slots, short maxCapacity) : _type{type}, _slotsNumber{slots}, _maxCapacity{maxCapacity}, Item(name, ItemType::CONTAINER) {}
+        Container(const std::string &name, const ContainerType &type, const ItemRank &rank, short slots, short maxCapacity) : _type{type}, _slotsNumber{slots}, _maxCapacity{maxCapacity}, Item(name, ItemType::CONTAINER, rank) {}
 
         ContainerType getType() const { return _type; }
         short getSlotsNumber() const { return _slotsNumber; }
