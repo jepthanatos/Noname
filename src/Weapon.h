@@ -13,16 +13,17 @@ namespace noname
 {
     class Weapon : public Item
     {
-
     private:
         SkillType _type;
         Property<short> _die;
 
     public:
-        Weapon(const std::string &name, const SkillType &type, const ItemRank &rank = ItemRank::NORMAL, const short &die = 0) : _type{type}, _die{die}, Item(name, ItemType::WEAPON, rank) {}
+        Weapon(const std::string &name, SkillType type, ItemRank rank = ItemRank::NORMAL, short die = 0)
+            : Item{name, ItemType::WEAPON, rank}, _type{type}, _die{die} {}
 
         SkillType getSkillType() const { return _type; }
         short getDie() const { return _die; }
     };
 }
+
 #endif // __WEAPON_H__

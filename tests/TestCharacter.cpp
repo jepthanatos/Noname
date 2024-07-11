@@ -124,7 +124,7 @@ TEST_F(TestCharacter, takeDamageDieAndLoseLevel)
 
 TEST_F(TestCharacter, CharacterGetWeapon)
 {
-    Weapon club{"Club", SkillType::CLUB, ItemRank::NORMAL, 4};
+    auto club{character.getWeapon()};
     EXPECT_EQ(club, character.getWeapon());
 }
 

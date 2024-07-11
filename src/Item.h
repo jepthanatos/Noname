@@ -4,6 +4,7 @@
 // System includes
 #include <string>
 #include <optional>
+#include <atomic>
 
 // Local includes
 #include "Skill.h"
@@ -23,6 +24,7 @@ namespace noname
         RING,
         LEGS_ARMOR,
         BOOTS,
+        AMMUNITION,
         USABLE,
         LAST_ITEM_TYPE
     };
@@ -53,29 +55,42 @@ namespace noname
 
         short getValueFromOptional(const std::optional<Property<short>> &optional) const
         {
-            if (not optional.has_value())
-                return NO_VALUE;
-            else
-                return optional.value();
+            return optional.has_value() ? static_cast<short>(optional.value()) : NO_VALUE;
+        };
+
+        auto generateId()
+        {
+            static std::atomic<int> cont{0};
+            return cont++;
         };
 
     public:
         Item(const std::string &name,
-             const ItemType &type,
-             const ItemRank &rank = ItemRank::NORMAL,
-             const std::optional<short> &value = std::nullopt,
-             const std::optional<short> &uses = std::nullopt,
-             const std::optional<short> &weight = std::nullopt) : _name{name},
-                                                                  _type{type},
-                                                                  _rank{rank},
-                                                                  _value{value},
-                                                                  _uses{uses},
-                                                                  _weight{weight}
+             ItemType type,
+             ItemRank rank = ItemRank::NORMAL,
+             std::optional<short> value = std::nullopt,
+             std::optional<short> uses = std::nullopt,
+             std::optional<short> weight = std::nullopt)
+            : _id{generateId()},
+              _name{name},
+              _type{type},
+              _rank{rank},
+              _value{value ? std::make_optional<Property<short>>(*value) : std::nullopt},
+              _uses{uses ? std::make_optional<Property<short>>(*uses) : std::nullopt},
+              _weight{weight ? std::make_optional<Property<short>>(*weight) : std::nullopt}
         {
-            static int itemId{0};
-            _id = itemId;
-            ++itemId;
         }
+
+        // Default copy constructor and assignment operator
+        Item(const Item &other) = default;
+        Item &operator=(const Item &other) = default;
+
+        // Destructor
+        virtual ~Item() = default;
+
+        // Move constructor and assignment operator
+        Item(Item &&other) noexcept = default;
+        Item &operator=(Item &&other) noexcept = default;
 
         std::string getName() const { return _name; }
         ItemType getItemType() const { return _type; }
@@ -85,16 +100,14 @@ namespace noname
 
         bool operator==(const Item &item) const
         {
-            // return item._id == _id;
-            return item._name == _name;
+            return _id == item._id;
         }
 
         void useItem()
         {
-            if (getUses() > 0)
-                _uses.value().operator--();
+            if (_uses && _uses.value() > short(0))
+                --_uses.value();
         }
     };
-
 }
 #endif // __ITEM_H__

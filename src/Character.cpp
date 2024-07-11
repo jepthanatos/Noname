@@ -10,14 +10,15 @@
 #include <memory>
 #include <cmath>     // std::ceil
 #include <algorithm> // std::min std::max
+#include <atomic>
 
 namespace noname
 {
     int Character::generateId()
     {
-        static int cont{0};
+        static std::atomic<int> cont{0};
         return cont++;
-    }
+    };
 
     Character::Character() : _id{generateId()},
                              _name{"Noname"},

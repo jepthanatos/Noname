@@ -38,6 +38,20 @@ TODOS:
         - Carisma - Necesario para saber cómo de fácil encontrará pareja
         - Atractivo - Necesario para saber cómo de fácil encontrará pareja
     - Inventario
+        Habrá 11 slots de equipamiento para distintos tipos de objeto.
+            En el slot número 1 sólo se podrá equipar objetos de tipo AMULETO y hasta un máximo de 1 objeto.
+            En el slot número 2 sólo se podrá equipar objetos de tipo CASCO y hasta un máximo de 1 objeto.
+            En el slot número 3 sólo se podrá equipar objetos de tipo CONTENEDORES PORTABLES y hasta un máximo de 1 objeto.
+            En el slot número 4 sólo se podrá equipar objetos de tipo ARMA (una mano y dos manos) y hasta un máximo de 1 objeto.
+            En el slot número 5 sólo se podrá equipar objetos de tipo ANILLO y hasta un máximo de 1 objeto.
+            En el slot número 6 sólo se podrá equipar objetos de tipo ARMADURA y hasta un máximo de 1 objeto.
+            En el slot número 7 sólo se podrá equipar objetos de tipo ESCUDO, hasta un máximo de 1 objeto, siempre y cuando no esté equipada un arma de dos manos.
+            En el slot número 8 sólo se podrá equipar objetos de tipo ANILLO y hasta un máximo de 1 objeto.
+            En el slot número 9 sólo se podrá equipar objetos de tipo LEGS ARMOR y hasta un máximo de 1 objeto.
+            En el slot número 10 sólo se podrá equipar objetos de tipo BOTAS, hasta un máximo de 1 objeto.
+            En el slot número 11 sólo se podrá equipar objetos de tipo MUNICION y hasta un máximo de 100 objetos.
+            Nota: cuando se equipa un arma de dos manos el escudo pasa automáticamente al contenedor portable que esté equipado. En caso de no estar equipado un contedor portable, el objeto cae al suelo.
+            Nota 2: cuando se equipa un escudo y hay un arma de dos manos equipada, el arma de dos manos pasa automáticamente al contenedor portable que esté equipado. En caso de no estar equipado un contenedor portable, el objeto cae al suelo.
         - Añadir objetos al inventario - DONE
         - Quitar objetos del inventario - DONE
         - Calcular el peso de todos los objetos del inventario - DONE (muy simple, necesita mejora)
