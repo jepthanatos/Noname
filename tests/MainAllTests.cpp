@@ -5,6 +5,7 @@
 #include "TestCreatures.cpp"
 #include "TestFileManager.cpp"
 #include "TestGameManager.cpp"
+#include "TestInventory.cpp"
 #include "TestItem.cpp"
 #include "TestLogManager.cpp"
 #include "TestPlayer.cpp"

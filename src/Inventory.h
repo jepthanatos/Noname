@@ -9,27 +9,12 @@
 // Local includes
 #include "Utils.h"
 #include "Item.h"
+#include "ItemEnumTypes.h"
 #include "Property.h"
 #include "Container.h"
 
 namespace noname
 {
-    enum class SlotType
-    {
-        AMULET,
-        HELMET,
-        CONTAINER,
-        WEAPON,
-        RIGHT_RING,
-        ARMOR,
-        SHIELD,
-        LEFT_RING,
-        LEGS_ARMOR,
-        BOOTS,
-        AMMUNITION,
-        LAST_SLOT_TYPE
-    };
-
     class Inventory
     {
 
@@ -37,10 +22,10 @@ namespace noname
         std::vector<std::optional<Item>> _slots;
 
     public:
-        Inventory() : _slots{std::nullopt} {}
+        Inventory() : _slots(static_cast<size_t>(ItemSlotType::LAST_SLOT_TYPE), std::nullopt) {}
 
         std::vector<std::optional<Item>> getSlots() const { return _slots; }
-        std::optional<Item> getItem(SlotType slot)
+        std::optional<Item> getItem(ItemSlotType slot)
         {
             auto value{std::move(_slots.at(Utils::toInt(slot)))};
             if (_slots.at(Utils::toInt(slot)).has_value())
@@ -48,7 +33,7 @@ namespace noname
             return value;
         }
 
-        void useItem(SlotType slot)
+        void useItem(ItemSlotType slot)
         {
             if (_slots.at(Utils::toInt(slot)).has_value())
                 if (_slots.at(Utils::toInt(slot)).value().getUses() > 0)
@@ -66,23 +51,9 @@ namespace noname
             return weight;
         }
 
-        void storeItem(Item &item, SlotType slot)
+        void storeItem(Item &item, ItemSlotType slot)
         {
-            static const std::unordered_map<SlotType, ItemType> slotToItemType{
-                {SlotType::AMULET, ItemType::AMULET},
-                {SlotType::HELMET, ItemType::HELMET},
-                {SlotType::CONTAINER, ItemType::CONTAINER},
-                {SlotType::WEAPON, ItemType::WEAPON},
-                {SlotType::RIGHT_RING, ItemType::RING},
-                {SlotType::LEFT_RING, ItemType::RING},
-                {SlotType::ARMOR, ItemType::ARMOR},
-                {SlotType::SHIELD, ItemType::SHIELD},
-                {SlotType::LEGS_ARMOR, ItemType::LEGS_ARMOR},
-                {SlotType::BOOTS, ItemType::BOOTS},
-                {SlotType::AMMUNITION, ItemType::AMMUNITION}};
-
-            auto it = slotToItemType.find(slot);
-            if (it != slotToItemType.end() && item.getItemType() == it->second)
+            if (item.getItemType() == slotTypeToItemType(slot))
             {
                 if (!_slots.at(Utils::toInt(slot)).has_value())
                 {

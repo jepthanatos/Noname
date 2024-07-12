@@ -7,39 +7,12 @@
 #include <atomic>
 
 // Local includes
+#include "ItemEnumTypes.h"
 #include "Skill.h"
 #include "Property.h"
 
 namespace noname
 {
-    enum class ItemType
-    {
-        NO_TYPE,
-        AMULET,
-        HELMET,
-        CONTAINER,
-        WEAPON,
-        ARMOR,
-        SHIELD,
-        RING,
-        LEGS_ARMOR,
-        BOOTS,
-        AMMUNITION,
-        USABLE,
-        LAST_ITEM_TYPE
-    };
-
-    enum class ItemRank
-    {
-        NO_RANK,
-        NORMAL,
-        MAGIC,
-        RARE,
-        EPIC,
-        LEGENDARY,
-        LAST_ITEM_RANK
-    };
-
     inline constexpr short NO_VALUE = -1;
 
     class Item
