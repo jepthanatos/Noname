@@ -53,15 +53,18 @@ namespace noname
             _weapons.insert({"Spear", {"Spear", SkillType::DISTANCE, ItemRank::NORMAL, 6}});
         }
 
-        std::unordered_map<std::string, Weapon> getWeaponsList() const { return _weapons; }
+        std::unordered_map<std::string, Weapon>
+        getWeaponsList() const
+        {
+            return _weapons;
+        }
 
-        Weapon getWeapon(const std::string &weapon)
+        Weapon getWeapon(const std::string &name)
         {
             if (!isStarted())
                 startUp();
-            return _weapons.find(weapon)->second;
+            return _weapons.find(name)->second;
         }
     };
-
 }
 #endif // __WEAPONS_MANAGER_H__

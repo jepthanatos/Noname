@@ -3,8 +3,8 @@
 
 // System includes
 #include <unordered_map>
-#include <optional>
 #include <vector>
+#include <memory>
 
 // Local includes
 #include "Utils.h"
@@ -17,54 +17,77 @@ namespace noname
 {
     class Inventory
     {
-
     private:
-        std::vector<std::optional<Item>> _slots;
+        std::vector<std::shared_ptr<Item>> _slots;
+
+        inline std::shared_ptr<Item> &atSlot(ItemSlotType slot)
+        {
+            return _slots.at(Utils::toInt(slot));
+        }
 
     public:
-        Inventory() : _slots(static_cast<size_t>(ItemSlotType::LAST_SLOT_TYPE), std::nullopt) {}
+        Inventory() : _slots(static_cast<size_t>(ItemSlotType::LAST_SLOT_TYPE)) {}
 
-        std::vector<std::optional<Item>> getSlots() const { return _slots; }
-        std::optional<Item> getItem(ItemSlotType slot)
+        const std::vector<std::shared_ptr<Item>> &getSlots() const { return _slots; }
+
+        std::shared_ptr<Weapon> getWeapon()
         {
-            auto value{std::move(_slots.at(Utils::toInt(slot)))};
-            if (_slots.at(Utils::toInt(slot)).has_value())
-                _slots.at(Utils::toInt(slot)) = std::nullopt;
+            auto &itemPtr = atSlot(ItemSlotType::WEAPON);
+            if (itemPtr)
+            {
+                return std::dynamic_pointer_cast<Weapon>(itemPtr);
+            }
+            return nullptr;
+        }
+
+        std::shared_ptr<Item> dropItem(ItemSlotType slot)
+        {
+            auto value = std::move(atSlot(slot));
+            atSlot(slot) = nullptr;
             return value;
         }
 
         void useItem(ItemSlotType slot)
         {
-            if (_slots.at(Utils::toInt(slot)).has_value())
-                if (_slots.at(Utils::toInt(slot)).value().getUses() > 0)
-                    _slots.at(Utils::toInt(slot)).value().useItem();
+            auto &item = atSlot(slot);
+            if (item && item->getUses() > 0)
+                item->useItem();
         }
 
-        short getWeight()
+        short getWeight() const
         {
             short weight{0};
-            for (auto slot : _slots)
+            for (const auto &slot : _slots)
             {
-                if (slot.has_value())
-                    weight += slot.value().getWeight();
+                if (slot)
+                    weight += slot->getWeight();
             }
             return weight;
         }
 
-        void storeItem(Item &item, ItemSlotType slot)
+        void storeItem(std::shared_ptr<Item> item, ItemSlotType slot)
         {
-            if (item.getItemType() == slotTypeToItemType(slot))
+            if (item->getItemType() == slotTypeToItemType(slot))
             {
-                if (!_slots.at(Utils::toInt(slot)).has_value())
+                if (!atSlot(slot))
                 {
-                    _slots.at(Utils::toInt(slot)) = std::move(item);
+                    atSlot(slot) = std::move(item);
+                }
+                else
+                {
+                    if (atSlot(slot)->getName() == "Fists")
+                        atSlot(slot) = std::move(item);
+                    else
+                        LM.writeLog(Level::Debug, "Inventory already has an item of type " + std::to_string(static_cast<int>(slot)));
                 }
             }
             else
             {
-                // Error handling TBD
+                LM.writeLog(Level::Error, "Item type does not match slot type");
+                // throw std::invalid_argument("Item type does not match slot type");
             }
         }
     };
 }
+
 #endif // __INVENTORY_H__

@@ -36,9 +36,11 @@ namespace noname
                              _nextLevelExperience{0},
                              _currentManaWasted{0},
                              _nextLevelManaWasted{0},
-                             _currentWeapon{WM.getWeapon("Fists")},
                              _skills(Utils::toInt(SkillType::LAST_SKILL), 1),
-                             _skillTries(Utils::toInt(SkillType::LAST_SKILL), 0)
+                             _skillTries(Utils::toInt(SkillType::LAST_SKILL), 0),
+                             _isDead{false},
+                             _heritables{},
+                             _inventory{}
     {
         setLevel(1);
         setMagicLevel(1);
@@ -132,8 +134,13 @@ namespace noname
         // Error handling TBD
     }
 
-    short Character::getAttackDamage() const
+    short Character::getAttackDamage()
     {
+        auto weapon = _inventory.getWeapon();
+        if (!weapon)
+        {
+            return 0;
+        }
         short doubleDamage{1};
         auto d20{Utils::rollDie(1, 20)};
         if (d20 > 1)
@@ -142,7 +149,9 @@ namespace noname
             {
                 doubleDamage = 2;
             }
-            return (Utils::rollDie(1, _currentWeapon.getDie()) * doubleDamage) + _skills.at(Utils::toInt(_currentWeapon.getSkillType()));
+            short baseDamage = Utils::rollDie(1, weapon->getDie()) * doubleDamage;
+            short skillBonus = _skills.at(Utils::toInt(weapon->getSkillType()));
+            return baseDamage + skillBonus;
         }
         // The character missed the attack
         return 0;
@@ -236,7 +245,7 @@ namespace noname
         LM.writeLog(Level::Debug, "Character " + _id.toString() + " has attacked with damage equal to " + std::to_string(damage));
         if (damage > 0)
         {
-            updateTries(_currentWeapon.getSkillType());
+            updateTries(getWeapon()->getSkillType());
             character.defense(damage);
         }
     }
@@ -254,13 +263,17 @@ namespace noname
         }
     }
 
-    void Character::pick(Item &item)
+    void Character::pick(std::shared_ptr<Item> item, ItemSlotType slot)
     {
-        LM.writeLog(Level::Debug, "Character " + _id.toString() + " has picked item " + item.getName());
-        if (_currentCapacity >= item.getWeight())
+        if (_currentCapacity >= item->getWeight())
         {
-            // _inventory.addItemToContainer(item);
+            LM.writeLog(Level::Debug, "Character " + _id.toString() + " has picked item " + item->getName());
+            _inventory.storeItem(std::move(item), slot);
             updateCurrentCapacity();
+        }
+        else
+        {
+            LM.writeLog(Level::Debug, "Character " + _id.toString() + " has not enough capacity for item " + item->getName());
         }
     }
 
@@ -269,6 +282,19 @@ namespace noname
         // auto item{_inventory.searchItem(itemID)};
         // LM.writeLog(Level::Debug, "Character " + _id.toString() + " has droped item " + item.getName());
         // _inventory.dropItem(item);
+        updateCurrentCapacity();
+    }
+
+    void Character::drop(ItemSlotType slot)
+    {
+        auto item{_inventory.dropItem(slot)};
+        LM.writeLog(Level::Debug, "Character " + _id.toString() + " has droped item " + item->getName());
+        auto weapon = getWeapon();
+        if (!weapon)
+        {
+            std::shared_ptr<Weapon> fists = std::make_shared<Weapon>(WM.getWeapon("Fists"));
+            this->equipWeapon(fists);
+        }
         updateCurrentCapacity();
     }
 

@@ -18,7 +18,9 @@ struct TestRelationships : Test
     {
         LM.startUp();
         relationships.add_parents_and_child(parent1, parent2, child1);
+        child1.determineHeritables(parent1, parent2);
         relationships.add_parents_and_child(parent1, parent2, child2);
+        child2.determineHeritables(parent1, parent2);
         relationships.add_husband_and_wife(parent1, parent2);
     }
     void TearDown() override
@@ -39,9 +41,14 @@ TEST_F(TestRelationships, findAllChildrenOfChildrenShouldNotReturnAnything)
     EXPECT_TRUE(children.size() == 0);
 }
 
-TEST_F(TestRelationships, findParentsOfChild)
+TEST_F(TestRelationships, findParentsOfChild1)
 {
     EXPECT_TRUE(relationships.find_parents_of("Child1").size() == 2);
+}
+
+TEST_F(TestRelationships, findParentsOfChild2)
+{
+    EXPECT_TRUE(relationships.find_parents_of("Child2").size() == 2);
 }
 
 TEST_F(TestRelationships, findHusbandOf)

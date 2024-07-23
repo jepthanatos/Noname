@@ -43,7 +43,8 @@ TEST_F(TestRanking, add100Players)
     for (int i = 0; i < 100; ++i)
     {
         Player player{};
-        player.equipWeapon("Club");
+        std::shared_ptr<Weapon> club = std::make_shared<Weapon>(WM.getWeapon("Club"));
+        player.equipWeapon(club);
         player.gainExperience(GM.getExpForLevel(Utils::rollDie(1, 100)));
         auto attackNumber{Utils::rollDie(1, 1000)};
         // for (int j = 1; j < attackNumber; ++j)

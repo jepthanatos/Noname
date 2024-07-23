@@ -23,7 +23,8 @@ struct TestCharacter : Test
         LM.startUp();
         WM.startUp();
         character.respawn();
-        character.equipWeapon("Club");
+        std::shared_ptr<Weapon> club = std::make_shared<Weapon>(WM.getWeapon("Club"));
+        character.equipWeapon(club);
     }
     void TearDown() override
     {
@@ -137,7 +138,7 @@ TEST_F(TestCharacter, CharacterAttack)
         character.attack(*beast);
     }
     Property<short> expectedSkill{1};
-    ASSERT_TRUE(character.getSkill(character.getWeapon().getSkillType()) > expectedSkill);
+    ASSERT_TRUE(character.getSkill(character.getWeapon()->getSkillType()) > expectedSkill);
 }
 
 TEST_F(TestCharacter, CharacterGainHealth)
@@ -167,4 +168,44 @@ TEST_F(TestCharacter, CharacterUseMana)
     ASSERT_TRUE(character.getManaWasted() == 0);
     character.useMana(1);
     ASSERT_TRUE(character.getManaWasted() == 1);
+}
+
+TEST_F(TestCharacter, PickItemStoresItemInInventory)
+{
+    std::unique_ptr<Item> amulet = std::make_unique<Item>("Amulet", ItemType::AMULET, ItemRank::NORMAL);
+    character.pick(std::move(amulet), ItemSlotType::AMULET);
+    auto slots = std::move(character.getInventorySlots());
+    bool found = false;
+    for (const auto &slot : slots)
+    {
+        if (slot.get() && slot->getName() == "Amulet")
+        {
+            found = true;
+            break;
+        }
+    }
+    EXPECT_TRUE(found);
+}
+
+TEST_F(TestCharacter, DropItemRemovesItemFromInventory)
+{
+    auto slotsBefore = character.getInventorySlots();
+    std::unique_ptr<Item> amulet = std::make_unique<Item>("Amulet", ItemType::AMULET, ItemRank::NORMAL);
+    character.pick(std::move(amulet), ItemSlotType::AMULET);
+    auto slotsAfter = character.getInventorySlots();
+    EXPECT_NE(slotsBefore, slotsAfter);
+    character.drop(ItemSlotType::AMULET);
+    auto slotsFinal = character.getInventorySlots();
+    EXPECT_EQ(slotsBefore, slotsFinal);
+}
+
+TEST_F(TestCharacter, DropWeaponRemovesWeapon)
+{
+    character.drop(ItemSlotType::WEAPON);
+    EXPECT_EQ(character.getWeapon()->getName(), "Fists");
+    std::shared_ptr<Weapon> handaxe = std::make_shared<Weapon>(WM.getWeapon("Handaxe"));
+    character.equipWeapon(handaxe);
+    EXPECT_EQ(character.getWeapon()->getName(), "Handaxe");
+    character.drop(ItemSlotType::WEAPON);
+    EXPECT_EQ(character.getWeapon()->getName(), "Fists");
 }

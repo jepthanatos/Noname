@@ -88,7 +88,7 @@ namespace noname
             rankingTable.add_child("caption", title);
 
             rankingTable.add_child(HtmlBuilder{"tr"}.add_child("th", "Player ID").add_child("th", "Level").add_child("th", "Skill"));
-            for (auto player : _players_list)
+            for (auto &player : _players_list)
             {
                 player.getInfoForRanking(rankingTable, _skill);
             }

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <memory>
 
 // Local includes
 #include "Item.h"
@@ -22,35 +23,35 @@ namespace noname
     class Container : public Item
     {
     private:
-        ContainerType _type;
+        ContainerType _containerType;
         Property<short> _slotsNumber;
         Property<short> _maxCapacity;
-        std::vector<std::optional<Item>> _slots;
+        std::vector<std::shared_ptr<Item>> _slots;
 
     public:
-        Container(const std::string &name, ContainerType type, ItemRank rank, short slots, short maxCapacity)
-            : Item{name, ItemType::CONTAINER, rank}, _type{type}, _slotsNumber{slots}, _maxCapacity{maxCapacity}, _slots(slots, std::nullopt) {}
+        Container(const std::string &name, ContainerType containerType, ItemRank rank, short slots, short maxCapacity)
+            : Item{name, ItemType::CONTAINER, rank}, _containerType{containerType}, _slotsNumber{slots}, _maxCapacity{maxCapacity}, _slots(static_cast<size_t>(slots)) {}
 
-        ContainerType getType() const { return _type; }
+        ContainerType getContainerType() const { return _containerType; }
         short getSlotsNumber() const { return _slotsNumber; }
         short getMaxCapacity() const { return _maxCapacity; }
 
         short getWeight() const override
         {
             short weight{0};
-            for (auto slot : _slots)
+            for (const auto &slot : _slots)
             {
-                if (slot.has_value())
+                if (slot)
                     weight += slot->getWeight();
             }
             return weight;
         }
 
-        bool addItem(Item &item)
+        bool addItem(std::unique_ptr<Item> item)
         {
             for (auto &slot : _slots)
             {
-                if (!slot.has_value())
+                if (!slot)
                 {
                     slot = std::move(item);
                     return true;
@@ -59,13 +60,13 @@ namespace noname
             return false;
         }
 
-        std::optional<Item> removeItem(size_t index)
+        std::shared_ptr<Item> removeItem(size_t index)
         {
-            if (index >= _slots.size() || !_slots[index].has_value())
-                return std::nullopt;
+            if (index >= _slots.size() || !_slots[index])
+                return nullptr;
 
             auto item = std::move(_slots[index]);
-            _slots[index] = std::nullopt;
+            _slots[index] = nullptr;
             return item;
         }
     };

@@ -12,6 +12,7 @@
 #include "WeaponsManager.h"
 #include "Heritables.h"
 #include "Inventory.h"
+#include "ItemEnumTypes.h"
 
 namespace noname
 {
@@ -36,7 +37,6 @@ namespace noname
         Property<unsigned long long> _nextLevelManaWasted;
         std::vector<Property<short>> _skills;
         std::vector<Property<short>> _skillTries;
-        Weapon _currentWeapon;
         bool _isDead;
         Heritables _heritables;
         Inventory _inventory;
@@ -55,7 +55,8 @@ namespace noname
 
     public:
         Character();
-        Character(const std::string &name) : Character() { _name = name; };
+        Character(const std::string &name) : Character() { _name = name; }
+
         bool operator==(const Character &p) const { return _id == p._id; }
 
         // Getters for UI or info related
@@ -72,9 +73,10 @@ namespace noname
         int getMaxMana() const { return _maxMana; }
         bool isDead() { return _isDead; }
         short getHeritable(HeritableType value) { return _heritables.at(value); }
-        short getAttackDamage() const;
-        Weapon getWeapon() const { return _currentWeapon; }
+        short getAttackDamage();
+        std::shared_ptr<Weapon> getWeapon() { return _inventory.getWeapon(); }
         void writeCharacterInfo();
+        const std::vector<std::shared_ptr<Item>> &getInventorySlots() const { return _inventory.getSlots(); }
 
         // Others
         void gainExperience(int value);
@@ -82,15 +84,16 @@ namespace noname
         void takeDamage(int value);
         void useMana(int value);
         void gainMana(int value);
-        void equipWeapon(const std::string &weapon) { _currentWeapon = WM.getWeapon(weapon); }
+        void equipWeapon(std::shared_ptr<Weapon> weapon) { pick(weapon, ItemSlotType::WEAPON); }
 
         // Actions
         virtual void respawn();
         virtual void move() {}
         virtual void attack(Character &character);
         virtual void defense(short damage);
-        virtual void pick(Item &item);
+        virtual void pick(std::shared_ptr<Item> item, ItemSlotType slot);
         virtual void drop(int itemID);
+        virtual void drop(ItemSlotType slot);
         virtual void use(int itemID) {}
 
         // Others

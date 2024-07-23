@@ -5,6 +5,7 @@
 #include <string>
 #include <optional>
 #include <atomic>
+#include <memory>
 
 // Local includes
 #include "ItemEnumTypes.h"
@@ -53,17 +54,6 @@ namespace noname
               _weight{weight ? std::make_optional<Property<short>>(*weight) : std::nullopt}
         {
         }
-
-        // Default copy constructor and assignment operator
-        Item(const Item &other) = default;
-        Item &operator=(const Item &other) = default;
-
-        // Destructor
-        virtual ~Item() = default;
-
-        // Move constructor and assignment operator
-        Item(Item &&other) noexcept = default;
-        Item &operator=(Item &&other) noexcept = default;
 
         std::string getName() const { return _name; }
         ItemType getItemType() const { return _type; }

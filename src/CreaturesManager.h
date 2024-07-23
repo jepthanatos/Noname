@@ -21,7 +21,7 @@ namespace noname
     {
 
     private:
-        std::unordered_map<std::string, Creature> _creatures;
+        std::unordered_map<std::string, std::shared_ptr<noname::Creature>> _creatures;
         Relationships<Creature> _relationships;
 
     public:
@@ -42,18 +42,32 @@ namespace noname
 
         void initializeCreatures()
         {
-            _creatures.insert({"Rat", {"Rat", CreatureType::BEAST}});
-            _creatures.insert({"Cat", {"Cat", CreatureType::BEAST}});
-            _relationships.add_predator_and_prey({"Cat", CreatureType::BEAST}, {"Rat", CreatureType::BEAST});
+            std::shared_ptr<Creature> rat = std::make_shared<Creature>("Rat", CreatureType::BEAST);
+            std::shared_ptr<Creature> cat = std::make_shared<Creature>("Cat", CreatureType::BEAST);
+            _creatures.emplace(rat->getName(), rat);
+            _creatures.emplace(cat->getName(), cat);
+            _relationships.add_predator_and_prey(*cat, *rat);
         }
 
-        std::unordered_map<std::string, Creature> getCreaturesList() const { return _creatures; }
+        std::unordered_map<std::string, std::shared_ptr<noname::Creature>> getCreaturesList() const
+        {
+            return _creatures;
+        }
 
-        Creature getCreature(const std::string &name) { return _creatures.find(name)->second; }
+        std::shared_ptr<noname::Creature> &getCreature(const std::string &name)
+        {
+            return _creatures.at(name);
+        }
 
-        std::vector<Creature> findPreyOf(const std::string &name) { return _relationships.find_prey_of(name); }
-        std::vector<Creature> findPredatorOf(const std::string &name) { return _relationships.find_predator_of(name); }
+        std::vector<Creature> findPreyOf(const std::string &name)
+        {
+            return _relationships.find_prey_of(name);
+        }
+
+        std::vector<Creature> findPredatorOf(const std::string &name)
+        {
+            return _relationships.find_predator_of(name);
+        }
     };
-
 }
 #endif // __CREATURES_MANAGER_H__

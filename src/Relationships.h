@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <functional> // std::reference_wrapper
 
 namespace noname
 {
@@ -14,7 +15,10 @@ namespace noname
         CHILD,
         SIBLING,
         MARRIED,
-        ENEMY
+        ENEMY,
+        FRIEND,
+        NEUTRAL,
+        LAST_RELATIONSHIP
     };
 
     template <class T>
@@ -25,7 +29,7 @@ namespace noname
         std::vector<std::tuple<T, Relationship, T>> _predatoryRelations;
 
     public:
-        void add_parents_and_child(const T &father, const T &mother, T &child);
+        void add_parents_and_child(const T &father, const T &mother, const T &child);
         void add_husband_and_wife(const T &husband, const T &wife);
         void add_predator_and_prey(const T &predator, const T &prey);
 
@@ -41,13 +45,12 @@ namespace noname
 namespace noname
 {
     template <class T>
-    void Relationships<T>::add_parents_and_child(const T &father, const T &mother, T &child)
+    void Relationships<T>::add_parents_and_child(const T &father, const T &mother, const T &child)
     {
         _familyRelations.push_back({father, Relationship::PARENT, child});
         _familyRelations.push_back({child, Relationship::CHILD, father});
         _familyRelations.push_back({mother, Relationship::PARENT, child});
         _familyRelations.push_back({child, Relationship::CHILD, mother});
-        child.determineHeritables(father, mother);
     }
 
     template <class T>
