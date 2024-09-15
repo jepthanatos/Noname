@@ -14,6 +14,33 @@
 using namespace noname;
 using namespace testing;
 
+TEST(CharacterTest, DefaultConstructor)
+{
+    noname::Character character;
+    EXPECT_EQ(character.getId(), 0);
+    EXPECT_EQ(character.getName(), "Noname");
+    EXPECT_FALSE(character.isDead());
+}
+
+TEST(CharacterTest, ParameterizedConstructor)
+{
+    std::string name = "Hero";
+    noname::Character character{name};
+    EXPECT_EQ(character.getName(), name);
+}
+
+TEST(CharacterTest, EqualityOperator)
+{
+    noname::Character character1("Hero1");
+    noname::Character character2("Hero2");
+
+    EXPECT_FALSE(character1 == character2);
+
+    character2 = character1;
+
+    EXPECT_TRUE(character1 == character2);
+}
+
 struct TestCharacter : Test
 {
     Character character{"Noname"};
@@ -43,10 +70,9 @@ TEST_F(TestCharacter, getExperience)
     EXPECT_EQ(character.getExperience(), 0);
 }
 
-TEST_F(TestCharacter, CharacterGainExperience)
+TEST_F(TestCharacter, getManaWasted)
 {
-    character.gainExperience(1000);
-    EXPECT_EQ(character.getExperience(), 1000);
+    EXPECT_EQ(character.getManaWasted(), 0);
 }
 
 TEST_F(TestCharacter, getLevel)
@@ -64,20 +90,66 @@ TEST_F(TestCharacter, getSkill)
     EXPECT_EQ(character.getSkill(SkillType::CLUB), short(1));
 }
 
-TEST_F(TestCharacter, CharacterHealthAtEachLevelFrom1To1000)
+TEST_F(TestCharacter, getHealth)
 {
+    EXPECT_EQ(character.getCurrentHealth(), character.getMaxHealth());
+}
+
+TEST_F(TestCharacter, getMaxHealthAtEachLevelFrom1To1000)
+{
+    Character newCharacter;
     for (int i = 1; i < 1001; i++)
     {
-        character.gainExperience(GM.getExpForLevel(i) - GM.getExpForLevel(i - 1));
-        EXPECT_EQ(character.getLevel(), i);
+        newCharacter.gainExperience(GM.getExpForLevel(i) - GM.getExpForLevel(i - 1));
+        EXPECT_EQ(newCharacter.getLevel(), i);
 
-        ASSERT_TRUE(character.getMaxHealth() > character.getHeritable(HeritableType::CONSTITUTION) * character.getLevel());
+        ASSERT_TRUE(newCharacter.getMaxHealth() > newCharacter.getHeritable(HeritableType::CONSTITUTION) * newCharacter.getLevel());
+    }
+}
+
+TEST_F(TestCharacter, getCurrentMana)
+{
+    EXPECT_TRUE(character.getCurrentMana() == character.getMaxMana());
+}
+
+TEST_F(TestCharacter, getMaxManaAtEachLevelFrom1To1000)
+{
+    Character newCharacter;
+    for (int i = 1; i < 1001; i++)
+    {
+        newCharacter.gainExperience(GM.getExpForLevel(i) - GM.getExpForLevel(i - 1));
+        EXPECT_EQ(newCharacter.getLevel(), i);
+
+        ASSERT_TRUE(newCharacter.getMaxMana() > newCharacter.getHeritable(HeritableType::INTELLIGENCE) * newCharacter.getLevel());
     }
 }
 
 TEST_F(TestCharacter, getAttackDamage)
 {
-    EXPECT_TRUE(character.getAttackDamage() >= 0);
+    EXPECT_GT(character.getAttackDamage(), 0);
+}
+
+TEST_F(TestCharacter, getWeapon)
+{
+    auto club{character.getWeapon()};
+    EXPECT_EQ(club, character.getWeapon());
+}
+
+TEST_F(TestCharacter, gainExperience)
+{
+    character.gainExperience(1000);
+    EXPECT_EQ(character.getExperience(), 1000);
+}
+
+TEST_F(TestCharacter, gainHealth)
+{
+    if (character.getCurrentHealth() == character.getMaxHealth())
+    {
+        character.takeDamage(1);
+    }
+    ASSERT_TRUE(character.getMaxHealth() > character.getCurrentHealth());
+    character.gainHealth(character.getMaxHealth() - character.getCurrentHealth());
+    EXPECT_EQ(character.getMaxHealth(), character.getCurrentHealth());
 }
 
 TEST_F(TestCharacter, takeDamage)
@@ -85,7 +157,7 @@ TEST_F(TestCharacter, takeDamage)
     short damage{character.getAttackDamage()};
     int initialHealth{character.getCurrentHealth()};
     character.takeDamage(damage);
-    ASSERT_EQ(character.getCurrentHealth(), initialHealth - damage);
+    EXPECT_EQ(character.getCurrentHealth(), initialHealth - damage);
 }
 
 TEST_F(TestCharacter, takeDamageAndDie)
@@ -102,7 +174,7 @@ TEST_F(TestCharacter, takeDamageAndDie)
 
     character.respawn();
     auto experience = GM.getExpForLevel(2) - ceil((GM.getExpForLevel(2) * 25) / 100);
-    ASSERT_EQ(character.getExperience(), experience);
+    EXPECT_EQ(character.getExperience(), experience);
 }
 
 TEST_F(TestCharacter, takeDamageDieAndLoseLevel)
@@ -119,17 +191,41 @@ TEST_F(TestCharacter, takeDamageDieAndLoseLevel)
 
     character.respawn();
     auto experience = GM.getExpForLevel(100) - ceil((GM.getExpForLevel(100) * 25) / 100);
-    ASSERT_EQ(character.getExperience(), experience);
-    ASSERT_EQ(character.getLevel(), 91);
+    EXPECT_EQ(character.getExperience(), experience);
+    EXPECT_EQ(character.getLevel(), 91);
 }
 
-TEST_F(TestCharacter, CharacterGetWeapon)
+TEST_F(TestCharacter, useMana)
 {
-    auto club{character.getWeapon()};
-    EXPECT_EQ(club, character.getWeapon());
+    ASSERT_TRUE(character.getManaWasted() == 0);
+    character.useMana(1);
+    EXPECT_EQ(character.getManaWasted(), 1);
 }
 
-TEST_F(TestCharacter, CharacterAttack)
+TEST_F(TestCharacter, gainMana)
+{
+    if (character.getCurrentMana() == character.getMaxMana())
+    {
+        character.useMana(1);
+    }
+    EXPECT_GT(character.getMaxMana(), character.getCurrentMana());
+    character.gainMana(character.getMaxMana() - character.getCurrentMana());
+    EXPECT_EQ(character.getMaxMana(), character.getCurrentMana());
+}
+
+TEST_F(TestCharacter, respawn)
+{
+    character.takeDamage(character.getCurrentHealth());
+
+    ASSERT_TRUE(character.isDead());
+
+    character.respawn();
+
+    EXPECT_FALSE(character.isDead());
+    EXPECT_GT(character.getCurrentHealth(), 0);
+}
+
+TEST_F(TestCharacter, attack)
 {
     std::unique_ptr<Character> beast = std::make_unique<Creature>();
     beast->gainExperience(GM.getExpForLevel(1000));
@@ -141,33 +237,14 @@ TEST_F(TestCharacter, CharacterAttack)
     ASSERT_TRUE(character.getSkill(character.getWeapon()->getSkillType()) > expectedSkill);
 }
 
-TEST_F(TestCharacter, CharacterGainHealth)
+TEST_F(TestCharacter, defense)
 {
-    if (character.getCurrentHealth() == character.getMaxHealth())
-    {
-        character.takeDamage(1);
-    }
-    ASSERT_TRUE(character.getMaxHealth() > character.getCurrentHealth());
-    character.gainHealth(character.getMaxHealth() - character.getCurrentHealth());
-    ASSERT_TRUE(character.getMaxHealth() == character.getCurrentHealth());
-}
+    short initialHealth = character.getCurrentHealth();
+    short damage = 20;
 
-TEST_F(TestCharacter, CharacterGainMana)
-{
-    if (character.getCurrentMana() == character.getMaxMana())
-    {
-        character.useMana(1);
-    }
-    ASSERT_TRUE(character.getMaxMana() > character.getCurrentMana());
-    character.gainMana(character.getMaxMana() - character.getCurrentMana());
-    ASSERT_TRUE(character.getMaxMana() == character.getCurrentMana());
-}
+    character.defense(damage);
 
-TEST_F(TestCharacter, CharacterUseMana)
-{
-    ASSERT_TRUE(character.getManaWasted() == 0);
-    character.useMana(1);
-    ASSERT_TRUE(character.getManaWasted() == 1);
+    EXPECT_GT(character.getCurrentHealth(), initialHealth - damage);
 }
 
 TEST_F(TestCharacter, PickItemStoresItemInInventory)

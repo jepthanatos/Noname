@@ -39,7 +39,7 @@ TEST_F(TestContainer, getMaxCapacity)
 TEST_F(TestContainer, AddItem)
 {
     std::unique_ptr<Weapon> sword = std::make_unique<Weapon>("Sword", SkillType::SWORD, ItemRank::NORMAL, 10, 10, 5, 3);
-    EXPECT_TRUE(backpack.addItem(std::move(sword)));
+    ASSERT_TRUE(backpack.addItem(std::move(sword)));
     EXPECT_EQ(backpack.getWeight(), 3);
 }
 
@@ -48,10 +48,10 @@ TEST_F(TestContainer, AddItemWhenFull)
     for (int i = 0; i < backpack.getSlotsNumber(); ++i)
     {
         std::unique_ptr<Weapon> sword = std::make_unique<Weapon>("Sword", SkillType::SWORD, ItemRank::NORMAL, 10, 10, 5, 3);
-        EXPECT_TRUE(backpack.addItem(std::move(sword)));
+        ASSERT_TRUE(backpack.addItem(std::move(sword)));
     }
     std::unique_ptr<Weapon> sword2 = std::make_unique<Weapon>("Sword2", SkillType::SWORD, ItemRank::NORMAL, 10, 10, 5, 3);
-    EXPECT_FALSE(backpack.addItem(std::move(sword2)));
+    ASSERT_FALSE(backpack.addItem(std::move(sword2)));
     EXPECT_EQ(backpack.getWeight(), 24);
 }
 
@@ -61,7 +61,7 @@ TEST_F(TestContainer, RemoveItem)
     std::unique_ptr<Weapon> sword = std::make_unique<Weapon>("Sword", SkillType::SWORD, ItemRank::NORMAL, 10, 10, 5, 3);
     backpack.addItem(std::move(sword));
     auto removedItem = backpack.removeItem(0);
-    EXPECT_TRUE(removedItem.get());
+    ASSERT_TRUE(removedItem.get());
     EXPECT_EQ(removedItem->getName(), "Sword");
     EXPECT_EQ(backpack.getWeight(), 0);
 }

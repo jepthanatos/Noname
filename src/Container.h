@@ -35,40 +35,9 @@ namespace noname
         ContainerType getContainerType() const { return _containerType; }
         short getSlotsNumber() const { return _slotsNumber; }
         short getMaxCapacity() const { return _maxCapacity; }
-
-        short getWeight() const override
-        {
-            short weight{0};
-            for (const auto &slot : _slots)
-            {
-                if (slot)
-                    weight += slot->getWeight();
-            }
-            return weight;
-        }
-
-        bool addItem(std::unique_ptr<Item> item)
-        {
-            for (auto &slot : _slots)
-            {
-                if (!slot)
-                {
-                    slot = std::move(item);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        std::shared_ptr<Item> removeItem(size_t index)
-        {
-            if (index >= _slots.size() || !_slots[index])
-                return nullptr;
-
-            auto item = std::move(_slots[index]);
-            _slots[index] = nullptr;
-            return item;
-        }
+        short getWeight() const override;
+        bool addItem(std::unique_ptr<Item> item);
+        std::shared_ptr<Item> removeItem(size_t index);
     };
 }
 #endif // __CONTAINER_H__
