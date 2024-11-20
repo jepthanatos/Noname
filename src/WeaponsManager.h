@@ -10,6 +10,7 @@
 // System includes
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 // Two-letter acronym for easier access to manager
 #define WM noname::WeaponsManager::getInstance()
@@ -20,50 +21,74 @@ namespace noname
     {
 
     private:
-        std::unordered_map<std::string, Weapon> _weapons;
+        std::unordered_map<std::string, std::shared_ptr<Weapon>> _defaultWeapons;
+        std::unordered_map<std::string, std::shared_ptr<Weapon>> _gameWeapons;
 
     public:
         void startUp()
         {
-            Manager::setType("WeaponsManager");
-            LM.writeLog(Level::Debug, "WeaponsManager::startUp");
-            Manager::startUp();
-            initializeWeapons();
+            try
+            {
+                Manager::setType("WeaponsManager");
+                LM.writeLog(Level::Debug, "WeaponsManager::startUp");
+                Manager::startUp();
+                initializeWeapons();
+            }
+            catch (const std::exception &e)
+            {
+                LM.writeLog(Level::Error, "Failed to start WeaponsManager: " + std::string(e.what()));
+            }
         }
 
         void shutDown()
         {
-            _weapons.clear();
+            _defaultWeapons.clear();
             Manager::shutDown();
             LM.writeLog(Level::Debug, "WeaponsManager::shutDown");
         }
 
         void initializeWeapons()
         {
-            _weapons.insert({"Fists", {"Fists", SkillType::FIST, ItemRank::NORMAL, 2}});
-            _weapons.insert({"Club", {"Club", SkillType::CLUB, ItemRank::NORMAL, 4}});
-            _weapons.insert({"Dagger", {"Dagger", SkillType::SWORD, ItemRank::NORMAL, 4}});
-            _weapons.insert({"Greatclub", {"Greatclub", SkillType::CLUB, ItemRank::NORMAL, 8}});
-            _weapons.insert({"Handaxe", {"Handaxe", SkillType::AXE, ItemRank::NORMAL, 6}});
-            _weapons.insert({"Javelin", {"Javelin", SkillType::DISTANCE, ItemRank::NORMAL, 6}});
-            _weapons.insert({"Light hammer", {"Light hammer", SkillType::CLUB, ItemRank::NORMAL, 4}});
-            _weapons.insert({"Mace", {"Mace", SkillType::CLUB, ItemRank::NORMAL, 6}});
-            _weapons.insert({"Quaterstaff", {"Quaterstaff", SkillType::CLUB, ItemRank::NORMAL, 6}});
-            _weapons.insert({"Sickle", {"Sickle", SkillType::SWORD, ItemRank::NORMAL, 4}});
-            _weapons.insert({"Spear", {"Spear", SkillType::DISTANCE, ItemRank::NORMAL, 6}});
+            if (!_defaultWeapons.empty())
+            {
+                LM.writeLog(Level::Warning, "WeaponsManager::initializeWeapons - Weapons already initialized");
+                return;
+            }
+            _defaultWeapons.insert({"Fists", std::make_shared<Weapon>("Fists", SkillType::FIST, ItemRank::NORMAL, 2)});
+            _defaultWeapons.insert({"Club", std::make_shared<Weapon>("Club", SkillType::CLUB, ItemRank::NORMAL, 4)});
+            _defaultWeapons.insert({"Dagger", std::make_shared<Weapon>("Dagger", SkillType::SWORD, ItemRank::NORMAL, 4)});
+            _defaultWeapons.insert({"Greatclub", std::make_shared<Weapon>("Greatclub", SkillType::CLUB, ItemRank::NORMAL, 8)});
+            _defaultWeapons.insert({"Handaxe", std::make_shared<Weapon>("Handaxe", SkillType::AXE, ItemRank::NORMAL, 6)});
+            _defaultWeapons.insert({"Javelin", std::make_shared<Weapon>("Javelin", SkillType::DISTANCE, ItemRank::NORMAL, 6)});
+            _defaultWeapons.insert({"Light hammer", std::make_shared<Weapon>("Light hammer", SkillType::CLUB, ItemRank::NORMAL, 4)});
+            _defaultWeapons.insert({"Mace", std::make_shared<Weapon>("Mace", SkillType::CLUB, ItemRank::NORMAL, 6)});
+            _defaultWeapons.insert({"Quaterstaff", std::make_shared<Weapon>("Quaterstaff", SkillType::CLUB, ItemRank::NORMAL, 6)});
+            _defaultWeapons.insert({"Sickle", std::make_shared<Weapon>("Sickle", SkillType::SWORD, ItemRank::NORMAL, 4)});
+            _defaultWeapons.insert({"Spear", std::make_shared<Weapon>("Spear", SkillType::DISTANCE, ItemRank::NORMAL, 6)});
         }
 
-        std::unordered_map<std::string, Weapon>
-        getWeaponsList() const
-        {
-            return _weapons;
-        }
-
-        Weapon getWeapon(const std::string &name)
+        std::unordered_map<std::string, std::shared_ptr<Weapon>> getWeaponsList() const
         {
             if (!isStarted())
-                startUp();
-            return _weapons.find(name)->second;
+            {
+                LM.writeLog(Level::Error, "WeaponsManager::getWeaponsList - Weapons Manager has not been started");
+                return {};
+            }
+            return _defaultWeapons;
+        }
+
+        std::shared_ptr<Weapon> getWeapon(std::string_view name)
+        {
+            if (!isStarted())
+            {
+                LM.writeLog(Level::Error, "WeaponsManager::getWeapon - Weapons Manager has not been started");
+                return NullWeapon::getInstance();
+            }
+            auto it = _defaultWeapons.find(std::string{name});
+            if (it != _defaultWeapons.end())
+                return it->second;
+            LM.writeLog(Level::Warning, "Weapon not found: " + std::string{name});
+            return NullWeapon::getInstance();
         }
     };
 }

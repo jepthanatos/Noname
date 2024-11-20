@@ -3,6 +3,7 @@
 
 // System includes
 #include <string>
+#include <memory>
 
 // Local includes
 #include "Skill.h"
@@ -30,6 +31,22 @@ namespace noname
 
         SkillType getSkillType() const { return _skillType; }
         short getDie() const { return _die; }
+    };
+
+    class NullWeapon
+    {
+    public:
+        static std::shared_ptr<Weapon> getInstance()
+        {
+            static std::shared_ptr<Weapon> instance{new Weapon("Null Weapon", SkillType::AXE, ItemRank::NORMAL)};
+            return instance;
+        }
+
+    private:
+        NullWeapon(const NullWeapon &) = delete;
+        NullWeapon(NullWeapon &&) = delete;
+        NullWeapon &operator=(const NullWeapon &) = delete;
+        NullWeapon &operator=(NullWeapon &&) = delete;
     };
 }
 

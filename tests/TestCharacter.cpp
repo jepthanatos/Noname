@@ -50,7 +50,7 @@ struct TestCharacter : Test
         LM.startUp();
         WM.startUp();
         character.respawn();
-        std::shared_ptr<Weapon> club = std::make_shared<Weapon>(WM.getWeapon("Club"));
+        std::shared_ptr<Weapon> club = WM.getWeapon("Club");
         character.equipWeapon(club);
     }
     void TearDown() override
@@ -280,7 +280,7 @@ TEST_F(TestCharacter, DropWeaponRemovesWeapon)
 {
     character.drop(ItemSlotType::WEAPON);
     EXPECT_EQ(character.getWeapon()->getName(), "Fists");
-    std::shared_ptr<Weapon> handaxe = std::make_shared<Weapon>(WM.getWeapon("Handaxe"));
+    std::shared_ptr<Weapon> handaxe = WM.getWeapon("Handaxe");
     character.equipWeapon(handaxe);
     EXPECT_EQ(character.getWeapon()->getName(), "Handaxe");
     character.drop(ItemSlotType::WEAPON);

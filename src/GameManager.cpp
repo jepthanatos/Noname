@@ -53,7 +53,7 @@ namespace noname
         for (int i = 0; i < 100; ++i)
         {
             Player player{};
-            std::shared_ptr<Weapon> club = std::make_shared<Weapon>(WM.getWeapon("Club"));
+            std::shared_ptr<Weapon> club = WM.getWeapon("Club");
             player.equipWeapon(club);
             player.gainExperience(getExpForLevel(Utils::rollDie(1, 100)));
             // for (int j = 1; j < Utils::rollDie(1, 10000); ++j)

@@ -43,9 +43,25 @@ namespace noname
             _items.insert({"Rune", {"Rune", ItemType::USABLE, 20, 10, 5}});
         }
 
-        std::unordered_map<std::string, Item> getItemsList() const { return _items; }
+        std::unordered_map<std::string, Item> getItemsList() const
+        {
+            if (!isStarted())
+                LM.writeLog(Level::Error, "ItemsManager::getItemsList - Items Manager has not been started");
+            return _items;
+        }
 
-        Item getItem(const std::string &name) { return _items.find(name)->second; }
+        Item getItem(const std::string &name)
+        {
+            if (!isStarted())
+            {
+                LM.writeLog(Level::Error, "ItemsManager::getItem - Items Manager has not been started");
+                return NullItem::getInstance();
+            }
+            auto it = _items.find(name);
+            if (it != _items.end())
+                return it->second;
+            return NullItem::getInstance();
+        }
     };
 
 }

@@ -4,22 +4,25 @@
 // System includes
 #include <string>
 #include <optional>
-#include <atomic>
 #include <memory>
+#include <atomic>
 
 // Local includes
 #include "ItemEnumTypes.h"
 #include "Skill.h"
 #include "Property.h"
 
+#define ID_ITEM int
+
 namespace noname
 {
     inline constexpr short NO_VALUE = -1;
+    inline constexpr int NULL_ITEM = -1;
 
     class Item
     {
     protected:
-        int _id;
+        ID_ITEM _id;
         std::string _name;
         ItemType _type;
         ItemRank _rank;
@@ -34,7 +37,7 @@ namespace noname
 
         auto generateId()
         {
-            static std::atomic<int> cont{0};
+            static std::atomic_int cont;
             return cont++;
         };
 
@@ -55,13 +58,14 @@ namespace noname
         {
         }
 
-        std::string getName() const { return _name; }
+        int getId() const { return _id; }
+        virtual std::string getName() const { return _name; }
         ItemType getItemType() const { return _type; }
         short getValue() const { return getValueFromOptional(_value); }
         short getUses() const { return getValueFromOptional(_uses); }
         virtual short getWeight() const { return getValueFromOptional(_weight); }
 
-        bool operator==(const Item &item) const
+        virtual bool operator==(const Item &item) const
         {
             return _id == item._id;
         }
@@ -71,6 +75,22 @@ namespace noname
             if (_uses && _uses.value() > short(0))
                 --_uses.value();
         }
+    };
+
+    class NullItem
+    {
+    public:
+        static std::shared_ptr<Item> getInstance()
+        {
+            static std::shared_ptr<Item> instance{new Item("Null Item", ItemType::NO_TYPE, ItemRank::NO_RANK)};
+            return instance;
+        }
+
+    private:
+        NullItem(const NullItem &) = delete;
+        NullItem(NullItem &&) = delete;
+        NullItem &operator=(const NullItem &) = delete;
+        NullItem &operator=(NullItem &&) = delete;
     };
 }
 #endif // __ITEM_H__

@@ -23,6 +23,7 @@
 #include "TestSkillsManager.cpp"
 #include "TestUtils.cpp"
 #include "TestWeapon.cpp"
+#include "TestWeaponsManager.cpp"
 
 int main(int argc, char **argv)
 {

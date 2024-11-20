@@ -43,15 +43,19 @@ namespace noname
         std::shared_ptr<Item> dropItem(ItemSlotType slot)
         {
             auto value = std::move(atSlot(slot));
-            atSlot(slot) = nullptr;
+            atSlot(slot).reset();
             return value;
         }
 
-        void useItem(ItemSlotType slot)
+        bool useItem(ItemSlotType slot)
         {
             auto &item = atSlot(slot);
             if (item && item->getUses() > 0)
+            {
                 item->useItem();
+                return true;
+            }
+            return false; // No se pudo usar el ítem
         }
 
         short getWeight() const

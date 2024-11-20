@@ -292,7 +292,7 @@ namespace noname
         auto weapon = getWeapon();
         if (!weapon)
         {
-            std::shared_ptr<Weapon> fists = std::make_shared<Weapon>(WM.getWeapon("Fists"));
+            std::shared_ptr<Weapon> fists = WM.getWeapon("Fists");
             this->equipWeapon(fists);
         }
         updateCurrentCapacity();

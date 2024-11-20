@@ -1,6 +1,8 @@
 #ifndef __ITEM_ENUM_TYPES_H__
 #define __ITEM_ENUM_TYPES_H__
 
+#include "Skill.h"
+
 namespace noname
 {
     enum class ItemType
