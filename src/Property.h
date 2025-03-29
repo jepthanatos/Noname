@@ -29,6 +29,11 @@ namespace noname
             return value;
         }
 
+        T get() const
+        {
+            return value;
+        }
+
         Property<T> &operator=(T newValue)
         {
             value = newValue;

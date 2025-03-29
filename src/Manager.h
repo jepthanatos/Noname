@@ -1,45 +1,30 @@
-#ifndef __MANAGER_H__
-#define __MANAGER_H__
+#pragma once
 
-// System includes
 #include <string>
+#include <string_view>
 
 namespace noname
 {
     class Manager
     {
     private:
-        std ::string type; // Manager type identifier.
+        std::string _type{"None"};
 
     protected:
-        bool started; // True when started sucessfully.
+        bool _started{false};
 
-        // Default constructor.
-        Manager();
+        Manager() = default;
 
-        // Set type identifier of Manager.
-        void setType(std ::string value);
+        void setType(std::string_view value) noexcept { _type = value; }
 
     public:
-        virtual ~Manager(){};
+        virtual ~Manager() = default;
 
-        // Get type identifier of Manager.
-        std::string getType() const;
+        [[nodiscard]] std::string_view getType() const noexcept { return _type; }
 
-        // Startup Manager.
-        virtual void startUp()
-        {
-            started = true;
-        }
+        virtual void startUp() noexcept { _started = true; }
+        virtual void shutDown() noexcept { _started = false; }
 
-        // Shutdown Manager.
-        virtual void shutDown()
-        {
-            started = false;
-        }
-
-        // Return true when startUp() was executed ok, else false.
-        bool isStarted() const;
+        [[nodiscard]] bool isStarted() const noexcept { return _started; }
     };
 }
-#endif /* __MANAGER_H__ */

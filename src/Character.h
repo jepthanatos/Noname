@@ -4,6 +4,8 @@
 // System includes
 #include <vector>
 #include <string>
+#include <string_view>
+#include <memory>
 
 // Local includes
 #include "Property.h"
@@ -37,67 +39,67 @@ namespace noname
         Property<unsigned long long> _nextLevelManaWasted;
         std::vector<Property<short>> _skills;
         std::vector<Property<short>> _skillTries;
-        bool _isDead;
+        bool _isDead{false};
         Heritables _heritables;
         Inventory _inventory;
 
-        static int generateId();
-        void setLevel(short value);
-        void setMagicLevel(short value);
-        void setMaxHealth();
-        void setMaxMana();
-        void setMaxCapacity();
-        void updateCurrentCapacity();
-        void setSpeed();
-        void updateSpeed();
-        void setSkill(SkillType skill, short value);
-        void updateTries(SkillType skill);
+        static int generateId() noexcept;
+        void setLevel(short value) noexcept;
+        void setMagicLevel(short value) noexcept;
+        void setMaxHealth() noexcept;
+        void setMaxMana() noexcept;
+        void setMaxCapacity() noexcept;
+        void updateCurrentCapacity() noexcept;
+        void setSpeed() noexcept;
+        void updateSpeed() noexcept;
+        void setSkill(SkillType skill, short value) noexcept;
+        void updateTries(SkillType skill) noexcept;
 
     public:
         Character();
-        Character(const std::string &name) : Character() { _name = name; }
+        explicit Character(std::string_view name) : Character() { _name = std::string(name); }
 
-        bool operator==(const Character &p) const { return _id == p._id; }
+        bool operator==(const Character &p) const noexcept { return _id == p._id; }
 
-        // Getters for UI or info related
-        int getId() const { return _id; }
-        std::string getName() const { return _name; }
-        unsigned long long getExperience() const { return _currentExperience; }
-        unsigned long long getManaWasted() const { return _currentManaWasted; }
-        short getLevel() const { return _level; }
-        short getMagicLevel() const { return _magicLevel; }
-        short getSkill(SkillType skill) const { return _skills.at(static_cast<int>(skill)); }
-        int getCurrentHealth() const { return _currentHealth; }
-        int getMaxHealth() const { return _maxHealth; }
-        int getCurrentMana() const { return _currentMana; }
-        int getMaxMana() const { return _maxMana; }
-        bool isDead() { return _isDead; }
-        short getHeritable(HeritableType value) { return _heritables.at(value); }
-        short getAttackDamage();
-        std::shared_ptr<Weapon> getWeapon() { return _inventory.getWeapon(); }
-        void writeCharacterInfo();
-        const std::vector<std::shared_ptr<Item>> &getInventorySlots() const { return _inventory.getSlots(); }
+        [[nodiscard]] int getId() const noexcept { return _id; }
+        [[nodiscard]] std::string getName() const noexcept { return _name; }
+        [[nodiscard]] unsigned long long getExperience() const noexcept { return _currentExperience; }
+        [[nodiscard]] unsigned long long getManaWasted() const noexcept { return _currentManaWasted; }
+        [[nodiscard]] short getLevel() const noexcept { return _level; }
+        [[nodiscard]] short getMagicLevel() const noexcept { return _magicLevel; }
+        [[nodiscard]] short getSkill(SkillType skill) const noexcept { return _skills.at(static_cast<int>(skill)); }
+        [[nodiscard]] int getCurrentHealth() const noexcept { return _currentHealth; }
+        [[nodiscard]] int getMaxHealth() const noexcept { return _maxHealth; }
+        [[nodiscard]] int getCurrentMana() const noexcept { return _currentMana; }
+        [[nodiscard]] int getMaxMana() const noexcept { return _maxMana; }
+        [[nodiscard]] bool isDead() const noexcept { return _isDead; }
+        [[nodiscard]] short getHeritable(HeritableType value) const noexcept { return _heritables.at(value); }
+        [[nodiscard]] short getAttackDamage() noexcept;
+        [[nodiscard]] std::shared_ptr<Weapon> getWeapon() const noexcept { return _inventory.getWeapon(); }
+        void writeCharacterInfo() const;
+        [[nodiscard]] const std::vector<std::shared_ptr<Item>> &getInventorySlots() const noexcept { return _inventory.getSlots(); }
 
         // Others
-        void gainExperience(int value);
-        void gainHealth(int value);
-        void takeDamage(int value);
-        void useMana(int value);
-        void gainMana(int value);
-        void equipWeapon(std::shared_ptr<Weapon> weapon) { pick(weapon, ItemSlotType::WEAPON); }
+        void gainExperience(int value) noexcept;
+        void gainHealth(int value) noexcept;
+        void takeDamage(int value) noexcept;
+        void useMana(int value) noexcept;
+        void gainMana(int value) noexcept;
+        void equipWeapon(std::shared_ptr<Weapon> weapon) noexcept { pick(std::move(weapon), ItemSlotType::WEAPON); }
 
         // Actions
-        virtual void respawn();
-        virtual void move() {}
-        virtual void attack(Character &character);
-        virtual void defense(short damage);
-        virtual void pick(std::shared_ptr<Item> item, ItemSlotType slot);
-        virtual void drop(int itemID);
-        virtual void drop(ItemSlotType slot);
-        virtual void use(int itemID) {}
+        virtual void respawn() noexcept;
+        virtual void move() noexcept {}
+        virtual void attack(Character &character) noexcept;
+        virtual void defense(short damage) noexcept;
+        virtual void pick(std::shared_ptr<Item> item, ItemSlotType slot) noexcept;
+        virtual void drop(int itemID) noexcept;
+        virtual void drop(ItemSlotType slot) noexcept;
+        virtual void use(int itemID) noexcept {}
 
         // Others
-        void determineHeritables(const Character &father, const Character &mother);
+        void determineHeritables(const Character &father, const Character &mother) noexcept;
     };
 }
+
 #endif // __CHARACTER_H__

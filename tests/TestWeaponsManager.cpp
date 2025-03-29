@@ -41,3 +41,10 @@ TEST_F(TestWeaponsManager, getWeaponReturnsNullWeapon)
 {
     EXPECT_EQ(NullWeapon::getInstance().get(), WM.getWeapon("No weapon").get());
 }
+
+TEST_F(TestWeaponsManager, getSameWeaponTwoTimes)
+{
+    auto weapon1 = WM.getWeapon("Club").get();
+    auto weapon2 = WM.getWeapon("Club").get();
+    ASSERT_TRUE(weapon1 == weapon2);
+}

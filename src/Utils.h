@@ -1,25 +1,26 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-// System includes
 #include <random>
+#include <type_traits>
 
 namespace noname
 {
     class Utils
     {
     public:
-        static auto rollDie(int min, int max)
+        static int rollDie(int min, int max)
         {
-            std::random_device dev;
-            std::mt19937 rng(dev());
-            std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
-            return dist6(rng);
-        };
+            static thread_local std::random_device dev;
+            static thread_local std::mt19937 rng(dev());
+            std::uniform_int_distribution<int> dist(min, max);
+            return dist(rng);
+        }
 
-        template <class T>
-        static int toInt(T value)
+        template <typename T>
+        static constexpr int toInt(T value) noexcept
         {
+            static_assert(std::is_enum_v<T>, "toInt requires an enum type");
             return static_cast<int>(value);
         }
     };

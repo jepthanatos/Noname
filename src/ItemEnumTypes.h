@@ -1,6 +1,7 @@
 #ifndef __ITEM_ENUM_TYPES_H__
 #define __ITEM_ENUM_TYPES_H__
 
+#include <string>
 #include "Skill.h"
 
 namespace noname
@@ -12,9 +13,9 @@ namespace noname
         HELMET,
         CONTAINER,
         WEAPON,
+        RING,
         ARMOR,
         SHIELD,
-        RING,
         LEGS_ARMOR,
         BOOTS,
         AMMUNITION,
@@ -39,19 +40,52 @@ namespace noname
         HELMET,
         CONTAINER,
         WEAPON,
-        RIGHT_RING,
+        RING_LEFT,
         ARMOR,
         SHIELD,
-        LEFT_RING,
+        RING_RIGHT,
         LEGS_ARMOR,
         BOOTS,
         AMMUNITION,
         LAST_SLOT_TYPE
     };
 
-    inline ItemType slotTypeToItemType(ItemSlotType itemSlotType)
+    static std::string ItemTypeToString(ItemType type)
     {
-        switch (itemSlotType)
+        switch (type)
+        {
+        case ItemType::NO_TYPE:
+            return "NO_TYPE";
+        case ItemType::AMULET:
+            return "AMULET";
+        case ItemType::HELMET:
+            return "HELMET";
+        case ItemType::CONTAINER:
+            return "CONTAINER";
+        case ItemType::WEAPON:
+            return "WEAPON";
+        case ItemType::RING:
+            return "RING";
+        case ItemType::ARMOR:
+            return "ARMOR";
+        case ItemType::SHIELD:
+            return "SHIELD";
+        case ItemType::LEGS_ARMOR:
+            return "LEGS_ARMOR";
+        case ItemType::BOOTS:
+            return "BOOTS";
+        case ItemType::AMMUNITION:
+            return "AMMUNITION";
+        case ItemType::USABLE:
+            return "USABLE";
+        default:
+            return "UNKNOWN";
+        }
+    }
+
+    static ItemType slotTypeToItemType(ItemSlotType slot)
+    {
+        switch (slot)
         {
         case ItemSlotType::AMULET:
             return ItemType::AMULET;
@@ -61,9 +95,8 @@ namespace noname
             return ItemType::CONTAINER;
         case ItemSlotType::WEAPON:
             return ItemType::WEAPON;
-        case ItemSlotType::RIGHT_RING:
-            return ItemType::RING;
-        case ItemSlotType::LEFT_RING:
+        case ItemSlotType::RING_LEFT:
+        case ItemSlotType::RING_RIGHT:
             return ItemType::RING;
         case ItemSlotType::ARMOR:
             return ItemType::ARMOR;
@@ -97,4 +130,5 @@ namespace noname
         }
     }
 }
+
 #endif // __ITEM_ENUM_TYPES_H__

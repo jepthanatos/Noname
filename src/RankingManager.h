@@ -3,6 +3,7 @@
 
 // Local includes
 #include "Ranking.h"
+#include "Player.h" // Ensure Player is included
 
 // Two-letter acronym for easier access to manager
 #define RM noname::RankingManager::getInstance()
@@ -12,7 +13,7 @@ namespace noname
     class RankingManager : public Manager, public Singleton<RankingManager>
     {
     public:
-        void startUp()
+        void startUp() noexcept
         {
             Manager::setType("RankingManager");
             LM.writeLog(Level::Debug, "RankingManager::startUp");
@@ -25,7 +26,7 @@ namespace noname
             Manager::startUp();
         }
 
-        void shutDown()
+        void shutDown() noexcept
         {
             RANKING_FIST.shutDown();
             RANKING_SWORD.shutDown();
@@ -49,12 +50,12 @@ namespace noname
 
         void addPlayer(const Player &player)
         {
-            RANKING_FIST.addPlayer(std::move(player));
-            RANKING_SWORD.addPlayer(std::move(player));
-            RANKING_AXE.addPlayer(std::move(player));
-            RANKING_CLUB.addPlayer(std::move(player));
-            RANKING_DISTANCE.addPlayer(std::move(player));
-            RANKING_SHIELDING.addPlayer(std::move(player));
+            RANKING_FIST.addPlayer(player);
+            RANKING_SWORD.addPlayer(player);
+            RANKING_AXE.addPlayer(player);
+            RANKING_CLUB.addPlayer(player);
+            RANKING_DISTANCE.addPlayer(player);
+            RANKING_SHIELDING.addPlayer(player);
         }
 
         short getPlayerRanking(int playerId, SkillType skill)

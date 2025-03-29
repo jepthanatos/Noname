@@ -1,20 +1,18 @@
-#ifndef __LOG_MANAGER_H__
-#define __LOG_MANAGER_H__
+#pragma once
 
-// System includes
 #include <string>
 #include <fstream>
+#include <string_view>
+#include <filesystem>
 
-// Engine includes
 #include "Singleton.h"
 #include "Manager.h"
 
-// Two-letter acronym for easier access to manager
 #define LM noname::LogManager::getInstance()
 
 namespace noname
 {
-    const std::string LOGFILE_NAME = "noname.log";
+    const std::filesystem::path LOGFILE_NAME = "noname.log";
 
     enum class Level
     {
@@ -27,27 +25,18 @@ namespace noname
     class LogManager : public Manager, public Singleton<LogManager>
     {
     private:
-        std::ofstream logFile;
-        Level logLevel;
+        std::ofstream _logFile;
+        Level _logLevel{Level::Debug};
 
     public:
-        // If logfile is open, close it.
-        ~LogManager();
+        ~LogManager() override;
 
-        // Startup the LogManager (open logfile).
-        void startUp();
+        void startUp() noexcept override;
+        void shutDown() noexcept override;
 
-        // Shut down the LogManager (close logfile).
-        void shutDown();
+        void writeLog(Level level, std::string_view message);
 
-        // Write to logfile.
-        void writeLog(Level level, const std::string &message);
-
-        // Get the log level.
-        Level getLevel() const;
-
-        // Set the log level.
-        void setLevel(Level value);
+        [[nodiscard]] Level getLevel() const noexcept;
+        void setLevel(Level value) noexcept;
     };
 }
-#endif // __LOG_MANAGER_H__

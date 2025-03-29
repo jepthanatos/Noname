@@ -63,7 +63,7 @@ namespace noname
             }
         };
 
-        short at(HeritableType type)
+        short at(HeritableType type) const
         {
             return _heritables.at(static_cast<int>(type));
         }

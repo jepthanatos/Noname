@@ -251,7 +251,7 @@ TEST_F(TestCharacter, PickItemStoresItemInInventory)
 {
     std::unique_ptr<Item> amulet = std::make_unique<Item>("Amulet", ItemType::AMULET, ItemRank::NORMAL);
     character.pick(std::move(amulet), ItemSlotType::AMULET);
-    auto slots = std::move(character.getInventorySlots());
+    const auto &slots = character.getInventorySlots();
     bool found = false;
     for (const auto &slot : slots)
     {

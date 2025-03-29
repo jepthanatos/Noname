@@ -33,26 +33,26 @@ namespace noname
         FileManager rankingFile;
 
     public:
-        void startUp()
+        void startUp() noexcept
         {
             Manager::setType("Ranking-" + SkillToString(_skill));
-            LM.writeLog(Level::Debug, Manager::getType() + "::startUp");
+            LM.writeLog(Level::Debug, std::string(Manager::getType()) + "::startUp");
             Manager::startUp();
             rankingFile.initOutputFile("Ranking-" + SkillToString(_skill) + ".html");
             rankingFile.startUp();
         }
 
-        void shutDown()
+        void shutDown() noexcept
         {
             _players_list.clear();
             rankingFile.shutDown();
             Manager::shutDown();
-            LM.writeLog(Level::Debug, Manager::getType() + "::shutDown");
+            LM.writeLog(Level::Debug, std::string(Manager::getType()) + "::shutDown");
         }
 
         void updateRanking()
         {
-            std::sort(_players_list.begin(), _players_list.end(), [](Player a, Player b)
+            std::sort(_players_list.begin(), _players_list.end(), [](const Player &a, const Player &b)
                       { return a.getSkill(_skill) > b.getSkill(_skill); });
         }
 

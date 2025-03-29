@@ -9,6 +9,7 @@
 
 // System includes
 #include <unordered_map>
+#include <string>
 
 // Two-letter acronym for easier access to manager
 #define SM noname::SkillsManager::getInstance()
@@ -21,7 +22,7 @@ namespace noname
         std::unordered_map<SkillType, Skill> _skillsList;
 
     public:
-        void startUp()
+        void startUp() noexcept
         {
             Manager::setType("SkillsManager");
             LM.writeLog(Level::Debug, "SkillsManager::startUp");
@@ -29,7 +30,7 @@ namespace noname
             initializeSkills();
         }
 
-        void shutDown()
+        void shutDown() noexcept
         {
             _skillsList.clear();
             Manager::shutDown();
@@ -51,9 +52,18 @@ namespace noname
         Skill getSkill(const SkillType &skill) const
         {
             if (!isStarted())
+            {
+                LM.writeLog(Level::Warning, "SkillsManager::getSkill - Manager not started. Starting now.");
                 SM.startUp();
-            if (_skillsList.size() > 0)
-                return _skillsList.find(skill)->second;
+            }
+
+            auto it = _skillsList.find(skill);
+            if (it != _skillsList.end())
+            {
+                return it->second;
+            }
+
+            LM.writeLog(Level::Error, "Skill not found: " + SkillToString(skill));
             return {0, 0, 0};
         }
     };

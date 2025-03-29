@@ -1,6 +1,5 @@
 #include "LogManager.h"
 
-// Sytem includes
 #include <chrono>
 #include <iomanip>
 #include <sstream>
@@ -10,61 +9,68 @@ namespace noname
 {
     LogManager::~LogManager()
     {
-        if (logFile.is_open())
-            logFile.close();
+        if (_logFile.is_open())
+        {
+            _logFile.close();
+        }
     }
 
-    void LogManager::startUp()
+    void LogManager::startUp() noexcept
     {
         try
         {
-            Manager::setType("LogManager");
-            logFile.open(LOGFILE_NAME, std::ofstream::out | std::ofstream::app);
-            logLevel = Level::Debug;
+            setType("LogManager");
+            _logFile.open(LOGFILE_NAME.string(), std::ios::out | std::ios::app);
+            if (!_logFile.is_open())
+            {
+                throw std::ios_base::failure("Failed to open log file: " + LOGFILE_NAME.string());
+            }
             Manager::startUp();
             writeLog(Level::Info, "-- Starting the game --");
             writeLog(Level::Debug, "LogManager::startUp");
         }
-        catch (std::ofstream::failure e)
+        catch (const std::exception &e)
         {
-            std::cerr << "Log file creation failed." << std::endl;
             std::cerr << e.what() << std::endl;
         }
     }
 
-    void LogManager::shutDown()
+    void LogManager::shutDown() noexcept
     {
         writeLog(Level::Debug, "LogManager::shutDown");
         writeLog(Level::Info, "-- Closing the game --");
-        logFile.close();
-    }
-
-    void LogManager::writeLog(Level level, const std::string &message)
-    {
-        // Lambda to generate pretty time for logs
-        auto prettyTime = []()
+        if (_logFile.is_open())
         {
-            auto now = std::chrono::system_clock::now();
-            auto time = std::chrono::system_clock::to_time_t(now);
-            std::stringstream stream;
-            stream << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
-            return stream.str();
-        };
-
-        if (level >= logLevel)
-        {
-            logFile << prettyTime() << " : " << message << std::endl;
-            logFile.flush();
+            _logFile.close();
         }
     }
 
-    Level LogManager::getLevel() const
+    void LogManager::writeLog(Level level, std::string_view message)
     {
-        return logLevel;
+        if (level < _logLevel)
+        {
+            return;
+        }
+
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        std::ostringstream stream;
+        stream << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+
+        if (_logFile.is_open())
+        {
+            _logFile << stream.str() << " : " << message << '\n';
+            _logFile.flush();
+        }
     }
 
-    void LogManager::setLevel(Level value)
+    Level LogManager::getLevel() const noexcept
     {
-        logLevel = value;
+        return _logLevel;
+    }
+
+    void LogManager::setLevel(Level value) noexcept
+    {
+        _logLevel = value;
     }
 }

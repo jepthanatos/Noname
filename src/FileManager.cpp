@@ -1,6 +1,4 @@
 #include "FileManager.h"
-
-// Local includes
 #include "LogManager.h"
 
 namespace noname
@@ -10,61 +8,64 @@ namespace noname
         shutDown();
     }
 
-    void FileManager::initInputFile(const std::string &input)
+    void FileManager::initInputFile(const std::filesystem::path &input)
     {
         inputFileName = input;
     }
 
-    void FileManager::initOutputFile(const std::string &output)
+    void FileManager::initOutputFile(const std::filesystem::path &output)
     {
         outputFileName = output;
     }
 
-    void FileManager::startUp()
+    void FileManager::startUp() noexcept
     {
-        // Open the input file.
-        if (inputFileName != "")
+        try
         {
-            try
+            if (!inputFileName.empty())
             {
-                inputFile.open(inputFileName, std::ofstream::in);
-                started = true;
+                inputFile.open(inputFileName, std::ios::in);
+                if (!inputFile.is_open())
+                {
+                    throw std::ios_base::failure("Failed to open input file: " + inputFileName.string());
+                }
             }
-            catch (std::ofstream::failure e)
-            {
-                LM.writeLog(Level::Debug, "Error opening the input file: " + inputFileName);
-                LM.writeLog(Level::Debug, e.what());
-                std::cerr << e.what() << std::endl;
-            }
-        }
 
-        // Open the output file.
-        if (outputFileName != "")
+            if (!outputFileName.empty())
+            {
+                outputFile.open(outputFileName, std::ios::out);
+                if (!outputFile.is_open())
+                {
+                    throw std::ios_base::failure("Failed to open output file: " + outputFileName.string());
+                }
+            }
+
+            _started = true;
+        }
+        catch (const std::exception &e)
         {
-            try
-            {
-                outputFile.open(outputFileName, std::ofstream::out);
-            }
-            catch (std::ofstream::failure e)
-            {
-                LM.writeLog(Level::Debug, "Error opening the output file: " + outputFileName);
-                LM.writeLog(Level::Debug, e.what());
-                std::cerr << e.what() << std::endl;
-            }
+            LM.writeLog(Level::Error, e.what());
         }
     }
 
-    void FileManager::shutDown()
+    void FileManager::shutDown() noexcept
     {
         if (inputFile.is_open())
+        {
             inputFile.close();
+        }
         if (outputFile.is_open())
+        {
             outputFile.close();
+        }
     }
 
     void FileManager::write(const std::string &text)
     {
-        outputFile << text << std::endl;
-        outputFile.flush();
+        if (outputFile.is_open())
+        {
+            outputFile << text << '\n';
+            outputFile.flush();
+        }
     }
 }

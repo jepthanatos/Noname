@@ -14,7 +14,7 @@ namespace noname
         return weight;
     }
 
-    bool Container::addItem(std::unique_ptr<Item> item)
+    bool Container::addItem(std::shared_ptr<Item> item)
     {
         for (auto &slot : _slots)
         {
@@ -37,4 +37,4 @@ namespace noname
         return item;
     }
 
-}
+} // Closing brace for namespace noname

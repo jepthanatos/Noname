@@ -25,7 +25,7 @@ namespace noname
         Relationships<Creature> _relationships;
 
     public:
-        void startUp()
+        void startUp() noexcept
         {
             Manager::setType("CreaturesManager");
             LM.writeLog(Level::Debug, "CreaturesManager::startUp");
@@ -33,7 +33,7 @@ namespace noname
             initializeCreatures();
         }
 
-        void shutDown()
+        void shutDown() noexcept
         {
             _creatures.clear();
             Manager::shutDown();
@@ -59,14 +59,26 @@ namespace noname
             return _creatures.at(name);
         }
 
-        std::vector<Creature> findPreyOf(const std::string &name)
+        std::vector<std::shared_ptr<Creature>> findPreyOf(const std::string &name)
         {
-            return _relationships.find_prey_of(name);
+            auto prey = _relationships.find_prey_of(name);
+            std::vector<std::shared_ptr<Creature>> preyPtrs;
+            for (auto &p : prey)
+            {
+                preyPtrs.push_back(std::make_shared<Creature>(p));
+            }
+            return preyPtrs;
         }
 
-        std::vector<Creature> findPredatorOf(const std::string &name)
+        std::vector<std::shared_ptr<Creature>> findPredatorOf(const std::string &name)
         {
-            return _relationships.find_predator_of(name);
+            auto predators = _relationships.find_predator_of(name);
+            std::vector<std::shared_ptr<Creature>> predatorPtrs;
+            for (auto &predator : predators)
+            {
+                predatorPtrs.push_back(std::make_shared<Creature>(predator));
+            }
+            return predatorPtrs;
         }
     };
 }

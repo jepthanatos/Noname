@@ -13,16 +13,16 @@ namespace noname
     class GameManager : public Manager, public Singleton<GameManager>
     {
     public:
-        ~GameManager(){};
+        ~GameManager() {};
 
         // Initialize the program by parsing the program arguments.
         int initialization(int argc, char *argv[]);
 
         // Startup the program services.
-        void startUp();
+        void startUp() noexcept;
 
         // Shut down the program services.
-        void shutDown();
+        void shutDown() noexcept;
 
         // Run program loop.
         void run();

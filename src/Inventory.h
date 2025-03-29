@@ -25,12 +25,17 @@ namespace noname
             return _slots.at(Utils::toInt(slot));
         }
 
+        inline const std::shared_ptr<Item> &atSlot(ItemSlotType slot) const
+        {
+            return _slots.at(Utils::toInt(slot));
+        }
+
     public:
         Inventory() : _slots(static_cast<size_t>(ItemSlotType::LAST_SLOT_TYPE)) {}
 
         const std::vector<std::shared_ptr<Item>> &getSlots() const { return _slots; }
 
-        std::shared_ptr<Weapon> getWeapon()
+        std::shared_ptr<Weapon> getWeapon() const
         {
             auto &itemPtr = atSlot(ItemSlotType::WEAPON);
             if (itemPtr)
@@ -71,24 +76,32 @@ namespace noname
 
         void storeItem(std::shared_ptr<Item> item, ItemSlotType slot)
         {
-            if (item->getItemType() == slotTypeToItemType(slot))
+            if (!item)
             {
-                if (!atSlot(slot))
+                LM.writeLog(Level::Error, "Attempted to store a null item.");
+                return;
+            }
+
+            if (item->getItemType() != slotTypeToItemType(slot))
+            {
+                LM.writeLog(Level::Error, "Item type does not match slot type.");
+                return;
+            }
+
+            if (atSlot(slot))
+            {
+                if (atSlot(slot)->getName() == "Fists")
                 {
                     atSlot(slot) = std::move(item);
                 }
                 else
                 {
-                    if (atSlot(slot)->getName() == "Fists")
-                        atSlot(slot) = std::move(item);
-                    else
-                        LM.writeLog(Level::Debug, "Inventory already has an item of type " + std::to_string(static_cast<int>(slot)));
+                    LM.writeLog(Level::Debug, "Inventory already has an item of type " + std::to_string(static_cast<int>(slot)));
                 }
             }
             else
             {
-                LM.writeLog(Level::Error, "Item type does not match slot type");
-                // throw std::invalid_argument("Item type does not match slot type");
+                atSlot(slot) = std::move(item);
             }
         }
     };

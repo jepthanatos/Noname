@@ -36,7 +36,7 @@ namespace noname
         short getSlotsNumber() const { return _slotsNumber; }
         short getMaxCapacity() const { return _maxCapacity; }
         short getWeight() const override;
-        bool addItem(std::unique_ptr<Item> item);
+        bool addItem(std::shared_ptr<Item> item);
         std::shared_ptr<Item> removeItem(size_t index);
     };
 }

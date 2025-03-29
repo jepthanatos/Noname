@@ -10,6 +10,7 @@
 #include "RankingManager.h"
 #include "CreaturesManager.h"
 #include "SkillsManager.h"
+#include "WorldManager.h"
 #include "Utils.h"
 
 namespace noname
@@ -17,15 +18,19 @@ namespace noname
     int GameManager::initialization(int argc, char *argv[])
     {
         // Define the usage string printed to console.
-        std::string usage{"Usage is: Noname_run"};
+        const std::string usage{"Usage: Noname_run"};
 
-        // if something is not right then
-        // return EXIT_FAILURE;
+        if (argc < 1)
+        {
+            LM.writeLog(Level::Error, "Invalid arguments. " + usage);
+            return EXIT_FAILURE;
+        }
 
+        LM.writeLog(Level::Info, "Initialization successful.");
         return EXIT_SUCCESS;
     }
 
-    void GameManager::startUp()
+    void GameManager::startUp() noexcept
     {
         Manager::setType("GameManager");
         LM.startUp();
@@ -34,10 +39,11 @@ namespace noname
         CM.startUp();
         RM.startUp();
         SM.startUp();
-        started = LM.isStarted() and CM.isStarted() and WM.isStarted() and RM.isStarted() and SM.isStarted();
+        World.startUp();
+        _started = LM.isStarted() and CM.isStarted() and WM.isStarted() and RM.isStarted() and SM.isStarted() and World.isStarted();
     }
 
-    void GameManager::shutDown()
+    void GameManager::shutDown() noexcept
     {
         LM.writeLog(Level::Debug, "Closing services...");
         WM.shutDown();
@@ -45,23 +51,15 @@ namespace noname
         RM.shutDown();
         SM.shutDown();
         LM.shutDown();
+        World.shutDown();
     }
 
     void GameManager::run()
     {
         LM.writeLog(Level::Debug, "Starting game...");
-        for (int i = 0; i < 100; ++i)
-        {
-            Player player{};
-            std::shared_ptr<Weapon> club = WM.getWeapon("Club");
-            player.equipWeapon(club);
-            player.gainExperience(getExpForLevel(Utils::rollDie(1, 100)));
-            // for (int j = 1; j < Utils::rollDie(1, 10000); ++j)
-            // player.attack();
-            RM.addPlayer(std::move(player));
-            player.writeCharacterInfo();
-        }
-        RM.printAllRankings();
+        // The world should be created
+        // At least 1 player should be added
+        // And then multiple creatures
         LM.writeLog(Level::Debug, "Ending game...");
     }
 

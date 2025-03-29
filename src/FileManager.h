@@ -1,12 +1,9 @@
-#ifndef __FILE_MANAGER_H__
-#define __FILE_MANAGER_H__
+#pragma once
 
-// System includes
-#include <fstream>
-#include <iostream>
 #include <string>
+#include <fstream>
+#include <filesystem>
 
-// Local includes
 #include "Singleton.h"
 #include "Manager.h"
 
@@ -15,32 +12,21 @@ namespace noname
     class FileManager : public Manager
     {
     private:
-        // Name of the IO files.
-        std::string inputFileName;
-        std::string outputFileName;
+        std::filesystem::path inputFileName;
+        std::filesystem::path outputFileName;
 
-        // IO Files.
         std::ifstream inputFile;
         std::ofstream outputFile;
 
     public:
-        // If files are open, close them.
-        ~FileManager();
+        ~FileManager() override;
 
-        // Initialize the input file before the start up.
-        void initInputFile(const std::string &input);
+        void initInputFile(const std::filesystem::path &input);
+        void initOutputFile(const std::filesystem::path &output);
 
-        // Initialize the output file before the start up.
-        void initOutputFile(const std::string &output);
+        void startUp() noexcept override;
+        void shutDown() noexcept override;
 
-        // Startup the FileManager (open files).
-        void startUp();
-
-        // Shut down the FileManager (close files).
-        void shutDown();
-
-        // Write to the file.
         void write(const std::string &text);
     };
 }
-#endif // __FILE_MANAGER_H__
