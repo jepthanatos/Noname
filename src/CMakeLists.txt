@@ -1,9 +1,16 @@
 set(BINARY ${CMAKE_PROJECT_NAME}_run)
 set(LIBRARY ${CMAKE_PROJECT_NAME}_lib)
 
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
-
-set(SOURCES ${SOURCES})
+# Explicitly list source files
+set(SOURCES
+    Character.cpp
+    Container.cpp
+    FileManager.cpp
+    GameManager.cpp
+    Inventory.cpp
+    LogManager.cpp
+    Noname.cpp
+)
 
 add_executable(${BINARY} ${SOURCES})
 

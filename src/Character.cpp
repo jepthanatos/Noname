@@ -5,6 +5,8 @@
 #include "GameManager.h"
 #include "FileManager.h"
 #include "SkillsManager.h"
+#include "Inventory.h"
+#include "LogManager.h"
 
 // System includes
 #include <memory>

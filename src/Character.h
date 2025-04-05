@@ -2,6 +2,7 @@
 #define __CHARACTER_H__
 
 // System includes
+#include <array>
 #include <vector>
 #include <string>
 #include <string_view>
@@ -77,7 +78,7 @@ namespace noname
         [[nodiscard]] short getAttackDamage() noexcept;
         [[nodiscard]] std::shared_ptr<Weapon> getWeapon() const noexcept { return _inventory.getWeapon(); }
         void writeCharacterInfo() const;
-        [[nodiscard]] const std::vector<std::shared_ptr<Item>> &getInventorySlots() const noexcept { return _inventory.getSlots(); }
+        [[nodiscard]] const InventorySlots &getInventorySlots() const noexcept { return _inventory.getSlots(); }
 
         // Others
         void gainExperience(int value) noexcept;
