@@ -10,6 +10,8 @@ set(SOURCES
     Inventory.cpp
     LogManager.cpp
     Noname.cpp
+    ItemTemplate.cpp
+    ItemTemplateFactory.cpp
 )
 
 add_executable(${BINARY} ${SOURCES})

@@ -50,6 +50,12 @@ namespace noname
         LAST_SLOT_TYPE
     };
 
+    enum class WeaponHandedness
+    {
+        ONE_HAND,
+        TWO_HAND
+    };
+
     static std::string ItemTypeToString(ItemType type)
     {
         switch (type)
